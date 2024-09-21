@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('../src/Assets/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+input::placeholder {
+  font-family: 'Poppins', sans-serif;
+}
+
+select.placeholder {
+  font-family: 'Poppins', sans-serif;
+}
+
+.sidebar-item {
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  color: #1d4ed8; /* Blue color on hover (text-blue-600 equivalent) */
+}
+
+.sidebar-item:active {
+  color: #1e3a8a; /* Darker blue on active (text-blue-700 equivalent) */
+}
+
+.Boxseperate {
+  display: flex;
+  width: 25%; /* Equivalent to w-1/4 */
+  height: 100%; /* Equivalent to h-full */
+  background-color: white; /* Equivalent to bg-white */
+  border-radius: 16px;
+}

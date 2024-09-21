@@ -1,33 +1,39 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import profile from '../Assets/img/profile.jpg'
+import '../index.css';
 
 const Header = () => {
   return (
-    <header className=' text-green-600'>
-      clkclndnskd
-      {/* <nav className="navbar">
-        <div className="navbar-logo">
-          <Link to="/">Vehicle Rental</Link>
+      <div className=' flex w-full h-20 bg-zinc-100 '>
+      <div className='flex flex-col justify-center items-start w-2/5 h-full px-4'>
+          <h1 className='text-xl font-bold text-gray-600'>Welcome, John!</h1>
+          <p className='text-gray-600 text-sm'>Have a Nice Day...</p>
         </div>
-        <ul className="navbar-links">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/vehicles">Vehicles</Link>
-          </li>
-          <li>
-            <Link to="/about">About Us</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-          <li>
-            <Link to="/cart">Cart</Link>
-          </li>
-        </ul>
-      </nav> */}
-    </header>
+        <div className='flex w-2/5 h-full items-center justify-center'>
+          <div className="relative w-full max-w-lg">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i className="bi bi-search text-gray-400"></i>
+            </div>
+            <input
+              type="search"
+              placeholder="Search"
+              className="w-full h-10 pl-10 pr-4 py-2 bg-white rounded-full border border-gray-300 focus:outline-none focus:border-gray-500 placeholder-gray-400 text-sm"
+            />
+          </div>
+        </div>
+        <div className='flex w-56 h-full items-center justify-center gap-10 pl-12'>
+          <i className="bi bi-chat text-gray-400 text-xl cursor-pointer sidebar-item"></i>
+          <div className="relative">
+            <i className="bi bi-bell text-gray-400 text-xl cursor-pointer sidebar-item"></i>
+            <span className="absolute top-0 right-0 block h-2 w-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+          </div>
+          <img
+            src={profile}
+            alt="Profile"
+            className="w-10 h-10 rounded-full cursor-pointer sidebar-item"
+          />
+        </div>
+      </div>
   );
 };
 
