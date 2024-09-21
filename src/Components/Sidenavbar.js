@@ -61,7 +61,7 @@ const Sidebar = () => {
   <div className="w-52 max-w-xs h-[1px] bg-gray-300"></div>
 </div>
 <div className='flex flex-col w-full h-auto items-center justify-center pt-4 pb-4'>
-<ul className="space-y-5 text-gray-600 text-sm-16px">
+<ul className="space-y-5 text-gray-600 text-base">
 <li className="flex items-center space-x-3 sidebar-item">
           <i className="bi bi-gear"></i>
           <span >Settings</span>

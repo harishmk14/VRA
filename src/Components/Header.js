@@ -21,10 +21,10 @@ const Header = () => {
             />
           </div>
         </div>
-        <div className='flex w-56 h-full items-center justify-center gap-10 pl-12'>
-          <i className="bi bi-chat text-gray-400 text-xl cursor-pointer sidebar-item"></i>
+        <div className='flex w-56 h-full items-center justify-center gap-6 pl-10'>
+          <i className="bi bi-chat-dots text-gray-500 text-2xl  cursor-pointer sidebar-item"></i>
           <div className="relative">
-            <i className="bi bi-bell text-gray-400 text-xl cursor-pointer sidebar-item"></i>
+            <i className="bi bi-bell text-gray-500 text-2xl  cursor-pointer sidebar-item"></i>
             <span className="absolute top-0 right-0 block h-2 w-2 bg-red-500 rounded-full ring-2 ring-white"></span>
           </div>
           <img
@@ -32,6 +32,7 @@ const Header = () => {
             alt="Profile"
             className="w-10 h-10 rounded-full cursor-pointer sidebar-item"
           />
+          <i className="bi bi-box-arrow-right text-gray-500 text-2xl cursor-pointer sidebar-item"></i>
         </div>
       </div>
   );
