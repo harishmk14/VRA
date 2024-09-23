@@ -10,11 +10,7 @@ const Sidebar = () => {
             <img src={logo} className='max-w-48 ' alt="Company Logo"/>
         </div>
         <div className='flex flex-col w-full h-auto items-center justify-center pt-7 pb-5'>
-      <ul className="space-y-5 text-gray-600 text-base">
-      <li className="flex items-center space-x-3 sidebar-item">
-          <i className="bi bi-house"></i>
-          <span >Home</span>
-        </li>
+      <ul className="space-y-7 text-gray-600 text-base">
         <li className="flex items-center space-x-3 sidebar-item">
           <i className="bi bi-grid-fill"></i>
           <span >Dashboard</span>
@@ -48,12 +44,8 @@ const Sidebar = () => {
           <span >Maintenance</span>
         </li>
         <li className="flex items-center space-x-3 sidebar-item">
-          <i className="bi bi-clipboard-data"></i>
-          <span >Performance</span>
-        </li>
-        <li className="flex items-center space-x-3 sidebar-item">
           <i className="bi bi-graph-up-arrow"></i>
-          <span >Financial Overview</span>
+          <span >Performance</span>
         </li>
       </ul>
         </div>
@@ -61,7 +53,7 @@ const Sidebar = () => {
   <div className="w-52 max-w-xs h-[1px] bg-gray-300"></div>
 </div>
 <div className='flex flex-col w-full h-auto items-center justify-center pt-4 pb-4'>
-<ul className="space-y-5 text-gray-600 text-base">
+<ul className="space-y-6 text-gray-600 text-base">
 <li className="flex items-center space-x-3 sidebar-item">
           <i className="bi bi-gear"></i>
           <span >Settings</span>
