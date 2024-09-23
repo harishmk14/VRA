@@ -1,0 +1,6 @@
+<CalendarComponent date={date} setDate={setDate} />
+<WeatherWidget />
+
+
+import CalendarComponent from '../Components/CalendarComponent';
+import WeatherWidget from '../Components/WeatherWidget';
