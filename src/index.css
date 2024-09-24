@@ -34,8 +34,7 @@ select.placeholder {
 }
 
 .Boxseperate {
-  display: flex;
-  width: 25%; /* Equivalent to w-1/4 */
+  display: flex; /* Equivalent to w-1/4 */
   height: 100%; /* Equivalent to h-full */
   background-color: white; /* Equivalent to bg-white */
   border-radius: 16px;
