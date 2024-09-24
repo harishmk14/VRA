@@ -5,6 +5,8 @@ import CalendarCard from '../Components/CalendarCard';
 import WeatherCard from '../Components/WeatherCard';
 import DonutChart from '../Components/DonutChart';
 import income from '../Assets/img/income.jpg';
+// import IncomeGraph from '../Components/Incomegraph';
+// import ExpenseGraph from '../Components/Expensegraph';
 import expense from '../Assets/img/expense.jpg';
 import '../index.css';
 import '../styles/calendar.css';
@@ -44,8 +46,18 @@ const Dashboard = () => {
           <div className='flex w-full h-4/5'></div>
         </div>
         <div className='flex flex-col w-1/4 h-full gap-4'>
-        <div className='flex w-full h-1/2 shadow-md  bg-white rounded-2xl'></div>
-        <div className='flex w-full h-1/2  bg-white shadow-md rounded-2xl'></div>   
+        <div className='flex-col w-full h-1/2 shadow-md  bg-white rounded-2xl pt-2'>
+        <div className="flex w-full h-1/10 items-center justify-center">
+      <h2 className="text-lg font-bold text-gray-600">User</h2>
+    </div>
+    <div className="flex-col w-full h-9/10 items-center justify-center mt-1"></div>
+        </div>
+        <div className='flex-col w-full h-1/2  bg-white shadow-md rounded-2xl pt-2'>
+        <div className="flex w-full h-1/10 items-center justify-center">
+      <h2 className="text-lg font-bold text-gray-600">Driver</h2>
+    </div>
+    <div className="flex-col w-full h-9/10 items-center justify-center mt-1"></div>
+        </div>   
         </div>
         <div className='Boxseperate shadow-md flex-col w-1/4'>
           <div className='flex w-full h-1/5 items-center justify-center p-2'>     
@@ -72,7 +84,8 @@ const Dashboard = () => {
         <span className="ml-1">0.48%</span>
       </span>
     </div>
-      <img src={income} alt="Income graph" className="w-full h-16 rounded-2xl" />
+          <img src={income} alt="Income graph" className="w-full h-16 rounded-2xl" />
+    {/* <IncomeGraph /> */}
     </div>
   </div>
   
@@ -92,11 +105,17 @@ const Dashboard = () => {
       </span>
     </div>
       <img src={expense} alt="Expense graph" className="w-full h-16 rounded-2xl" />
+      {/* <ExpenseGraph /> */}
     </div>
   </div>
 </div>
 
-            <div className='flex w-3/5 h-full bg-white shadow-md rounded-2xl'></div>
+            <div className='flex-col w-3/5 h-full bg-white shadow-md rounded-2xl pt-2'>
+            <div className="flex w-full h-1/10 items-center justify-center">
+      <h2 className="text-lg font-bold text-gray-600">Vehicle</h2>
+    </div>
+    <div className="flex-col w-full h-9/10 items-center justify-center mt-1"></div>
+            </div>
         </div>
 
         <div className='flex w-2/5 h-full bg-white shadow-md rounded-2xl items-center justify-center'>
