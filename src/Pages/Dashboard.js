@@ -57,14 +57,14 @@ const Dashboard = () => {
         {/* live trip section */}
         <LiveVehicleStatus trips={trips} />  {/* Use the new component */}
 
-        <TotalAndVehicleAvailability />
-
         <div className='Boxseperate shadow-md flex-col w-1/4'>
           <div className='flex w-full h-1/5 items-center justify-center p-2'>     
             <h2 className='text-lg font-bold text-gray-600 '>Trip Overview</h2>
           </div>
           <div className='flex w-full h-full'><DonutChart /></div>
         </div>
+
+        <TotalAndVehicleAvailability />
       </div>  
 
       <div className='flex flex-grow w-full h-2/4 gap-4'>

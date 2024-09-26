@@ -1,4 +1,4 @@
-// src/components/CalendarCard.js
+// CalendarCard.js
 import React from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';

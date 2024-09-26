@@ -1,4 +1,4 @@
-// src/components/VehicleSection.js
+// VehicleSection.js
 import React from 'react';
 import twow from '../Assets/img/bike.png';
 import truck from '../Assets/img/delivery-truck.png';

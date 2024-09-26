@@ -1,3 +1,4 @@
+// LiveTripStatus.js
 import React from 'react';
 
 const LiveVehicleStatus = ({ trips }) => {
