@@ -6,8 +6,6 @@ import DonutChart from '../Components/DonutChart';
 import IncomeCard from '../Components/IncomeCard';
 import ExpenseCard from '../Components/ExpenseCard';
 import VehicleSection from '../Components/VehicleSection';
-import user from '../Assets/img/user.png';
-import driver from '../Assets/img/driver.png';
 import '../index.css';
 import '../styles/calendar.css';
 
@@ -39,50 +37,45 @@ const Dashboard = () => {
   return (
     <div className='flex flex-col h-full gap-4'>
       <div className='flex flex-grow gap-4 w-full h-2/4'>
-        <div className='Boxseperate shadow-md flex-col w-2/4'>
-          <div className='flex w-full h-1/5 items-center justify-center p-2'>     
-            <h2 className='text-lg font-bold text-gray-600 '>Live Trip Status</h2>
+        <div className='Boxseperate shadow-md flex-col w-2/4 '>
+          <div className='flex w-full h-1/6 items-center justify-between px-5'>     
+            <h2 className='text-lg font-bold text-gray-600 pl-1'>Live Trip Status</h2>
+            <button className='text-gray-600 font-bold'><i className="bi bi-funnel px-1"></i>Filter</button>
           </div>
-          <div className='flex w-full h-4/5'></div>
+          <div className='flex flex-col w-full h-5/6 items-center'>
+                <div className='flex w-full h-1/12 items-end pb-1'>
+                <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Trip No </div>
+                <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Vehicle No</div>
+                <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Driver</div>
+                <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Persons</div>
+                <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Status</div>
+                {/* <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'></div> */}
+                </div>
+                <div className=" flex w-11/12 h-[0.5px] bg-gray-300"></div>
+                <div className='flex w-full h-11/12'></div>
+          </div>
         </div>
         <div className='flex flex-col w-1/4 h-full gap-4'>
-          <div className='flex w-full h-1/2 bg-white shadow-md rounded-2xl pt-2'>
-                <div className=' flex flex-col h-full w-2/5 justify-center items-center'>
-                {/* <h2 className='text-lg font-bold text-gray-600 '>Users</h2> */}
-                <img
-            src={user}
-            alt="user"
-            className="w-20 h-20"
-          />
-                </div>
-                <div className='flex flex-col h-full w-3/5'>
-                      <div className='flex w-full h-1/2 items-center'>
-                      <h2 className=' flex text-xl font-bold '>Total</h2>
-                      </div>
-                      <div className='flex w-full h-1/2 items-center'>
-                      <h2 className=' flex text-xl font-bold '>Active</h2>
-                      </div>
-                      <div></div>
-                </div>
+          <div className='flex w-full h-1/2 bg-white shadow-md rounded-2xl'>
+              <div className='flex flex-col w-2/5 items-center justify-center'>
+                  <h2 className='text-3xl font-bold text-gray-500 '>Total</h2>
+                  <h2 className='text-4xl font-bold text-blue-500 drop-shadow-md '>78</h2>
+              </div>
+              <div className=" flex w-[1px] max-w-xs h-full bg-gray-300"></div>
+              <div className='flex flex-col w-3/5'>
+                    <div className='flex h-1/2 items-center px-5 justify-between' style={{ backgroundColor: "#f2fef2", borderTopRightRadius: "1rem" }}>
+                      <h2 className='text-xl font-bold text-gray-600 '>User</h2>
+                      <h2 className='text-2xl font-bold pl-4'>48</h2>
+                    </div>
+                    <div className=" flex w-full max-w-xs h-[1px] bg-gray-300"></div>
+                    <div className='flex h-1/2 items-center px-5 justify-between' style={{ backgroundColor: "#fef2f2", borderBottomRightRadius: "1rem" }}>
+                      <h2 className='text-xl font-bold text-gray-600 '>Driver</h2>
+                      <h2 className='text-2xl font-bold pl-4 '>30</h2>
+                    </div>
+              </div>
           </div>
-          <div className='flex w-full h-1/2 bg-white shadow-md rounded-2xl pt-2'>
-                <div className=' flex flex-col h-full w-2/5 justify-center items-center'>
-                {/* <h2 className='text-lg font-bold text-gray-600 '>Users</h2> */}
-                <img
-            src={driver}
-            alt="Driver"
-            className="w-20 h-20"
-          />
-                </div>
-                <div className='flex flex-col h-full w-3/5'>
-                      <div className='flex w-full h-1/2 items-center'>
-                      <h2 className=' flex text-xl font-bold '>Total</h2>
-                      </div>
-                      <div className='flex w-full h-1/2 items-center'>
-                      <h2 className=' flex text-xl font-bold '>Active</h2>
-                      </div>
-                      <div></div>
-                </div>
+          <div className='flex w-full h-1/2 bg-white shadow-md rounded-2xl'>
+                
           </div>
         </div>
         <div className='Boxseperate shadow-md flex-col w-1/4'>
