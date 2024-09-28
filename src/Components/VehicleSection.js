@@ -50,7 +50,7 @@ const VehicleSection = () => {
       <div className='flex flex-col w-1/2 h-full gap-4'>
         <div className='flex w-full h-2/5 bg-white shadow-md rounded-2xl'>
         <div className='flex flex-col w-2/5 items-center justify-center'>
-          <h2 className='text-xl font-bold text-gray-500 '>Total</h2>
+          <h2 className='text-xl font-bold text-gray-600 '>Total</h2>
           <h2 className='text-3xl font-bold   text-blue-500 drop-shadow-md'>78</h2>
         </div>
         <div className="flex w-[1.5px] max-w-xs h-full bg-gray-300"></div>

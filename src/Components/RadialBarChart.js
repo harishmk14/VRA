@@ -32,7 +32,8 @@ const RadialBarChart = () => {
           },
         },
       },
-      labels: ['Completed', 'In Progress', 'Pending', 'Cancelled'], // Categories
+      labels: ['Completed', 'Ongoing', 'Pending', 'Cancelled'],
+      colors: ['#16a34a', '#007bff', '#facc15', '#dc2626'], // Categories
     };
 
     const chart = new ApexCharts(document.querySelector('#chart'), options);

@@ -7,7 +7,7 @@ const IncomeCard = () => {
     series: [
       {
         name: "Income",
-        data: [40000, 5000, 15000, 2000, 30000, 4000, 25000], // Sample data, replace with actual values
+        data: [40000, 5000, 15000, 2000, 30000, 4000, 25000,], // Sample data, replace with actual values
       },
     ],
     options: {

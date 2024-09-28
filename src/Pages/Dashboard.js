@@ -6,7 +6,7 @@ import RadialBarChart from '../Components/RadialBarChart';
 import IncomeCard from '../Components/IncomeCard';
 import ExpenseCard from '../Components/ExpenseCard';
 import VehicleSection from '../Components/VehicleSection';
-import TotalAndVehicleAvailability from '../Components/TotalSection';
+import VehicleAvailability from '../Components/VehicleAvailabilitys';
 import LiveVehicleStatus from '../Components/LiveTripStatus';  // Import the new component
 import '../index.css';
 import '../styles/calendar.css';
@@ -59,7 +59,7 @@ const Dashboard = () => {
 
         <RadialBarChart />
 
-        <TotalAndVehicleAvailability />
+        <VehicleAvailability />
       </div>  
 
       <div className='flex flex-grow w-full h-2/4 gap-4'>
