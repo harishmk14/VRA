@@ -39,12 +39,12 @@ const WeatherCard = ({ weatherData, loading }) => {
           </div>
           <div className="flex items-center justify-center mt-2 gap-4">
             <div className='flex items-center justify-center'>
-              <span className="text-5xl font-bold">{Math.round(weatherData.current.temp_c)}</span>
-              <span className="text-2xl text-gray-500">°C</span>
+              <span className="text-5xl font-bold text-blue-500">{Math.round(weatherData.current.temp_c)}</span>
+              <span className="text-2xl  text-blue-500 ">°C</span>
             </div>
             <img src={getWeatherIcon()} alt="Weather Icon" className="w-12 h-12" />
           </div>
-          <div className="flex justify-center mt-2 text-gray-500 flex-col">
+          <div className="flex justify-center items-center mt-2 text-gray-500 flex-col">
             <div className="flex  items-center gap-6 mt-2">
               <img src={rainIcon} alt="Precipitation Icon" className="w-6 h-6" />
               <span className="text-xs">{weatherData.current.precip_mm} mm Precipitation</span>

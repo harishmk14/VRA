@@ -1,13 +1,13 @@
-// src/components/ExpenseCard.js
+// src/components/TripCard.js
 import React from 'react';
 import Chart from "react-apexcharts";
 
-const ExpenseCard = () => {
+const TripCard = () => {
   const data = {
     series: [
       {
-        name: "Expense",
-        data: [1800, 2150, 5000, 100, 5600, 80, 6000], // Sample data
+        name: "Trip",
+        data: [220, 420, 20, 380, 100, 45, 250], // Sample data, replace with actual values
       },
     ],
     options: {
@@ -30,12 +30,12 @@ const ExpenseCard = () => {
           colorStops: [
             {
               offset: 0,
-              color: "rgba(255, 99, 132, 0.5)", // Light red with opacity
+              color: "rgba(59, 130, 246, 0.5)", // Light blue with opacity
               opacity: 0.5,
             },
             {
               offset: 100,
-              color: "rgba(255, 99, 132, 0.2)", // Light red gradient
+              color: "rgba(59, 130, 246, 0.2)", // Light blue gradient
               opacity: 0.2,
             },
           ],
@@ -44,7 +44,7 @@ const ExpenseCard = () => {
       stroke: {
         curve: "straight",
         width: 2,
-        colors: ["rgba(255, 99, 132, 1)"], // Line color (red)
+        colors: ["#3b82f6"], // Line color (blue)
       },
       xaxis: {
         labels: {
@@ -74,42 +74,36 @@ const ExpenseCard = () => {
           format: 'dd/MM/yy', // Format for x-axis tooltip
         },
         y: {
-          formatter: (val) => `₹${val}`, // Format for y-axis tooltip
+          formatter: (val) => `${val}`, // Format for y-axis tooltip
         },
       },
       legend: {
         show: false, // Hide legend
       },
       dataLabels: {
-        enabled: false, // Disable numbers on the graph completely
+        enabled: false, // Disable numbers on the graph
       },
     },
   };
 
   return (
-    <div className="flex-col w-full h-1/2 pt-1">
-      <div className="flex w-full h-1/10 items-center justify-between px-3">
-        <h2 className="text-lg font-bold text-gray-600">Expense</h2>
+    <div className='flex flex-col w-full h-3/5 bg-white shadow-md rounded-2xl justify-center items-center pb-4'>
+      <div className='flex h-1/4 w-full p-2 px-3 justify-between'>
+        <h2 className="text-lg font-bold text-gray-600">Trips</h2>
         <select className='w-16 text-xs'>
-            <option>Month</option>
-            <option>Today</option>
-            <option>Yearly</option>
-          </select>
+          <option>Yearly</option>
+          <option>Month</option>
+          <option>Today</option>
+        </select>
       </div>
-      <div className="flex-col w-full h-9/10 items-center justify-center">
-        <div className="flex w-full justify-between mt-1 px-2">
-          <h3 className="text-xl font-bold "><i className="bi bi-currency-rupee"></i>9000</h3>
-          <span className="flex items-center text-sm text-red-500">
-            <i className="bi bi-arrow-down"></i>
-            <span className="ml-1">0.13%</span>
-          </span>
-        </div>
-        <div className="w-full h-16">
-          <Chart options={data.options} series={data.series} type="area" height="100%" />
-        </div>
+      <div className='flex h-1/4 w-full pl-16'>
+        <h2 className='text-5xl font-bold text-blue-500 drop-shadow-md'>1435</h2>
+      </div>
+      <div className='flex h-2/4 w-full'>
+        <Chart options={data.options} series={data.series} type="area" height="100%" />
       </div>
     </div>
   );
 };
 
-export default ExpenseCard;
+export default TripCard;

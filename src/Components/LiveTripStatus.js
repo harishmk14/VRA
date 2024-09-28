@@ -20,17 +20,18 @@ const LiveVehicleStatus = ({ trips }) => {
         <div className='flex flex-col w-full overflow-auto max-h-[30vh]'>
           {trips.map((trip, index) => (
             <React.Fragment key={index}>
-              <div className='flex w-full h-1/6 items-center py-2 '>
-                <div className='flex w-1/6 h-full justify-center text-gray-700 text-sm'>{trip.tripNo}</div>
-                <div className='flex w-1/6 h-full justify-center text-gray-700 text-sm'>{trip.vehicleNo}</div>
-                <div className='flex w-1/6 h-full justify-center text-gray-700 text-sm'>{trip.driver}</div>
-                <div className='flex w-1/6 h-full justify-center text-gray-700 text-sm'>{trip.persons}</div>
-                <div className={`flex w-1/6 h-full justify-center text-sm ${trip.status === 'Ongoing' ? 'text-green-500' : trip.status === 'Completed' ? 'text-blue-500' : 'text-red-500'}`}>
-                  {trip.status}
+              <div className='flex w-full  items-center py-3.5 '>
+                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.tripNo}</div>
+                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.vehicleNo}</div>
+                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.driver}</div>
+                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.persons}</div>
+                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.status}</div>
+                <div className='flex w-1/6 h-full justify-center'>
+                  <button className='shadow-md text-xs px-1.5 py-1 rounded-full bg-blue-500 text-white'>Details</button>
                 </div>
               </div>
               {index < trips.length - 1 && (
-                <div className="flex w-full justify-center items-center py-2">
+                <div className="flex w-full justify-center items-center ">
                   <div className="w-11/12 h-[0.5px] bg-gray-300"></div>
                 </div>
               )}

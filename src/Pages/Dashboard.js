@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CalendarCard from '../Components/CalendarCard';
 import WeatherCard from '../Components/WeatherCard';
-import DonutChart from '../Components/DonutChart';
+import RadialBarChart from '../Components/RadialBarChart';
 import IncomeCard from '../Components/IncomeCard';
 import ExpenseCard from '../Components/ExpenseCard';
 import VehicleSection from '../Components/VehicleSection';
@@ -57,20 +57,16 @@ const Dashboard = () => {
         {/* live trip section */}
         <LiveVehicleStatus trips={trips} />  {/* Use the new component */}
 
-        <div className='Boxseperate shadow-md flex-col w-1/4'>
-          <div className='flex w-full h-1/5 items-center justify-center p-2'>     
-            <h2 className='text-lg font-bold text-gray-600 '>Trip Overview</h2>
-          </div>
-          <div className='flex w-full h-full'><DonutChart /></div>
-        </div>
+        <RadialBarChart />
 
         <TotalAndVehicleAvailability />
       </div>  
 
       <div className='flex flex-grow w-full h-2/4 gap-4'>
         <div className='flex w-3/5 h-full gap-4'>  
-          <div className="flex w-2/5 h-full flex-col gap-4">
+          <div className="flex w-1/3 h-full flex-col bg-white shadow-md rounded-2xl gap-1 justify-center items-center">
             <IncomeCard />
+            <div className="w-11/12 max-w-xs h-[1px] bg-gray-300"></div>
             <ExpenseCard />
           </div>
           <VehicleSection />

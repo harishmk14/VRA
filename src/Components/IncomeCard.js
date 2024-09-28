@@ -42,7 +42,7 @@ const IncomeCard = () => {
         },
       },
       stroke: {
-        curve: "smooth",
+        curve: "straight",
         width: 2,
         colors: ["rgba(144, 238, 144, 1)"], // Line color (light green)
       },
@@ -67,7 +67,15 @@ const IncomeCard = () => {
         size: 0, // Hide markers (data points)
       },
       tooltip: {
-        enabled: false, // Hide tooltips
+        enabled: true, // Enable tooltips
+        shared: true, // Show all series in the tooltip
+        intersect: false, // Allow tooltip to show for all data points
+        x: {
+          format: 'dd/MM/yy', // Format for x-axis tooltip
+        },
+        y: {
+          formatter: (val) => `₹${val}`, // Format for y-axis tooltip
+        },
       },
       legend: {
         show: false, // Hide legend
@@ -79,12 +87,17 @@ const IncomeCard = () => {
   };
 
   return (
-    <div className="flex-col w-full h-1/2 bg-white shadow-md rounded-2xl pt-2">
-      <div className="flex w-full h-1/10 items-center justify-center">
+    <div className="flex-col w-full h-1/2 pt-1">
+      <div className="flex w-full h-1/10 items-center justify-between px-3">
         <h2 className="text-lg font-bold text-gray-600">Income</h2>
+        <select className='w-16 text-xs'>
+            <option>Month</option>
+            <option>Today</option>
+            <option>Yearly</option>
+          </select>
       </div>
-      <div className="flex-col w-full h-9/10 items-center justify-center mt-1">
-        <div className="flex w-full justify-between mt-1 px-2">
+      <div className="flex-col w-full h-9/10 items-center justify-center">
+        <div className="flex w-full justify-between px-2 mt">
           <h3 className="text-xl font-bold "><i className="bi bi-currency-rupee"></i>30000</h3>
           <span className="flex items-center text-sm text-green-500">
             <i className="bi bi-arrow-up"></i>

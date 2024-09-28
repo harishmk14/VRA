@@ -10,6 +10,7 @@ const CalendarCard = ({ date, setDate }) => {
       <Calendar
         onChange={setDate}
         value={date}
+        showNeighboringMonth={false}  // Ensures neighboring month days are hidden
         className='rounded-lg calendar-card'
       />
     </div>
