@@ -1,6 +1,9 @@
+// vehicles/Vehicles.js
 import React, { useState } from 'react';
 import '../index.css';
-import FilterModal from '../Components/FilterModal'; // Import the FilterModal component
+import FilterModal from '../vehicles/FilterModal'; // Import the FilterModal component
+import AddVehicleModal from '../vehicles/AddVehicleModal'; // Import AddVehicleModal component
+import ViewVehicleModal from '../vehicles/ViewVehicleModal'; // Import the ViewVehicleModal component
 
 const Vehicles = () => {
   const vehiclesData = [
@@ -112,12 +115,14 @@ const Vehicles = () => {
       seater: 5,
       range: "500 km",
       price: 1600,
-      status: "Service",
+      status: "Service", // New status added here
     },
   ];
-
   const [filter, setFilter] = useState("All");
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); // State for Add Vehicle Modal
+  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); // State for View Vehicle Modal
+  const [selectedVehicle, setSelectedVehicle] = useState(null); // State to hold the selected vehicle
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -145,7 +150,11 @@ const Vehicles = () => {
   return (
     <div className="h-full flex flex-col p-5 py-3 pb-0">
       <div className="flex justify-between items-center pb-2 sticky top-0 z-10">
-        <button className="bg-blue-500 text-white rounded-xl hover:bg-blue-300 px-1 py-0">
+        {/* Button to open Add Vehicle Modal */}
+        <button 
+          onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Vehicle Modal
+          className="bg-blue-500 text-white rounded-xl hover:bg-blue-300 px-1 py-0"
+        >
           <i className="bi bi-plus text-3xl"></i>
         </button>
 
@@ -176,19 +185,32 @@ const Vehicles = () => {
           </button>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)} // Open modal on button click
-          className='text-lg hover:text-blue-500 rounded-lg p-1'
+          onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
+          className="text-lg hover:text-blue-500 rounded-lg p-1"
         >
           <i className="bi bi-filter-right pr-2 size-3"></i>
           Filter
         </button>
       </div>
 
-      {/* FilterModal Component */}
+      {/* Filter Modal */}
       <FilterModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} // Close modal
-        onFilterSelect={(selectedFilter) => setFilter(selectedFilter)} // Handle filter selection
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        onFilterSelect={(selectedFilter) => setFilter(selectedFilter)}
+      />
+
+      {/* Add Vehicle Modal */}
+      <AddVehicleModal
+        isOpen={isAddVehicleModalOpen}
+        onClose={() => setIsAddVehicleModalOpen(false)} // Close Add Vehicle Modal
+      />
+
+      {/* View Vehicle Modal */}
+      <ViewVehicleModal
+        isOpen={isViewVehicleModalOpen}
+        onClose={() => setIsViewVehicleModalOpen(false)} // Close View Vehicle Modal
+        vehicle={selectedVehicle} // Pass the selected vehicle to the modal
       />
 
       <div className="flex-grow overflow-auto hide-scroll p-3">
@@ -231,7 +253,13 @@ const Vehicles = () => {
                   <div className="text-sm font-bold text-gray-900">
                     Rs {vehicle.price} <span className="text-xs text-gray-500">Per Day</span>
                   </div>
-                  <button className="px-3 py-1 text-xs text-white bg-blue-500 rounded-full hover:bg-blue-600">
+                  <button
+                    className="px-3 py-1 text-xs text-white bg-blue-500 rounded-full hover:bg-blue-600"
+                    onClick={() => {
+                      setSelectedVehicle(vehicle); // Set the selected vehicle
+                      setIsViewVehicleModalOpen(true); // Open View Vehicle Modal
+                    }}
+                  >
                     View
                   </button>
                 </div>

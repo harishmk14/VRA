@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CalendarCard from '../Components/CalendarCard';
-import WeatherCard from '../Components/WeatherCard';
-import RadialBarChart from '../Components/RadialBarChart';
-import IncomeCard from '../Components/IncomeCard';
-import ExpenseCard from '../Components/ExpenseCard';
-import VehicleSection from '../Components/VehicleSection';
-import VehicleAvailability from '../Components/VehicleAvailabilitys';
-import LiveVehicleStatus from '../Components/LiveTripStatus';  // Import the new component
+import CalendarCard from '../Dashboard/CalendarCard';
+import WeatherCard from '../Dashboard/WeatherCard';
+import RadialBarChart from '../Dashboard/RadialBarChart';
+import IncomeCard from '../Dashboard/IncomeCard';
+import ExpenseCard from '../Dashboard/ExpenseCard';
+import VehicleSection from '../Dashboard/VehicleSection';
+import VehicleAvailability from '../Dashboard/VehicleAvailabilitys';
+import LiveVehicleStatus from '../Dashboard/LiveTripStatus';  // Import the new component
 import '../index.css';
 import '../styles/calendar.css';
 
