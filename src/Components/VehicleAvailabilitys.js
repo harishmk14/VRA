@@ -36,7 +36,7 @@ const VehicleAvailability = () => {
           <option value="bus">Bus</option>
           <option value="truck">Delivery Truck</option>
         </select>
-        <input type='number' className='w-2/6 rounded-md border-2 bg-gray-50 py-2 text-xs' placeholder='Qty' />
+        <input type='number' className='w-2/6 rounded-md border-2 bg-gray-50 py-2 text-xs' placeholder='Persons' />
       </div>
       <div className='flex flex-col w-full h-3/6 items-center px-4'>
         <div className='flex flex-col h-1/2 w-full justify-center'>

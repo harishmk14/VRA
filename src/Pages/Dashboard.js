@@ -51,7 +51,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className='flex flex-col h-full gap-4'>
+    <div className='flex flex-col h-full gap-4 p-5 pt-3'>
       <div className='flex flex-grow gap-4 w-full h-2/4'>
         
         {/* live trip section */}

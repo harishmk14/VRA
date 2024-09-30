@@ -26,11 +26,12 @@ select.placeholder {
 }
 
 .sidebar-item:hover {
-  color: #1d4ed8; /* Blue color on hover (text-blue-600 equivalent) */
+  color: #3b82f6; /* Blue color on hover (text-blue-600 equivalent) */
 }
 
-.sidebar-item:active {
-  color: #1e3a8a; /* Darker blue on active (text-blue-700 equivalent) */
+.sidebar-item.active {
+  color: #3b82f6; /* Blue color for active state */
+  font-weight: bold;
 }
 
 .Boxseperate {
@@ -52,4 +53,14 @@ select.placeholder {
 
 ::-webkit-scrollbar-track {
   background-color: rgba(255, 255, 255, 0.1); /* Color of the scrollbar track */
+}
+
+/* Hide scrollbars for the specific class */
+.hide-scroll::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.hide-scroll {
+  -ms-overflow-style: none;  /* Internet Explorer and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
