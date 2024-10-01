@@ -42,72 +42,6 @@ const Vehicles = () => {
     },
     {
       id: 4,
-      model: "Nissan Leaf",
-      image: "https://www.cnet.com/a/img/resize/e5f50dfbbd4cf60df3b76e9646e8611f54b4ce1b/hub/2019/04/06/3c5cde59-d491-4f28-a817-719af6f08c7d/2019-nissan-leaf-plus-ogi.jpg?auto=webp&fit=crop&height=675&width=1200",
-      fuelType: "Electric",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "270 km",
-      price: 1800,
-      status: "Available",
-    },
-    {
-      id: 5,
-      model: "BMW 3 Series",
-      image: "https://media.ed.edmunds-media.com/bmw/3-series/2023/oem/2023_bmw_3-series_sedan_m340i_fq_oem_1_1600.jpg",
-      fuelType: "Diesel",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "500 km",
-      price: 2300,
-      status: "Pending",
-    },
-    {
-      id: 6,
-      model: "Audi A4",
-      image: "https://hips.hearstapps.com/hmg-prod/images/2022-audi-a4-mmp-1-1621027611.jpg?crop=0.795xw:0.671xh;0.0849xw,0.178xh&resize=2048:*",
-      fuelType: "Petrol",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "600 km",
-      price: 2400,
-      status: "In Journey",
-    },
-    {
-      id: 7,
-      model: "Kia EV6",
-      image: "https://vehicle-images.dealerinspire.com/07b4-18004013/KNDC34LA0R5217693/d01f697bac826d89119f0cded99291a9.jpg",
-      fuelType: "Electric",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "400 km",
-      price: 2200,
-      status: "Available",
-    },
-    {
-      id: 8,
-      model: "Hyundai Elantra",
-      image: "https://www.usatoday.com/gcdn/-mm-/221944ead94f36fb867f16da5b1d7db08ab24309/c=0-476-4926-3259/local/-/media/2017/02/08/DetroitFreePress/DetroitFreePress/636221808508481702-2018-Hyundai-Elantra-GT-03.JPG",
-      fuelType: "Petrol",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "550 km",
-      price: 1700,
-      status: "Pending",
-    },
-    {
-      id: 9,
-      model: "Volkswagen ID.4",
-      image: "https://uploads.vw-mms.de/system/production/images/vwn/037/107/images/85fff5370f464ce2397eba04709886a786dff846/DB2021AU00589_web_1600.jpg?1649157750",
-      fuelType: "Electric",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "400 km",
-      price: 2100,
-      status: "In Journey",
-    },
-    {
-      id: 10,
       model: "Chevrolet Malibu",
       image: "https://cdn.motor1.com/images/mgl/g4MN9E/s1/chevrolet-malibu.webp",
       fuelType: "Gas",
@@ -149,7 +83,7 @@ const Vehicles = () => {
 
   return (
     <div className="h-full flex flex-col p-5 py-3 pb-0">
-      <div className="flex justify-between items-center pb-2 sticky top-0 z-10">
+      <div className="flex justify-between items-center pb-2 sticky top-0 z-10 px-3">
         {/* Button to open Add Vehicle Modal */}
         <button 
           onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Vehicle Modal
@@ -221,7 +155,7 @@ const Vehicles = () => {
                 <img
                   src={vehicle.image}
                   alt={vehicle.model}
-                  className="w-full h-32 object-cover"
+                  className="w-full h-32 object-cover rounded-md"
                 />
                 <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
                   {vehicle.status}

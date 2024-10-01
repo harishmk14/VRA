@@ -49,42 +49,57 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
     setPriceRange(newRange);
   };
 
+  const handleReset = () => {
+    setSelectedVehicleType('');
+    setAvailableCategories([]);
+    setSelectedCategory('');
+    setPriceRange([0, 50000]);
+  };
+
   if (!isOpen) return null; // Do not render the modal if not open
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-5 shadow-lg w-96">
+      <div className="bg-white rounded-lg p-6 shadow-lg w-96 relative">
+        
+        {/* 'X' Button to close modal */}
+        <button 
+          onClick={onClose} 
+          className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900">
+          &times;
+        </button>
+        
         <h2 className="text-xl font-semibold mb-4">Filter Vehicles</h2>
 
         {/* Vehicle Type */}
-        <div className="mb-4">
+        <div className="px-2 py-3">
           <label className="block text-sm font-medium mb-1">Vehicle Type</label>
           <select
             value={selectedVehicleType}
             onChange={(e) => setSelectedVehicleType(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
           >
-            <option value="">Select Vehicle Type</option>
-            <option value="Bike">Bike</option>
-            <option value="Car">Car</option>
-            <option value="Van">Van</option>
-            <option value="Bus">Bus</option>
-            <option value="Delivery Truck">Delivery Truck</option>
+            <option value="" className="text-gray-400">Select Vehicle Type</option>
+            <option value="Bike" className="text-gray-600">Bike</option>
+            <option value="Car" className="text-gray-600">Car</option>
+            <option value="Van" className="text-gray-600">Van</option>
+            <option value="Bus" className="text-gray-600">Bus</option>
+            <option value="Delivery Truck" className="text-gray-600">Delivery Truck</option>
           </select>
         </div>
 
         {/* Vehicle Categories */}
-        <div className="mb-4">
+        <div className="px-2 py-3">
           <label className="block text-sm font-medium mb-1">Vehicle Categories</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             disabled={!availableCategories.length}
           >
-            <option value="">Select Category</option>
+            <option value="" className="text-gray-400">Select Category</option>
             {availableCategories.map((category) => (
-              <option key={category} value={category}>
+              <option key={category} value={category} className="text-gray-600">
                 {category}
               </option>
             ))}
@@ -92,7 +107,7 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
         </div>
 
         {/* Price Range */}
-        <div className="mb-4">
+        <div className="px-2 py-3">
           <label className="block text-sm font-medium mb-1">Price Range: {minPrice} - {maxPrice}</label>
           <div className="flex space-x-4">
             <input
@@ -117,18 +132,18 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-end space-x-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        <div className="flex justify-center space-x-3 px-2 pt-3  ">
+        <button
+            onClick={handleFilterClick}
+            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Cancel
+            Apply
           </button>
           <button
-            onClick={handleFilterClick}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={handleReset}
+            className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
           >
-            Apply Filters
+            Reset
           </button>
         </div>
       </div>
