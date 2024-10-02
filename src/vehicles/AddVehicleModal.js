@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const vehicleTypes = {
   bike: ['Scooters', 'Commuter Bikes', 'Sportbikes', 'Cruiser Bikes', 'Touring Bikes', 'Adventure Bikes', 'Dirt Bikes', 'Electric Bikes'],
   car: ['Economy Hatchbacks', 'Sedans', 'Crossovers', 'Full-Size SUVs', 'Luxury Cars', 'MUVs / MPVs', 'Electric Cars'],
@@ -8,36 +9,17 @@ const vehicleTypes = {
   truck: ['Mini Trucks', 'Pickup Trucks', 'Intermediate Commercial Vehicles (ICVs)', 'Heavy Commercial Vehicles (HCVs)', 'Multi-Axle Trucks', 'Container Trucks', 'Tipper Trucks'],
 };
 
-const vehicleFeatures = {
-  bike: ['ABS'],
-  car: [
-    'Anti-lock Braking System', 'Electronic Stability Control', 'Traction Control',
-    'Forward Collision Warning', 'Automatic Emergency Braking', 'Blind Spot Detection',
-    'Lane Departure Warning', 'Lane Keeping Assist', 'Adaptive Cruise Control',
-    'Driver Monitoring System', 'Adaptive Headlights', 'Seatbelts',
-    'Crumple Zones', 'Head Restraints', 'Side-Impact Protection',
-    'Collision Safety Features', '360-Degree Camera System',
-    'Traffic Sign Recognition', 'Cross-Traffic Alert', 'Collision Avoidance System'
-  ],
-  van: [
-    'Anti-lock Braking System', 'Electronic Stability Control', 'Traction Control',
-    'Forward Collision Warning', 'Automatic Emergency Braking', 'Blind Spot Detection',
-    'Lane Departure Warning', 'Lane Keeping Assist', 'Adaptive Cruise Control',
-    'Driver Monitoring System', 'Adaptive Headlights', 'Seatbelts',
-    'Crumple Zones', 'Head Restraints', 'Side-Impact Protection',
-    'Collision Safety Features', '360-Degree Camera System',
-    'Traffic Sign Recognition', 'Cross-Traffic Alert', 'Collision Avoidance System'
-  ],
-  bus: [
-    'Anti-lock Braking System', 'Electronic Stability Control', 'Traction Control',
-    'Forward Collision Warning', 'Automatic Emergency Braking', 'Blind Spot Detection',
-    'Lane Departure Warning', 'Lane Keeping Assist', 'Adaptive Cruise Control',
-    'Driver Monitoring System', 'Adaptive Headlights', 'Seatbelts',
-    'Crumple Zones', 'Head Restraints', 'Side-Impact Protection',
-    'Collision Safety Features', '360-Degree Camera System',
-    'Traffic Sign Recognition', 'Cross-Traffic Alert', 'Collision Avoidance System'
-  ],
-};
+const commonFeatures = [
+  'Anti-lock Braking System', 'Electronic Stability Control', 'Traction Control',
+  'Forward Collision Warning', 'Automatic Emergency Braking', 'Blind Spot Detection',
+  'Lane Departure Warning', 'Lane Keeping Assist', 'Adaptive Cruise Control',
+  'Driver Monitoring System', 'Adaptive Headlights', 'Seatbelts',
+  'Crumple Zones', 'Head Restraints', 'Side-Impact Protection',
+  'Collision Safety Features', '360-Degree Camera System',
+  'Traffic Sign Recognition', 'Cross-Traffic Alert', 'Collision Avoidance System'
+];
+
+const bikeFeatures = ['Anti-lock Braking System'];
 
 const AddVehicleModal = ({ isOpen, onClose }) => {
   const [vehicleType, setVehicleType] = useState('');
@@ -75,6 +57,12 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  const featuresToShow = vehicleType === 'bike' 
+  ? bikeFeatures 
+  : ['car', 'van', 'bus', 'truck'].includes(vehicleType) 
+  ? commonFeatures 
+  : [];
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-36">
       <div className="bg-white rounded-lg p-8 shadow-lg w-4/5  relative overflow-auto max-h-[90vh]">
@@ -88,8 +76,8 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
         <h2 className="text-xl font-semibold mb-4">Add New Vehicle</h2>
 
         <div className="grid grid-cols-2 gap-6 gap-x-8">
-          {/* Vehicle Type */}
-          <div>
+{/* Vehicle Type */}
+<div>
             <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
             <select 
               className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
@@ -114,6 +102,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             />
           </div>
 
+
           {/* Vehicle Model */}
           <div>
             <label className="block text-sm font-medium mb-1">Vehicle Model</label>
@@ -123,8 +112,8 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
               onChange={handleVehicleModelChange}
               disabled={!vehicleType}
             >
-              <option >Select Vehicle Model</option>
-              {vehicleType && vehicleTypes[vehicleType].map((model) => (
+              <option>Select Vehicle Model</option>
+              {vehicleType && vehicleTypes[vehicleType]?.map((model) => (
                 <option key={model} value={model}>{model}</option>
               ))}
             </select>
@@ -382,7 +371,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
           <div>
             <label className="block text-sm font-medium mb-1">Vehicle Features</label>
             <div className="flex flex-wrap gap-2">
-              {vehicleType && vehicleFeatures[vehicleType].map(feature => (
+              {featuresToShow.map(feature => (
                 <div key={feature} className="flex items-center">
                   <input
                     type="checkbox"
@@ -429,13 +418,19 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Close Button */}
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-          >
-            Close
-          </button>
+        <div className="flex justify-center mt-8 gap-4">
+        <button
+              // onClick={handleAdd}
+              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+            >
+              Add
+            </button>
+            <button
+              // onClick={handleReset}
+              className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Reset
+            </button>
         </div>
       </div>
     </div>
