@@ -3,23 +3,67 @@ import React, { useState } from 'react';
 const VehicleAvailability = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [availableVehicles, setAvailableVehicles] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
 
   const handleCheckAvailability = () => {
-    // Simulating vehicle data (could be fetched from an API in real-world scenario)
-    const mockVehicles = [
-      { id: 1, type: 'Bike', number: 'TN-01-1234', status: 'Available' },
-      { id: 2, type: 'Car', number: 'TN-02-5678', status: 'Available' },
-      { id: 3, type: 'Van', number: 'TN-03-9876', status: 'Unavailable' },
+    // Simulating vehicle data (could be fetched from an API in a real-world scenario)
+    const vehiclesData = [
+      {
+        id: 1,
+        model: "Tesla Model 3",
+        image: "https://ev-database.org/img/auto/Tesla_Model_3/Tesla_Model_3-01@2x.jpg",
+        fuelType: "Electric",
+        transmission: "Auto Gear",
+        seater: 5,
+        range: "350 km",
+        price: 2000,
+        status: "Available",
+      },
+      {
+        id: 2,
+        model: "Toyota Camry",
+        image: "https://i0.wp.com/practicalmotoring.com.au/wp-content/uploads/2016/11/097A0935.jpg?fit=768%2C512&ssl=1",
+        fuelType: "Petrol",
+        transmission: "Auto Gear",
+        seater: 5,
+        range: "450 km",
+        price: 1500,
+        status: "Available",
+      },
+      {
+        id: 3,
+        model: "Ford Mustang",
+        image: "https://www.vdm.ford.com/content/dam/vdm_ford/live/en_us/ford/nameplate/mustang/2024/collections/_360/atlas-blue/mst_24_gtp_ext_360_atlas_blue_01.jpg",
+        fuelType: "Gas",
+        transmission: "Auto Gear",
+        seater: 4,
+        range: "300 km",
+        price: 2500,
+        status: "Available",
+      },
+      {
+        id: 4,
+        model: "Chevrolet Malibu",
+        image: "https://cdn.motor1.com/images/mgl/g4MN9E/s1/chevrolet-malibu.webp",
+        fuelType: "Gas",
+        transmission: "Manual",
+        seater: 5,
+        range: "500 km",
+        price: 1600,
+        status: "Available",
+      },
     ];
 
     // Set the available vehicles and open the modal
-    setAvailableVehicles(mockVehicles);
+    setAvailableVehicles(vehiclesData);
+    setFilteredVehicles(vehiclesData); // Assuming no filters applied yet
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setAvailableVehicles([]);
+    setFilteredVehicles([]);
   };
 
   return (
@@ -67,36 +111,55 @@ const VehicleAvailability = () => {
         </button>
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold mb-4">Available Vehicles</h2>
-            <div className='flex flex-col'>
-              {availableVehicles.length > 0 ? (
-                availableVehicles.map((vehicle) => (
-                  <div key={vehicle.id} className='flex justify-between items-center mb-2'>
-                    <span>{vehicle.type} - {vehicle.number}</span>
-                    <span className={`text-xs p-1 rounded-full ${vehicle.status === 'Available' ? 'bg-green-200 text-green-600' : 'bg-red-200 text-red-600'}`}>
-                      {vehicle.status}
-                    </span>
+{/* Modal */}
+{isModalOpen && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-56 py-12">
+    <div className="bg-zinc-100 p-6 pt-0 rounded-xl shadow-lg w-full h-full overflow-auto">
+      {/* Sticky Header */}
+      <div className="flex justify-between items-center sticky top-0 bg-zinc-100 z-10 p-4 px-1">
+        <h2 className="text-2xl font-bold">Available Vehicles</h2>
+        <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
+          <span className="text-2xl ">&times;</span>
+        </button>
+      </div>
+      <div className="flex-grow overflow-auto p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          {filteredVehicles.map((vehicle) => (
+            <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
+              <div className="relative">
+                <img
+                  src={vehicle.image}
+                  alt={vehicle.model}
+                  className="w-full h-40 object-cover rounded-md"
+                />
+              </div>
+              <div className="p-2 space-y-2">
+                <h2 className="text-sm font-semibold text-gray-800">{vehicle.model}</h2>
+                <div className="grid grid-cols-3 gap-1 mt-2">
+                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">{vehicle.fuelType}</span>
+                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">{vehicle.transmission}</span>
+                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">Seater {vehicle.seater}</span>
+                </div>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-gray-500 text-xs">Range {vehicle.range}</span>
+                </div>
+                <div className="flex justify-between items-center mt-2">
+                  <div className="text-sm font-bold text-gray-900">
+                    Rs {vehicle.price} <span className="text-xs text-gray-500">Per Day</span>
                   </div>
-                ))
-              ) : (
-                <p>No vehicles available</p>
-              )}
+                  <button className="px-3 py-1 text-xs text-white bg-blue-500 rounded-full hover:bg-blue-600">
+                    Book
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-end mt-4">
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={handleCloseModal}
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

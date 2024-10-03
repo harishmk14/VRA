@@ -29,6 +29,8 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
   const [airbags, setAirbags] = useState('');
   const [acType, setAcType] = useState('');
   const [tollType, setTollType] = useState('');
+  const [sunroof, setSunroof] = useState(false);
+const [gpsTracking, setGpsTracking] = useState(false);
   
   const handleVehicleTypeChange = (e) => {
     const type = e.target.value;
@@ -63,19 +65,41 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
   ? commonFeatures 
   : [];
 
+const handleReset = () => {
+  setVehicleType('');
+  setVehicleModel('');
+  setFuelType('');
+  setSelectedFeatures([]);
+  setAirbags('');
+  setAcType('');
+  setTollType('');
+  setSunroof(false);
+  setGpsTracking(false);
+
+  // Reset the rest of the input fields that are controlled by state
+  // For example, if you have state variables for these fields:
+  document.querySelectorAll('input').forEach(input => {
+    input.value = '';
+  });
+  
+  document.querySelectorAll('textarea').forEach(textarea => {
+    textarea.value = '';
+  });
+
+  // Reset the select dropdowns
+  document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+};
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-36">
-      <div className="bg-white rounded-lg p-8 shadow-lg w-4/5  relative overflow-auto max-h-[90vh]">
-        <button 
-          onClick={onClose} 
-          className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900"
-        >
-          &times;
+      <div className="bg-white rounded-lg p-8 pt-0 shadow-lg w-4/5  relative overflow-auto max-h-[90vh]">
+      <div className="flex justify-between items-center sticky top-0 bg-white z-10 p-5 px-1 mb-2">
+        <h2 className="text-2xl font-bold">Add Vehicles</h2>
+        <button onClick={onClose}  className="text-gray-500 hover:text-gray-700">
+          <span className="text-2xl ">&times;</span>
         </button>
-
-        <h2 className="text-xl font-semibold mb-4">Add New Vehicle</h2>
-
-        <div className="grid grid-cols-2 gap-6 gap-x-8">
+      </div>
+        <div className="grid grid-cols-2 gap-5 gap-x-8">
 {/* Vehicle Type */}
 <div>
             <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
@@ -148,19 +172,21 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* AC/Non-AC */}
-          <div>
-            <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
-            <select
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              value={acType}
-              onChange={(e) => setAcType(e.target.value)}
-            >
-              <option>Select </option>
-              <option value="AC">AC</option>
-              <option value="Non-AC">Non-AC</option>
-            </select>
-          </div>
+{/* AC/Non-AC */}
+{vehicleType !== 'bike' && (
+  <div>
+    <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
+    <select
+      className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+      value={acType}
+      onChange={(e) => setAcType(e.target.value)}
+    >
+      <option>Select </option>
+      <option value="AC">AC</option>
+      <option value="Non-AC">Non-AC</option>
+    </select>
+  </div>
+)}
 
           {/* Gear Type */}
           <div>
@@ -256,23 +282,29 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-                    {/* Sunroof */}
-                    <div className="flex flex-col gap-1">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                  />
-                  <span >Sunroof</span>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                  />
-                  <span>GPS Tracking</span>
-                </div>
-            </div>
+{/* Sunroof */}
+{vehicleType !== 'bike' && (
+  <div className="flex flex-col gap-1">
+    <div className="flex items-center">
+      <input 
+        type="checkbox" 
+        className="mr-2"
+        checked={sunroof} // Controlled by state
+        onChange={(e) => setSunroof(e.target.checked)} // Update state on change
+      />
+      <span>Sunroof</span>
+    </div>
+    <div className="flex items-center">
+      <input 
+        type="checkbox" 
+        className="mr-2"
+        checked={gpsTracking} // Controlled by state
+        onChange={(e) => setGpsTracking(e.target.checked)} // Update state on change
+      />
+      <span>GPS Tracking</span>
+    </div>
+  </div>
+)}
 
           {/* Insurance ID */}
           <div>
@@ -346,16 +378,18 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-                    {/* Airbag */}
-                    <div>
-            <label className="block text-sm font-medium mb-1">Airbags</label>
-            <input
-              type="number"
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              value={airbags}
-              readOnly={vehicleType === 'bike'}
-            />
-          </div>
+{/* Airbags */}
+{vehicleType !== 'bike' && (
+  <div>
+    <label className="block text-sm font-medium mb-1">Airbags</label>
+    <input
+      type="number"
+      className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+      value={airbags}
+      onChange={(e) => setAirbags(e.target.value)}
+    />
+  </div>
+)}
 
           {/* Accident History */}
           <div>
@@ -426,7 +460,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
               Add
             </button>
             <button
-              // onClick={handleReset}
+              onClick={handleReset}
               className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
             >
               Reset

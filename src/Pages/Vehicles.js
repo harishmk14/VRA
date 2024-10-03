@@ -155,7 +155,7 @@ const Vehicles = () => {
                 <img
                   src={vehicle.image}
                   alt={vehicle.model}
-                  className="w-full h-32 object-cover rounded-md"
+                  className="w-full h-44 object-cover rounded-md"
                 />
                 <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
                   {vehicle.status}
