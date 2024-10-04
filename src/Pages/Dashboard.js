@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import user from '../Assets/img/user.png'
 // import CalendarCard from '../Dashboard/CalendarCard';
 // import WeatherCard from '../Dashboard/WeatherCard';
 import RadialBarChart from '../Dashboard/RadialBarChart';
-import IncomeCard from '../Dashboard/IncomeCard';
+// import IncomeCard from '../Dashboard/IncomeCard';
 import ExpenseCard from '../Dashboard/ExpenseCard';
-// import VehicleSection from '../Dashboard/VehicleSection';
+import VehicleSection from '../Dashboard/VehicleSection';
 import VehicleAvailability from '../Dashboard/VehicleAvailabilitys';
 import LiveVehicleStatus from '../Dashboard/LiveTripStatus';  // Import the new component
 import '../index.css';
-import '../styles/calendar.css';
+import { useRouteLoaderData } from 'react-router-dom';
+// import '../styles/calendar.css';
 
 // const API_KEY = '8e9dbe8f4a5d403b8a9161537242309';
 // const CITY = 'Pondicherry';
@@ -68,22 +70,44 @@ const Dashboard = () => {
               <VehicleAvailability />
            </div> 
            <div className='border-r-2 px-1 py-2.5  bg-white shadow-md rounded-lg'>
-
+              <VehicleSection />
            </div>
         </div>
         <div className=" grid grid-cols-2 h-full py-2 bg-white shadow-md rounded-lg">
                     <div className='border-r-2'>
             <RadialBarChart />
-          </div>
+          </div> 
           <div className='grid w-full h-full grid-rows-2'>
-            <div className='border-b-2'> 
-
-            </div>
-            <div>
-
-            </div>
+          <div className='flex flex-col border-b-2 pt-1'>
+              <span className='text-lg font-bold text-gray-600 px-4'>User</span>
+              <div className='flex justify-center items-center gap-7'> 
+                <div className='flex flex-col  items-center'>
+                <h2 className='text-4xl font-bold text-blue-500 drop-shadow-md'>250</h2>
+                <h2 className='text-2xl font-bold text-gray-600'>Total</h2>
+                </div>
+                <div className="flex w-[0.5px] h-20 bg-gray-300"></div>
+                <div className='flex flex-col  items-center'>
+                <h2 className='text-4xl font-bold text-blue-500 drop-shadow-md'>68</h2>
+                <h2 className='text-2xl font-bold text-gray-600'>Active</h2>
+                </div>
+              </div>
           </div>
-        </div>
+          <div className='flex flex-col pt-2'>
+              <span className='text-lg font-bold text-gray-600 px-4'>Driver</span>
+              <div className='flex justify-center items-center gap-7'> 
+                <div className='flex flex-col  items-center'>
+                <h2 className='text-4xl font-bold text-blue-500 drop-shadow-md'>120</h2>
+                <h2 className='text-2xl font-bold text-gray-600'>Total</h2>
+                </div>
+                <div className="flex w-[0.5px] h-20 bg-gray-300"></div>
+                <div className='flex flex-col  items-center'>
+                <h2 className='text-4xl font-bold text-blue-500 drop-shadow-md'>78</h2>
+                <h2 className='text-2xl font-bold text-gray-600'>Active</h2>
+                </div>
+              </div>
+          </div>
+          </div>
+      </div>
       </div>
     </div>
   );
