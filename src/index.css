@@ -78,3 +78,9 @@ select.placeholder {
 .animate-blink {
   animation: blink 1.5s infinite;
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; /* or use hidden class in Tailwind */
+  }
+}

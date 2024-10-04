@@ -102,7 +102,7 @@ const handleReset = () => {
         <div className="grid grid-cols-2 gap-5 gap-x-8">
 {/* Vehicle Type */}
 <div>
-            <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
+            <label className="block text-sm font-medium mb-1">Vehicle Type <span className="text-red-500">*</span></label>
             <select 
               className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
               value={vehicleType}
@@ -119,7 +119,7 @@ const handleReset = () => {
 
           {/* Brand Name */}
           <div>
-            <label className="grid text-sm font-medium mb-1">Brand Name</label>
+            <label className="block text-sm font-medium mb-1">Brand Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -129,7 +129,7 @@ const handleReset = () => {
 
           {/* Vehicle Model */}
           <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Model</label>
+            <label className="block text-sm font-medium mb-1">Vehicle Model <span className="text-red-500">*</span></label>
             <select 
               className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
               value={vehicleModel}
@@ -145,7 +145,7 @@ const handleReset = () => {
 
           {/* Registration No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Registration No</label>
+            <label className="block text-sm font-medium mb-1">Registration No <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -154,7 +154,7 @@ const handleReset = () => {
 
           {/* Registration Type (Only Commercial) */}
           <div>
-            <label className="block text-sm font-medium mb-1">Registration Type</label>
+            <label className="block text-sm font-medium mb-1">Registration Type <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -165,7 +165,7 @@ const handleReset = () => {
 
           {/* Seater */}
           <div>
-            <label className="block text-sm font-medium mb-1">Seater</label>
+            <label className="block text-sm font-medium mb-1">Seater <span className="text-red-500">*</span></label>
             <input
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -175,7 +175,7 @@ const handleReset = () => {
 {/* AC/Non-AC */}
 {vehicleType !== 'bike' && (
   <div>
-    <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
+    <label className="block text-sm font-medium mb-1">AC/Non-AC <span className="text-red-500">*</span></label>
     <select
       className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
       value={acType}
@@ -190,7 +190,7 @@ const handleReset = () => {
 
           {/* Gear Type */}
           <div>
-            <label className="block text-sm font-medium mb-1">Gear Type</label>
+            <label className="block text-sm font-medium mb-1">Gear Type <span className="text-red-500">*</span></label>
             <select className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'>
             <option>Select Gear Type</option>
               <option value="manual">Manual</option>
@@ -200,7 +200,7 @@ const handleReset = () => {
 
           {/* Fuel Type */}
           <div>
-            <label className="block text-sm font-medium mb-1">Fuel Type</label>
+            <label className="block text-sm font-medium mb-1">Fuel Type <span className="text-red-500">*</span></label>
             <select
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               value={fuelType}
@@ -216,7 +216,7 @@ const handleReset = () => {
 
           {/* Toll Type */}
           <div>
-            <label className="block text-sm font-medium mb-1">Toll Type</label>
+            <label className="block text-sm font-medium mb-1">Toll Type <span className="text-red-500">*</span></label>
             <select
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               value={tollType}
@@ -230,7 +230,7 @@ const handleReset = () => {
 
           {/* Color */}
           <div>
-            <label className="block text-sm font-medium mb-1">Color</label>
+            <label className="block text-sm font-medium mb-1">Color <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -239,7 +239,7 @@ const handleReset = () => {
 
           {/* Range */}
           <div>
-            <label className="block text-sm font-medium mb-1">Range (in km)</label>
+            <label className="block text-sm font-medium mb-1">Range (in km) <span className="text-red-500">*</span></label>
             <input
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -248,7 +248,7 @@ const handleReset = () => {
 
           {/* Price Per Day */}
           <div>
-            <label className="block text-sm font-medium mb-1">Price Per Day</label>
+            <label className="block text-sm font-medium mb-1">Price Per Day <span className="text-red-500">*</span></label>
             <input
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -257,7 +257,7 @@ const handleReset = () => {
 
           {/* Fuel Capacity */}
           <div>
-            <label className="block text-sm font-medium mb-1">Fuel Capacity (in Liters)</label>
+            <label className="block text-sm font-medium mb-1">Fuel Capacity (in Liters) <span className="text-red-500">*</span></label>
             <input
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -266,7 +266,7 @@ const handleReset = () => {
 
           {/* Mileage */}
           <div>
-            <label className="block text-sm font-medium mb-1">Mileage (per liter)</label>
+            <label className="block text-sm font-medium mb-1">Mileage (per liter) <span className="text-red-500">*</span></label>
             <input
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -275,7 +275,7 @@ const handleReset = () => {
 
           {/* Engine CC */}
           <div>
-            <label className="block text-sm font-medium mb-1">Engine CC</label>
+            <label className="block text-sm font-medium mb-1">Engine CC <span className="text-red-500">*</span></label>
             <input
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -292,7 +292,7 @@ const handleReset = () => {
         checked={sunroof} // Controlled by state
         onChange={(e) => setSunroof(e.target.checked)} // Update state on change
       />
-      <span>Sunroof</span>
+      <span>Sunroof <span className="text-red-500">*</span></span>
     </div>
     <div className="flex items-center">
       <input 
@@ -301,14 +301,14 @@ const handleReset = () => {
         checked={gpsTracking} // Controlled by state
         onChange={(e) => setGpsTracking(e.target.checked)} // Update state on change
       />
-      <span>GPS Tracking</span>
+      <span>GPS Tracking <span className="text-red-500">*</span></span>
     </div>
   </div>
 )}
 
           {/* Insurance ID */}
           <div>
-            <label className="block text-sm font-medium mb-1">Insurance ID</label>
+            <label className="block text-sm font-medium mb-1">Insurance ID <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -317,7 +317,7 @@ const handleReset = () => {
 
           {/* Insurance Renewal Date */}
           <div>
-            <label className="block text-sm font-medium mb-1">Insurance Renewal Date</label>
+            <label className="block text-sm font-medium mb-1">Insurance Renewal Date <span className="text-red-500">*</span></label>
             <input
               type="date"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -326,7 +326,7 @@ const handleReset = () => {
 
           {/* Insurance Expire Date */}
           <div>
-            <label className="block text-sm font-medium mb-1">Insurance Expire Date</label>
+            <label className="block text-sm font-medium mb-1">Insurance Expire Date <span className="text-red-500">*</span></label>
             <input
               type="date"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -335,7 +335,7 @@ const handleReset = () => {
 
           {/* Last Serviced Date */}
           <div>
-            <label className="block text-sm font-medium mb-1">Last Serviced Date</label>
+            <label className="block text-sm font-medium mb-1">Last Serviced Date <span className="text-red-500">*</span></label>
             <input
               type="date"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -344,7 +344,7 @@ const handleReset = () => {
 
           {/* Next Service Date */}
           <div>
-            <label className="block text-sm font-medium mb-1">Next Service Date</label>
+            <label className="block text-sm font-medium mb-1">Next Service Date <span className="text-red-500">*</span></label>
             <input
               type="date"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -353,7 +353,7 @@ const handleReset = () => {
 
           {/* Holder Name */}
           <div>
-            <label className="block text-sm font-medium mb-1">Holder Name</label>
+            <label className="block text-sm font-medium mb-1">Holder Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -362,7 +362,7 @@ const handleReset = () => {
 
           {/* Holder Mobile */}
           <div>
-            <label className="block text-sm font-medium mb-1">Holder Mobile</label>
+            <label className="block text-sm font-medium mb-1">Holder Mobile <span className="text-red-500">*</span></label>
             <input
               type="tel"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -371,7 +371,7 @@ const handleReset = () => {
 
           {/* Holder Email */}
           <div>
-            <label className="block text-sm font-medium mb-1">Holder Email</label>
+            <label className="block text-sm font-medium mb-1">Holder Email <span className="text-red-500">*</span></label>
             <input
               type="email"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -381,7 +381,7 @@ const handleReset = () => {
 {/* Airbags */}
 {vehicleType !== 'bike' && (
   <div>
-    <label className="block text-sm font-medium mb-1">Airbags</label>
+    <label className="block text-sm font-medium mb-1">Airbags <span className="text-red-500">*</span></label>
     <input
       type="number"
       className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -393,7 +393,7 @@ const handleReset = () => {
 
           {/* Accident History */}
           <div>
-            <label className="block text-sm font-medium mb-1">Accident History</label>
+            <label className="block text-sm font-medium mb-1">Accident History <span className="text-red-500">*</span></label>
             <textarea
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
@@ -403,7 +403,7 @@ const handleReset = () => {
 
           {/* Vehicle Features */}
           <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Features</label>
+            <label className="block text-sm font-medium mb-1">Vehicle Features <span className="text-red-500">*</span></label>
             <div className="flex flex-wrap gap-2">
               {featuresToShow.map(feature => (
                 <div key={feature} className="flex items-center">
@@ -420,33 +420,41 @@ const handleReset = () => {
             </div>
           </div>
 
-          {/* Upload Vehicle Image */}
+          {/* Upload Vehicle Image 1 , 2 , 3 */}
           <div>
-            <label className="block text-sm font-medium mb-1">Upload Vehicle Image</label>
+            <label className="block text-sm font-medium mb-1">Upload Vehicle Image 1 <span className="text-red-500">*</span></label>
+            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Vehicle Image 2</label>
+            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Vehicle Image 3</label>
             <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
           </div>
 
           {/* Upload Registration Doc */}
           <div>
-            <label className="block text-sm font-medium mb-1">Upload Registration Doc</label>
+            <label className="block text-sm font-medium mb-1">Upload Registration Doc <span className="text-red-500">*</span></label>
             <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
           </div>
 
           {/* Upload Insurance Doc */}
           <div>
-            <label className="block text-sm font-medium mb-1">Upload Insurance Doc</label>
+            <label className="block text-sm font-medium mb-1">Upload Insurance Doc <span className="text-red-500">*</span></label>
             <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
           </div>
 
           {/* Upload Holder DL */}
           <div>
-            <label className="block text-sm font-medium mb-1">Upload Holder DL</label>
+            <label className="block text-sm font-medium mb-1">Upload Holder DL <span className="text-red-500">*</span></label>
             <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
           </div>
 
           {/* Upload Holder Proof */}
           <div>
-            <label className="block text-sm font-medium mb-1">Upload Holder Proof</label>
+            <label className="block text-sm font-medium mb-1">Upload Holder Proof <span className="text-red-500">*</span></label>
             <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
           </div>
         </div>
@@ -455,13 +463,13 @@ const handleReset = () => {
         <div className="flex justify-center mt-8 gap-4">
         <button
               // onClick={handleAdd}
-              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Add
             </button>
             <button
               onClick={handleReset}
-              className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
             >
               Reset
             </button>
