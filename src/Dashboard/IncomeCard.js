@@ -87,7 +87,7 @@ const IncomeCard = () => {
   };
 
   return (
-    <div className="flex-col w-full h-1/2 pt-1">
+    <div className="flex-col w-full h-1/2 pt-1z">
       <div className="flex w-full h-1/10 items-center justify-between px-3">
         <h2 className="text-lg font-bold text-gray-600">Income</h2>
         <select className='w-16 text-xs'>

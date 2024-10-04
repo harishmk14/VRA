@@ -45,9 +45,14 @@ const RadialBarChart = () => {
   }, []);
 
   return (
-    <div className='Boxseperate shadow-md flex-col w-1/4'>
-      <div className='flex w-full h-1/5 items-center justify-center p-2'>     
-        <h2 className='text-lg font-bold text-gray-600'>Trip Overview</h2>
+    <div >
+      <div className='flex w-full h-1/5 items-center justify-between px-3 pt-1  '>     
+        <h2 className='text-lg font-bold text-gray-600 pl-1'>Trip Overview</h2>
+        <select className='w-16 text-xs pl-1'>
+            <option>Today</option>
+            <option>Month</option>
+            <option>Yearly</option>
+          </select>
       </div>
       <div className='flex w-full h-full items-center justify-center'>
         <div id="chart"></div> {/* Chart will render here */}
