@@ -1,1193 +1,200 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import CalendarCard from '../Dashboard/CalendarCard';
-import WeatherCard from '../Dashboard/WeatherCard';
-import RadialBarChart from '../Dashboard/RadialBarChart';
-import IncomeCard from '../Dashboard/IncomeCard';
-import ExpenseCard from '../Dashboard/ExpenseCard';
-import VehicleSection from '../Dashboard/VehicleSection';
+import React, { useState, useRef, useEffect } from 'react';
 import VehicleAvailability from '../Dashboard/VehicleAvailabilitys';
-import LiveVehicleStatus from '../Dashboard/LiveTripStatus';  // Import the new component
-import '../index.css';
-import '../styles/calendar.css';
+import FilterModal from '../Booking/FilterModal'; // Import the filter modal
 
-const API_KEY = '8e9dbe8f4a5d403b8a9161537242309';
-const CITY = 'Pondicherry';
+const Booking = () => {
+  const bookingData = Array.from({ length: 25 }, (_, index) => ({
+    id: index + 1,
+    bookingType: index % 2 === 0 ? 'Online' : 'Offline',
+    bookedAt: `2024-10-0${(index % 5) + 1}`,
+    vehicleNo: `VEH${(index % 5) + 1}234`,
+    driverId: `D00${(index % 5) + 1}`,
+    customerName: `Customer ${index + 1}`,
+    journeyType: index % 2 === 0 ? 'One-way' : 'Round-trip',
+    noOfPersons: (index % 5) + 1,
+    verified: Math.random() > 0.5,
+  }));
 
-const Dashboard = () => {
-  const [date, setDate] = useState(new Date());
-  const [weatherData, setWeatherData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filters, setFilters] = useState({ bookingType: '', journeyType: '' });
 
-  // Array of trips with default data
-  const [trips, setTrips] = useState([
-    { tripNo: '#1', vehicleNo: 'PY01H2200', driver: 'John', persons: 5, status: 'Ongoing' },
-    { tripNo: '#2', vehicleNo: 'PY01H2201', driver: 'Jane', persons: 3, status: 'Completed' },
-    { tripNo: '#3', vehicleNo: 'PY01H2202', driver: 'Mike', persons: 4, status: 'Ongoing' },
-    { tripNo: '#4', vehicleNo: 'PY01H2203', driver: 'David', persons: 2, status: 'Cancelled' },
-    { tripNo: '#5', vehicleNo: 'PY01H2204', driver: 'Lisa', persons: 6, status: 'Completed' },
-    { tripNo: '#1', vehicleNo: 'PY01H2200', driver: 'John', persons: 5, status: 'Ongoing' },
-    { tripNo: '#2', vehicleNo: 'PY01H2201', driver: 'Jane', persons: 3, status: 'Completed' },
-    { tripNo: '#3', vehicleNo: 'PY01H2202', driver: 'Mike', persons: 4, status: 'Ongoing' },
-    { tripNo: '#4', vehicleNo: 'PY01H2203', driver: 'David', persons: 2, status: 'Cancelled' },
-    { tripNo: '#5', vehicleNo: 'PY01H2204', driver: 'Lisa', persons: 6, status: 'Completed' },
-  ]);
+  const entriesPerPage = 7;
+  const indexOfLastEntry = currentPage * entriesPerPage;
+  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
 
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await axios.get(
-          `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${CITY}&aqi=no`
-        );
-        setWeatherData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchWeather();
-  }, []);
-
-  return (
-    <div className='flex flex-col h-full gap-4 p-5 pt-3'>
-      <div className='flex flex-grow gap-4 w-full h-2/4'>
-        
-        {/* live trip section */}
-        <LiveVehicleStatus trips={trips} />  {/* Use the new component */}
-
-        <RadialBarChart />
-
-        <VehicleAvailability />
-      </div>  
-
-      <div className='flex flex-grow w-full h-2/4 gap-4'>
-        <div className='flex w-3/5 h-full gap-4'>  
-          <div className="flex w-1/3 h-full flex-col bg-white shadow-md rounded-2xl gap-1 justify-center items-center">
-            <IncomeCard />
-            <div className="w-11/12 max-w-xs h-[1px] bg-gray-300"></div>
-            <ExpenseCard />
-          </div>
-          <VehicleSection />
-        </div>
-
-        <div className='flex w-2/5 h-full bg-white shadow-md rounded-2xl items-center justify-center'>
-          <CalendarCard date={date} setDate={setDate} />
-          <div className="h-60 max-h-xs w-[1px] bg-gray-300"></div>
-          <WeatherCard weatherData={weatherData} loading={loading} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
-
-
-import React, { useState } from 'react';
-
-const statusColor = {
-  'Ongoing': 'bg-blue-500',
-  'Cancelled': 'bg-red-500',
-  'Completed': 'bg-green-500',
-};
-
-const LiveVehicleStatus = ({ trips }) => {
-  const [selectedTrip, setSelectedTrip] = useState(null); // To track selected trip
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility
-  const [isFilterOpen, setIsFilterOpen] = useState(false); // Filter modal visibility
-  const [filters, setFilters] = useState({
-    vehicleType: 'all',
-    status: 'all',
-    driveOption: 'all',
+  // Filter the booking data based on the selected filters
+  const filteredEntries = bookingData.filter((booking) => {
+    return (
+      (filters.bookingType ? booking.bookingType === filters.bookingType : true) &&
+      (filters.journeyType ? booking.journeyType === filters.journeyType : true)
+    );
   });
 
-  // Function to open modal with trip details
-  const handleOpenModal = (trip) => {
-    setSelectedTrip(trip);
-    setIsModalOpen(true);
+  const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
+  
+  // Update currentEntries based on filtered data
+  const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
+
+  const modalRef = useRef(null); // Create a ref for the modal
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const handleDetailsClick = (bookingId) => alert(`Details for Booking ID: ${bookingId}`);
+  const toggleModal = () => setShowModal(!showModal);
+  const toggleFilterModal = () => setShowFilterModal(!showFilterModal);
+
+  const applyFilters = (filterValues) => {
+    setFilters(filterValues);
   };
 
-  // Function to close modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedTrip(null);
-  };
-
-  // Function to open filter popup
-  const handleOpenFilter = () => {
-    setIsFilterOpen(true);
-  };
-
-  // Function to close filter popup
-  const handleCloseFilter = () => {
-    setIsFilterOpen(false);
-  };
-
-  // Function to handle filter changes
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value,
-    });
-  };
-
-  const handleApplyFilters = () => {
-    console.log('Applied Filters:', filters);
-    setIsFilterOpen(false);
-  };
-
-  return (
-    <div className='Boxseperate shadow-md flex-col w-2/4'>
-      <div className='flex w-full h-1/6 items-center justify-between px-5'>
-        <h2 className='text-lg font-bold text-gray-600 pl-1'>Live Trip Status</h2>
-        <button 
-          className='text-gray-600 font-bold'
-          onClick={handleOpenFilter} // Open filter popup on click
-        >
-          <i className="bi bi-funnel px-1"></i>Filter
-        </button>
-      </div>
-      <div className='flex flex-col w-full h-5/6 items-center'>
-        <div className='flex w-full h-1/12 items-end pb-1'>
-          <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Trip No</div>
-          <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Vehicle No</div>
-          <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Driver</div>
-          <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Persons</div>
-          <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Status</div>
-        </div>
-        <div className="flex w-11/12 h-[0.5px] bg-gray-300"></div>
-        <div className='flex flex-col w-full overflow-auto max-h-[30vh]'>
-          {trips.map((trip, index) => (
-            <React.Fragment key={index}>
-              <div className='flex w-full items-center py-3.5'>
-                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.tripNo}</div>
-                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.vehicleNo}</div>
-                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.driver}</div>
-                <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.persons}</div>
-                <div className='flex w-1/6 h-full items-center font-bold text-gray-600 text-sm'>
-                  <span className={`w-2.5 h-2.5 rounded-full mr-2 ${statusColor[trip.status]}`}></span>
-                  {trip.status}
-                </div>
-                <div className='flex w-1/6 h-full justify-center'>
-                  <button 
-                    className='shadow-md text-xs px-1.5 py-1 rounded-full bg-blue-500 text-white'
-                    onClick={() => handleOpenModal(trip)} // Open modal on button click
-                  >
-                    Details
-                  </button>
-                </div>
-              </div>
-              {index < trips.length - 1 && (
-                <div className="flex w-full justify-center items-center">
-                  <div className="w-11/12 h-[0.5px] bg-gray-300"></div>
-                </div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-
-      {/* Modal for trip details */}
-      {isModalOpen && selectedTrip && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold mb-4">Trip Details</h2>
-            <p><strong>Trip No:</strong> {selectedTrip.tripNo}</p>
-            <p><strong>Vehicle No:</strong> {selectedTrip.vehicleNo}</p>
-            <p><strong>Driver:</strong> {selectedTrip.driver}</p>
-            <p><strong>Persons:</strong> {selectedTrip.persons}</p>
-            <p><strong>Status:</strong> {selectedTrip.status}</p>
-            <div className="flex justify-end mt-4">
-              <button 
-                className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={handleCloseModal} // Close modal on click
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-{/* Filter trip */} 
-{isFilterOpen && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div className="bg-white rounded-lg p-6 shadow-lg w-96 relative">
-      
-      {/* X Button in the top-right corner */}
-      <button 
-        onClick={handleCloseFilter} 
-        className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900"
-      >
-        &times;
-      </button>
-      
-      <h2 className="text-xl font-semibold mb-4">Filter Trips</h2>
-
-      <div className='px-2 py-3'>
-        <label className="block text-sm font-medium mb-1">Vehicle Type</label>
-        <select 
-          className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
-          name="vehicleType"
-          value={filters.vehicleType}
-          onChange={handleFilterChange}
-        >
-          <option value="all" className="text-gray-400">All Vehicles</option> 
-          <option value="bike" className="text-gray-600">Bike</option> 
-          <option value="car" className="text-gray-600">Car</option>
-          <option value="van" className="text-gray-600">Van</option> 
-          <option value="bus" className="text-gray-600">Bus</option> 
-          <option value="truck" className="text-gray-600">Truck</option>
-        </select>
-      </div>
-
-      <div className='px-2 py-3'>
-        <label className="block text-sm font-medium mb-1">Status</label>
-        <select 
-          className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
-          name="status"
-          value={filters.status}
-          onChange={handleFilterChange}
-        >
-          <option value="all" className="text-gray-400">All</option>
-          <option value="Ongoing" className="text-gray-600">Ongoing</option>
-          <option value="Completed" className="text-gray-600">Completed</option>
-          <option value="Cancelled" className="text-gray-600">Cancelled</option>
-        </select>
-      </div>
-
-      <div className='px-2 py-3'>
-        <label className="block text-sm font-medium mb-1">Driver / Self-Drive</label>
-        <select 
-          className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
-          name="driveOption"
-          value={filters.driveOption}
-          onChange={handleFilterChange}
-        >
-          <option value="all" className="text-gray-400">All</option>
-          <option value="driver" className="text-gray-600">Driver</option>
-          <option value="self-drive" className="text-gray-600">Self-Drive</option>
-        </select>
-      </div>
-
-      {/* Apply and Reset buttons */}
-      <div className="flex justify-center space-x-3 px-1 pt-2">
-        <button 
-          className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleApplyFilters}
-        >
-          Apply
-        </button>
-        <button 
-          className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-          onClick={() => setFilters({ vehicleType: 'all', status: 'all', driveOption: 'all' })} // Reset filters
-        >
-          Reset
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-
-    </div>
-  );
-};
-
-export default LiveVehicleStatus;
-
-
-import React, { useEffect } from 'react';
-import ApexCharts from 'apexcharts';
-
-const RadialBarChart = () => {
+  // Close modal if user clicks outside of it
   useEffect(() => {
-    const options = {
-      series: [44, 55, 67, 83], // Actual values
-      chart: {
-        height: 270, // Adjusted height to fit the box
-        type: 'radialBar',
-      },
-      plotOptions: {
-        radialBar: {
-          dataLabels: {
-            name: {
-              fontSize: '20px', // Adjust font size
-            },
-            value: {
-              fontSize: '16px',
-              show: true,
-              formatter: function (val) {
-                return val; // Display the actual value
-              },
-            },
-            total: {
-              show: true,
-              label: 'Total',
-              formatter: function () {
-                return 249; // Total value
-              },
-            },
-          },
-        },
-      },
-      labels: ['Completed', 'Ongoing', 'Pending', 'Cancelled'],
-      colors: ['#16a34a', '#007bff', '#facc15', '#dc2626'], // Categories
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setShowModal(false);
+        setShowFilterModal(false);
+      }
     };
-
-    const chart = new ApexCharts(document.querySelector('#chart'), options);
-    chart.render();
-
+    
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      chart.destroy(); // Cleanup chart when component unmounts
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  return (
-    <div className='Boxseperate shadow-md flex-col w-1/4'>
-      <div className='flex w-full h-1/5 items-center justify-center p-2'>     
-        <h2 className='text-lg font-bold text-gray-600'>Trip Overview</h2>
-      </div>
-      <div className='flex w-full h-full items-center justify-center'>
-        <div id="chart"></div> {/* Chart will render here */}
-      </div>
-    </div>
-  );
-};
-
-export default RadialBarChart;
-
-// src/components/ExpenseCard.js
-import React from 'react';
-import Chart from "react-apexcharts";
-
-const ExpenseCard = () => {
-  const data = {
-    series: [
-      {
-        name: "Expense",
-        data: [1800, 2150, 5000, 100, 5600, 80, 6000], // Sample data
-      },
-    ],
-    options: {
-      chart: {
-        type: "area",
-        height: 160,
-        toolbar: {
-          show: false, // Hide the toolbar
-        },
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          shade: 'light',
-          type: "vertical",
-          shadeIntensity: 0.5,
-          opacityFrom: 0.5,
-          opacityTo: 0.2,
-          stops: [0, 100],
-          colorStops: [
-            {
-              offset: 0,
-              color: "rgba(255, 99, 132, 0.5)", // Light red with opacity
-              opacity: 0.5,
-            },
-            {
-              offset: 100,
-              color: "rgba(255, 99, 132, 0.2)", // Light red gradient
-              opacity: 0.2,
-            },
-          ],
-        },
-      },
-      stroke: {
-        curve: "straight",
-        width: 2,
-        colors: ["rgba(255, 99, 132, 1)"], // Line color (red)
-      },
-      xaxis: {
-        labels: {
-          show: false, // Hide x-axis labels
-        },
-        axisBorder: {
-          show: false, // Hide x-axis border
-        },
-        axisTicks: {
-          show: false, // Hide x-axis ticks
-        },
-      },
-      yaxis: {
-        show: false, // Hide y-axis
-      },
-      grid: {
-        show: false, // Remove grid lines
-      },
-      markers: {
-        size: 0, // Hide markers (data points)
-      },
-      tooltip: {
-        enabled: true, // Enable tooltips
-        shared: true, // Show all series in the tooltip
-        intersect: false, // Allow tooltip to show for all data points
-        x: {
-          format: 'dd/MM/yy', // Format for x-axis tooltip
-        },
-        y: {
-          formatter: (val) => `₹${val}`, // Format for y-axis tooltip
-        },
-      },
-      legend: {
-        show: false, // Hide legend
-      },
-      dataLabels: {
-        enabled: false, // Disable numbers on the graph completely
-      },
-    },
-  };
-
-  return (
-    <div className="flex-col w-full h-1/2 pt-1">
-      <div className="flex w-full h-1/10 items-center justify-between px-3">
-        <h2 className="text-lg font-bold text-gray-600">Expense</h2>
-        <select className='w-16 text-xs'>
-            <option>Month</option>
-            <option>Today</option>
-            <option>Yearly</option>
-          </select>
-      </div>
-      <div className="flex-col w-full h-9/10 items-center justify-center">
-        <div className="flex w-full justify-between mt-1 px-2">
-          <h3 className="text-xl font-bold "><i className="bi bi-currency-rupee"></i>9000</h3>
-          <span className="flex items-center text-sm text-red-500">
-            <i className="bi bi-arrow-down"></i>
-            <span className="ml-1">0.13%</span>
-          </span>
-        </div>
-        <div className="w-full h-16">
-          <Chart options={data.options} series={data.series} type="area" height="100%" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ExpenseCard;
-
-
-// src/components/IncomeCard.js
-import React from 'react';
-import Chart from "react-apexcharts";
-
-const IncomeCard = () => {
-  const data = {
-    series: [
-      {
-        name: "Income",
-        data: [40000, 5000, 15000, 2000, 30000, 4000, 25000,], // Sample data, replace with actual values
-      },
-    ],
-    options: {
-      chart: {
-        type: "area",
-        height: 160,
-        toolbar: {
-          show: false, // Hide the toolbar
-        },
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          shade: 'light',
-          type: "vertical",
-          shadeIntensity: 0.5,
-          opacityFrom: 0.5,
-          opacityTo: 0.2,
-          stops: [0, 100],
-          colorStops: [
-            {
-              offset: 0,
-              color: "rgba(144, 238, 144, 0.5)", // Light green with opacity
-              opacity: 0.5,
-            },
-            {
-              offset: 100,
-              color: "rgba(144, 238, 144, 0.2)", // Light green gradient
-              opacity: 0.2,
-            },
-          ],
-        },
-      },
-      stroke: {
-        curve: "straight",
-        width: 2,
-        colors: ["rgba(144, 238, 144, 1)"], // Line color (light green)
-      },
-      xaxis: {
-        labels: {
-          show: false, // Hide x-axis labels
-        },
-        axisBorder: {
-          show: false, // Hide x-axis border
-        },
-        axisTicks: {
-          show: false, // Hide x-axis ticks
-        },
-      },
-      yaxis: {
-        show: false, // Hide y-axis
-      },
-      grid: {
-        show: false, // Remove grid lines
-      },
-      markers: {
-        size: 0, // Hide markers (data points)
-      },
-      tooltip: {
-        enabled: true, // Enable tooltips
-        shared: true, // Show all series in the tooltip
-        intersect: false, // Allow tooltip to show for all data points
-        x: {
-          format: 'dd/MM/yy', // Format for x-axis tooltip
-        },
-        y: {
-          formatter: (val) => `₹${val}`, // Format for y-axis tooltip
-        },
-      },
-      legend: {
-        show: false, // Hide legend
-      },
-      dataLabels: {
-        enabled: false, // Disable numbers on the graph
-      },
-    },
-  };
-
-  return (
-    <div className="flex-col w-full h-1/2 pt-1z">
-      <div className="flex w-full h-1/10 items-center justify-between px-3">
-        <h2 className="text-lg font-bold text-gray-600">Income</h2>
-        <select className='w-16 text-xs'>
-            <option>Month</option>
-            <option>Today</option>
-            <option>Yearly</option>
-          </select>
-      </div>
-      <div className="flex-col w-full h-9/10 items-center justify-center">
-        <div className="flex w-full justify-between px-2 mt">
-          <h3 className="text-xl font-bold "><i className="bi bi-currency-rupee"></i>30000</h3>
-          <span className="flex items-center text-sm text-green-500">
-            <i className="bi bi-arrow-up"></i>
-            <span className="ml-1">0.48%</span>
-          </span>
-        </div>
-        <div className="w-full h-16">
-          <Chart options={data.options} series={data.series} type="area" height="100%" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default IncomeCard;
-
-
-import React, { useState } from 'react';
-
-const VehicleAvailability = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [availableVehicles, setAvailableVehicles] = useState([]);
-  const [filteredVehicles, setFilteredVehicles] = useState([]);
-
-  const handleCheckAvailability = () => {
-    // Simulating vehicle data (could be fetched from an API in a real-world scenario)
-    const vehiclesData = [
-      {
-        id: 1,
-        model: "Tesla Model 3",
-        image: "https://ev-database.org/img/auto/Tesla_Model_3/Tesla_Model_3-01@2x.jpg",
-        fuelType: "Electric",
-        transmission: "Auto Gear",
-        seater: 5,
-        range: "350 km",
-        price: 2000,
-        status: "Available",
-      },
-      {
-        id: 2,
-        model: "Toyota Camry",
-        image: "https://i0.wp.com/practicalmotoring.com.au/wp-content/uploads/2016/11/097A0935.jpg?fit=768%2C512&ssl=1",
-        fuelType: "Petrol",
-        transmission: "Auto Gear",
-        seater: 5,
-        range: "450 km",
-        price: 1500,
-        status: "Available",
-      },
-      {
-        id: 3,
-        model: "Ford Mustang",
-        image: "https://www.vdm.ford.com/content/dam/vdm_ford/live/en_us/ford/nameplate/mustang/2024/collections/_360/atlas-blue/mst_24_gtp_ext_360_atlas_blue_01.jpg",
-        fuelType: "Gas",
-        transmission: "Auto Gear",
-        seater: 4,
-        range: "300 km",
-        price: 2500,
-        status: "Available",
-      },
-      {
-        id: 4,
-        model: "Chevrolet Malibu",
-        image: "https://cdn.motor1.com/images/mgl/g4MN9E/s1/chevrolet-malibu.webp",
-        fuelType: "Gas",
-        transmission: "Manual",
-        seater: 5,
-        range: "500 km",
-        price: 1600,
-        status: "Available",
-      },
-    ];
-
-    // Set the available vehicles and open the modal
-    setAvailableVehicles(vehiclesData);
-    setFilteredVehicles(vehiclesData); // Assuming no filters applied yet
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setAvailableVehicles([]);
-    setFilteredVehicles([]);
-  };
-
-  return (
-    <div className='flex flex-col w-1/4 h-full bg-white shadow-md rounded-2xl'>
-      <div className='flex flex-col w-full h-1/6 items-center justify-center'>
-        <h2 className='text-lg font-bold text-gray-600'>Vehicle Availability</h2>
-      </div>
-      <div className='flex w-full h-1/6 items-center gap-3 px-4'>
-        <select className='w-4/6 rounded-md border-2 bg-gray-50 p-1.5 text-xs'>
-          <option value="all">All Vehicles</option>
-          <option value="bike">Bike</option>
-          <option value="car">Car</option>
-          <option value="van">Van</option>
-          <option value="bus">Bus</option>
-          <option value="truck">Delivery Truck</option>
-        </select>
-        <input type='number' className='w-2/6 rounded-md border-2 bg-gray-50 py-2 text-xs' />
-      </div>
-      <div className='flex flex-col w-full h-3/6 items-center px-4'>
-        <div className='flex flex-col h-1/2 w-full justify-center'>
-          <div className='flex w-1/2'>
-            <h2 className='text-sm font-bold text-gray-600'>Start Date</h2>
-          </div>
-          <div className='flex h-1/2 w-full gap-3'>
-            <input type='date' className='w-3/5 rounded-md border-2 bg-gray-50 p-1 text-xs' />
-            <input type='time' className='w-2/5 rounded-md border-2 bg-gray-50 p-1 text-xs' />
-          </div>
-        </div>
-        <div className='flex flex-col h-1/2 w-full justify-center'>
-          <div className='flex w-1/2'>
-            <h2 className='text-sm font-bold text-gray-600'>End Date</h2>
-          </div>
-          <div className='flex h-1/2 w-full gap-3'>
-            <input type='date' className='w-3/5 rounded-md border-2 bg-gray-50 p-1 text-xs' />
-            <input type='time' className='w-2/5 rounded-md border-2 bg-gray-50 p-1 text-xs' />
-          </div>
-        </div>
-      </div>
-      <div className='flex w-full h-1/6 items-center px-3 gap-3 justify-center'>
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    if (totalPages <= 6) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+      pageNumbers.push(
         <button
-          className='p-1 px-3 rounded-md bg-blue-500 shadow-sm text-sm text-white'
-          onClick={handleCheckAvailability}
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={`px-2 py-0.5 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
         >
-          Check
+          1
         </button>
-      </div>
+      );
+      if (currentPage > 4) pageNumbers.push(<span key="dots-start">...</span>);
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+          >
+            {i}
+          </button>
+        );
+      }
+      if (currentPage < totalPages - 3) pageNumbers.push(<span key="dots-end">...</span>);
+      pageNumbers.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={`px-2 py-0.5 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
 
-{/* Modal */}
-{isModalOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-56 py-12">
-    <div className="bg-zinc-100 p-6 pt-0 rounded-xl shadow-lg w-full h-full overflow-auto">
-      {/* Sticky Header */}
-      <div className="flex justify-between items-center sticky top-0 bg-zinc-100 z-10 p-4 px-1">
-        <h2 className="text-2xl font-bold">Available Vehicles</h2>
-        <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
-          <span className="text-2xl ">&times;</span>
-        </button>
-      </div>
-      <div className="flex-grow overflow-auto p-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-          {filteredVehicles.map((vehicle) => (
-            <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
-              <div className="relative">
-                <img
-                  src={vehicle.image}
-                  alt={vehicle.model}
-                  className="w-full h-40 object-cover rounded-md"
-                />
-              </div>
-              <div className="p-2 space-y-2">
-                <h2 className="text-sm font-semibold text-gray-800">{vehicle.model}</h2>
-                <div className="grid grid-cols-3 gap-1 mt-2">
-                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">{vehicle.fuelType}</span>
-                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">{vehicle.transmission}</span>
-                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">Seater {vehicle.seater}</span>
-                </div>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-500 text-xs">Range {vehicle.range}</span>
-                </div>
-                <div className="flex justify-between items-center mt-2">
-                  <div className="text-sm font-bold text-gray-900">
-                    Rs {vehicle.price} <span className="text-xs text-gray-500">Per Day</span>
-                  </div>
-                  <button className="px-3 py-1 text-xs text-white bg-blue-500 rounded-full hover:bg-blue-600">
-                    Book
-                  </button>
-                </div>
-              </div>
+  return (
+    <div className="p-5 pt-2 h-full w-full">
+      <div className="h-full w-full grid grid-rows-[auto_1fr]">
+        <div className="w-full h-auto flex items-center justify-end py-3 gap-3">
+          <button
+            onClick={toggleModal}
+            className="bg-blue-500 text-white px-2 py-1 rounded flex items-center gap-1"
+          >
+            <i className="bi bi-clipboard-plus"></i> Book
+          </button>
+          <button onClick={toggleFilterModal} className="bg-blue-500 text-white px-2 py-1 rounded flex items-center gap-1">
+            <i className="bi bi-funnel"></i> Filter
+          </button>
+        </div>
+
+        {/* Modal for Booking */}
+        <div ref={modalRef} className={`absolute z-10 mt-14 mr-5 right-0 transition-opacity duration-300 ${showModal ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className="bg-white p-5 rounded-md shadow-lg w-96">
+            <VehicleAvailability />
+          </div>
+        </div>
+
+        {/* Filter Modal */}
+        {showFilterModal && (
+          <div className={`absolute z-10 mt-14 mr-5 right-0 transition-opacity duration-300 opacity-100`}>
+            <div className="bg-white p-5 rounded-md shadow-lg w-96">
+              <FilterModal onClose={toggleFilterModal} onApply={applyFilters} />
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-    </div>
-  );
-};
-
-export default VehicleAvailability;
-
-// VehicleSection.js
-import React from 'react';
-import twow from '../Assets/img/bike.png';
-import truck from '../Assets/img/delivery-truck.png';
-import sixw from '../Assets/img/bus.png';
-import fourw from '../Assets/img/car.png';
-import TripCard from './TripCard';
-
-const VehicleSection = () => {
-  return (
-    <div className='flex w-2/3 h-full gap-4'>
-      <div className='flex flex-col w-1/2 h-full bg-white shadow-md rounded-2xl items-center'>
-      <div className='flex w-full h-1/4'>
-          <div className='flex w-1/2 h-full items-center justify-center'>
-              <img src={twow} alt="bike" className="w-14 h-14"/>
           </div>
-          <div className='flex flex-col w-1/2 h-full items-center justify-center'>
-              <h2 className='text-sm font-bold text-gray-500 '>2 Wheeler</h2>
-              <h2 className='text-3xl font-bold text-blue-500 drop-shadow-md'>20</h2>
-          </div>
-      </div>
-      <div className='flex w-full h-1/4'>
-          <div className='flex w-1/2 h-full items-center justify-center'>
-              <img src={fourw} alt="car" className="w-14 h-14" />
-          </div>
-          <div className='flex flex-col w-1/2 h-full items-center justify-center'>
-              <h2 className='text-sm font-bold text-gray-500 '>4 Wheeler</h2>
-              <h2 className='text-3xl font-bold text-blue-500 drop-shadow-md'>15</h2>
-          </div>
-      </div>
-      <div className='flex w-full h-1/4'>
-          <div className='flex w-1/2 h-full items-center justify-center'>
-              <img src={sixw} alt="Bus" className="w-14 h-14" />
-          </div>
-          <div className='flex flex-col w-1/2 h-full items-center justify-center'>
-              <h2 className='text-sm font-bold text-gray-500 '>6 Wheeler</h2>
-              <h2 className='text-3xl font-bold text-blue-500 drop-shadow-md'>9</h2>
-          </div>
-      </div>
-      <div className='flex w-full h-1/4'>
-          <div className='flex w-1/2 h-full items-center justify-center'>
-              <img src={truck} alt="Delivery truck" className="w-14 h-14" />
-          </div>
-          <div className='flex flex-col w-1/2 h-full items-center justify-center'>
-              <h2 className='text-sm font-bold text-gray-500 '>Delivery Truck</h2>
-              <h2 className='text-3xl font-bold text-blue-500 drop-shadow-md'>12</h2>
-          </div>
-      </div>
-      </div>
-      <div className='flex flex-col w-1/2 h-full gap-4'>
-        <div className='flex w-full h-2/5 bg-white shadow-md rounded-2xl'>
-        <div className='flex flex-col w-2/5 items-center justify-center'>
-          <h2 className='text-xl font-bold text-gray-600 '>Total</h2>
-          <h2 className='text-3xl font-bold   text-blue-500 drop-shadow-md'>78</h2>
-        </div>
-        <div className="flex w-[1.5px] max-w-xs h-full bg-gray-300"></div>
-        <div className='flex flex-col w-3/5'>
-          <div className='flex h-1/2 items-center px-5 justify-between bg-blue-50' style={{borderTopRightRadius:"15px"}}>
-            <h2 className='text-xl font-bold text-gray-600 '>User</h2>
-            <h2 className='text-2xl font-bold pl-4'>48</h2>
-          </div>
-          <div className="flex w-full max-w-xs h-[1.5px] bg-gray-300"></div>
-          <div className='flex h-1/2 items-center px-5 justify-between bg-blue-50' style={{borderBottomRightRadius:"15px"}}>
-            <h2 className='text-xl font-bold text-gray-600 '>Driver</h2>
-            <h2 className='text-2xl font-bold pl-4 '>30</h2>
-          </div>
-        </div>
-        </div>
-       <TripCard />
-      </div>
-    </div>
-  );
-};
+        )}
 
-export default VehicleSection;
-
-
-import React, { useEffect } from 'react';
-import ApexCharts from 'apexcharts';
-
-const RadialBarChart = () => {
-  useEffect(() => {
-    const options = {
-      series: [44, 55, 67, 83], // Actual values
-      chart: {
-        height: 270, // Adjusted height to fit the box
-        type: 'radialBar',
-      },
-      plotOptions: {
-        radialBar: {
-          offsetY: 0,
-          startAngle: 0, // Custom angle start
-          endAngle: 270, // Custom angle end
-          hollow: {
-            margin: 5,
-            size: '5%',
-            background: 'transparent',
-          },
-          dataLabels: {
-            name: {
-              show: false, // Hide the name label
-            },
-            value: {
-              show: false, // Hide the value label
-            }
-          },
-          barLabels: {
-            enabled: true,
-            useSeriesColors: true,
-            offsetX: -15,
-            offsetY: 0,
-            fontSize: '16px',
-            formatter: function (seriesName, opts) {
-              return seriesName + ": " + opts.w.globals.series[opts.seriesIndex];
-            },
-          },
-        }
-      },
-      colors: ['#16a34a', '#007bff', '#facc15', '#dc2626'], // Same colors as the previous chart
-      labels: ['Completed', 'Ongoing', 'Pending', 'Cancelled'],
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          legend: {
-            show: false
-          }
-        }
-      }]
-    };
-
-    const chart = new ApexCharts(document.querySelector('#chart'), options);
-    chart.render();
-
-    return () => {
-      chart.destroy(); // Cleanup chart when component unmounts
-    };
-  }, []);
-
-  return (
-    <div>
-      <div className='flex w-full h-1/5 items-center justify-between px-3 pt-1'>
-        <h2 className='text-lg font-bold text-gray-600 pl-1'>Trip Overview</h2>
-        <select className='w-16 text-xs pl-1'>
-          <option>Today</option>
-          <option>Month</option>
-          <option>Yearly</option>
-        </select>
-      </div>
-      <div className='flex w-full h-full items-center justify-center pt-2'>
-        <div id="chart"></div> {/* Chart will render here */}
-      </div>
-    </div>
-  );
-};
-
-export default RadialBarChart;
-
-                      <td className="px-4 py-3">
-                        {booking.verified ? (
-                          <span className="text-blue-500"><i class="bi bi-check2-square"></i></span>
-                        ) : (
-                          <span className="text-gray-500">Not Verified</span>
-                        )}
+        <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
+          <div className="flex flex-col h-full">
+            <div className="overflow-auto flex-grow">
+              <table className="min-w-full border-collapse border-spacing-0">
+                <thead>
+                  <tr className="bg-blue-100">
+                    <th className="px-4 py-2 text-left">S. No</th>
+                    <th className="px-4 py-2 text-left">Booking Type</th>
+                    <th className="px-4 py-2 text-left">Booked At</th>
+                    <th className="px-4 py-2 text-left">Vehicle No</th>
+                    <th className="px-4 py-2 text-left">Driver ID</th>
+                    <th className="px-4 py-2 text-left">Customer Name</th>
+                    <th className="px-4 py-2 text-left">Journey Type</th>
+                    <th className="px-4 py-2 text-left">No of Persons</th>
+                    <th className="px-4 py-2 text-left">Verified</th>
+                    <th className="px-4 py-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentEntries.map((booking, index) => (
+                    <tr key={booking.id} className="border-b border-gray-300 last:border-b-0">
+                      <td className="px-4 py-2">{index + 1}</td>
+                      <td className="px-4 py-2">{booking.bookingType}</td>
+                      <td className="px-4 py-2">{booking.bookedAt}</td>
+                      <td className="px-4 py-2">{booking.vehicleNo}</td>
+                      <td className="px-4 py-2">{booking.driverId}</td>
+                      <td className="px-4 py-2">{booking.customerName}</td>
+                      <td className="px-4 py-2">{booking.journeyType}</td>
+                      <td className="px-4 py-2">{booking.noOfPersons}</td>
+                      <td className="px-4 py-2">{booking.verified ? 'Yes' : 'No'}</td>
+                      <td className="px-4 py-2">
+                        <button onClick={() => handleDetailsClick(booking.id)} className="text-blue-500 hover:underline">View Details</button>
                       </td>
-
-
-
-
-                              <div className="grid grid-cols-2 gap-5 gap-x-8">
-          {/* Vehicle Type */}
-          <div>
-            <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
-            {/* <p>{vehicleData?.vehicleType || 'N/A'}</p> */}
-            <p>Car</p>
-          </div>
-
-          {/* Brand Name */}
-          <div>
-            <label className="grid text-sm font-medium mb-1">Brand Name</label>
-            {/* <p>{vehicleData?.brandName || 'N/A'}</p> */}
-            <p>Ford</p>
-          </div>
-
-          {/* Vehicle Model */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Model</label>
-            {/* <p>{vehicleData?.vehicleModel || 'N/A'}</p> */}
-            <p>Mustang</p>
-          </div>
-
-          {/* Registration No */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Registration No</label>
-            {/* <p>{vehicleData?.registrationNo || 'N/A'}</p> */}
-            <p>ABC-1234</p>
-          </div>
-
-          {/* Registration Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Registration Type</label>
-            {/* <p>{vehicleData?.registrationType || 'N/A'}</p> */}
-            <p>Commercial</p>
-          </div>
-
-          {/* Seater */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Seater</label>
-            {/* <p>{vehicleData?.seater || 'N/A'}</p> */}
-            <p>4</p>
-          </div>
-
-          {/* AC/Non-AC */}
-          {vehicleData?.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
-              {/* <p>{vehicleData?.acType || 'N/A'}</p> */}
-              <p>AC</p>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
-
-          {/* Gear Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Gear Type</label>
-            {/* <p>{vehicleData?.gearType || 'N/A'}</p> */}
-            <p>Manual</p>
-          </div>
-
-          {/* Fuel Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Fuel Type</label>
-            {/* <p>{vehicleData?.fuelType || 'N/A'}</p> */}
-            <p>Petrol</p>
-          </div>
-
-          {/* Toll Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Toll Type</label>
-            {/* <p>{vehicleData?.tollType || 'N/A'}</p> */}
-            <p>Toll</p>
-          </div>
-
-          {/* Color */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Color</label>
-            {/* <p>{vehicleData?.color || 'N/A'}</p> */}
-            <p>White</p>
-          </div>
-
-          {/* Range */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Range (in km)</label>
-            {/* <p>{vehicleData?.range || 'N/A'}</p> */}
-            <p>120</p>
-          </div>
-
-          {/* Price Per Day */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Price Per Day</label>
-            {/* <p>{vehicleData?.pricePerDay || 'N/A'}</p> */}
-            <p>7500</p>
-          </div>
-
-          {/* Fuel Capacity */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Fuel Capacity (in Liters)</label>
-            {/* <p>{vehicleData?.fuelCapacity || 'N/A'}</p> */}
-            <p>45</p>
-          </div>
-
-          {/* Mileage */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Mileage (per liter)</label>
-            {/* <p>{vehicleData?.mileage || 'N/A'}</p> */}
-            <p>12</p>
-          </div>
-
-          {/* Engine CC */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Engine CC</label>
-            {/* <p>{vehicleData?.engineCC || 'N/A'}</p> */}
-            <p>4400</p>
-          </div>
-
-          {/* Sunroof */}
-          {vehicleData?.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Sunroof</label>
-              {/* <p>{vehicleData?.sunroof ? 'Yes' : 'No'}</p> */}
-              <p>Yes</p>
+            <div className="flex justify-between items-center p-2 bg-gray-100">
+              <div>
+                {renderPageNumbers()}
+              </div>
+              <div>
+                <span className="text-gray-600">Page {currentPage} of {totalPages}</span>
+              </div>
             </div>
-          )}
-
-          {/* GPS Tracking */}
-          {vehicleData?.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">GPS Tracking</label>
-              {/* <p>{vehicleData?.gpsTracking ? 'Yes' : 'No'}</p> */}
-              <p>Yes</p>
-            </div>
-          )}
-
-          {/* Insurance ID */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Insurance ID</label>
-            {/* <p>{vehicleData?.insuranceID || 'N/A'}</p> */}
-            <p>INS-2023-5678</p>
           </div>
-
-          {/* Insurance Renewal Date */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Insurance Renewal Date</label>
-            {/* <p>{vehicleData?.insuranceRenewalDate || 'N/A'}</p> */}
-            <p>2025-01-15</p>
-          </div>
-
-          {/* Insurance Expire Date */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Insurance Expire Date</label>
-            {/* <p>{vehicleData?.insuranceExpireDate || 'N/A'}</p> */}
-            <p>2025-07-15</p>
-          </div>
-
-          {/* Last Serviced Date */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Last Serviced Date</label>
-            {/* <p>{vehicleData?.lastServicedDate || 'N/A'}</p> */}
-            <p>2024-06-20</p>
-          </div>
-
-          {/* Next Service Date */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Next Service Date</label>
-            {/* <p>{vehicleData?.nextServiceDate || 'N/A'}</p> */}
-            <p>2025-06-20</p>
-          </div>
-
-          {/* Holder Name */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Holder Name</label>
-            {/* <p>{vehicleData?.holderName || 'N/A'}</p> */}
-            <p>Jaime Lannister</p>
-          </div>
-
-          {/* Holder Mobile */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Holder Mobile</label>
-            {/* <p>{vehicleData?.holderMobile || 'N/A'}</p> */}
-            <p>+91 9345450700</p>
-          </div>
-
-          {/* Holder Email */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Holder Email</label>
-            {/* <p>{vehicleData?.holderEmail || 'N/A'}</p> */}
-            <p>JaimeLannister@gmail.com</p>
-          </div>
-
-          {/* Airbags */}
-          {vehicleData?.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Airbags</label>
-              {/* <p>{vehicleData?.airbags || 'N/A'}</p> */}
-              <p>6</p>
-            </div>
-          )}
-
-          {/* Accident History */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Accident History</label>
-            {/* <p>{vehicleData?.accidentHistory || 'N/A'}</p> */}
-            <p>No</p>
-          </div>
-
-          {/* Vehicle Features */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Features</label>
-            {/* <p>{vehicleData?.features?.join(', ') || 'N/A'}</p> */}
-            <p>Anti-lock Braking System, Lane Departure Warning, Adaptive Cruise Control, 360-Degree Camera System, Collision Avoidance System</p>
-          </div>
-
-{/* Vehicle Images */}
-<div>
-  <label className="block text-sm font-medium mb-1">Vehicle Images</label>
-  <div className="flex gap-3">
-    {[up1, up2, up3].map((images, index) => (
-      <div key={index} className="w-full h-auto mb-2 border border-gray-300 p-2 rounded-md">
-        <img src={images} alt={`Vehicle ${index + 1}`} className="w-full h-auto object-cover" />
-      </div>
-    ))}
-  </div>
-</div>
-
-
-{/* Registration Document */}
-<div>
-  <label className="block text-sm font-medium mb-1">Registration Doc</label>
-  <div className="w-fit h-auto mb-2 border border-gray-300 p-2 rounded-md">
-    <a href={docs} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-      View Registration Doc
-    </a>
-  </div>
-</div>
-
-{/* Insurance Document */}
-<div>
-  <label className="block text-sm font-medium mb-1">Insurance Doc</label>
-  <div className="w-fit h-auto mb-2 border border-gray-300 p-2 rounded-md">
-    <a href={docs} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-      View Insurance Doc
-    </a>
-  </div>
-</div>
-
-{/* Holder Driving License */}
-<div>
-  <label className="block text-sm font-medium mb-1">Holder DL</label>
-  <div className="w-60 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-    <img src={dl} alt="Driving License" className="w-full h-auto object-cover" />
-  </div>
-</div>
-
-{/* Holder Proof */}
-<div>
-  <label className="block text-sm font-medium mb-1">Holder Proof</label>
-  <div className="w-60 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-    <img src={aadhar} alt="Aadhar Card" className="w-full h-auto object-cover" />
-  </div>
-</div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+export default Booking;

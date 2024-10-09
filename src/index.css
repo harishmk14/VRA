@@ -66,21 +66,38 @@ select.placeholder {
 }
 
 
-@keyframes blink {
+@keyframes blink-shadow {
   0%, 100% {
-    opacity: 1;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.7), 0 0 10px rgba(0, 255, 0, 0.5);
   }
   50% {
-    opacity: 0;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3), 0 0 15px rgba(0, 255, 0, 0.2);
   }
 }
 
-.animate-blink {
-  animation: blink 1.5s infinite;
+.online-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00ff00, #00cc00);
+  animation: blink-shadow 1s infinite;
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    display: none; /* or use hidden class in Tailwind */
+@keyframes blink-shadow-offline {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.7), 0 0 10px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3), 0 0 15px rgba(255, 0, 0, 0.2);
   }
 }
+
+.offline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  animation: blink-shadow-offline 1s infinite;
+}
+
+
