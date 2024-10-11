@@ -14,6 +14,7 @@ const VehicleBook = ({ closeModal }) => {
     vehicleModel: '',
     registrationNo: '',
     tripType: '',
+    tripArea: '', // Add this line
     pickUpLocation: '',
     dropLocation: '',
     pickUpDateTime: '',
@@ -55,7 +56,8 @@ const VehicleBook = ({ closeModal }) => {
       vehicleType: '',
       vehicleModel: '',
       registrationNo: '',
-      tripType: '',
+      tripType: '', // Reset added field
+      tripArea: '', // Reset added field
       pickUpLocation: '',
       dropLocation: '',
       pickUpDateTime: '',
@@ -133,8 +135,20 @@ const VehicleBook = ({ closeModal }) => {
           />
         </div>
 
-        {/* Address */}
-        <div>
+                {/* No of Persons */}
+                <div>
+          <label className="block mb-1">No. of Persons:</label>
+          <input 
+            type="number" 
+            name="noOfPersons" 
+            value={formData.noOfPersons} 
+            onChange={handleChange} 
+            className="border p-2 w-full rounded" 
+          />
+        </div>  
+
+                        {/* Address */}
+                        <div>
           <label className="block mb-1">Address:</label>
           <textarea 
             name="address" 
@@ -144,8 +158,19 @@ const VehicleBook = ({ closeModal }) => {
           />
         </div>
 
-        {/* Upload Aadhar */}
-        <div>
+                {/* Special Requirement */}
+                <div >
+          <label className="block mb-1">Special Requirement:</label>
+          <textarea 
+            name="specialRequirement" 
+            value={formData.specialRequirement} 
+            onChange={handleChange} 
+            className="border p-2 w-full rounded" 
+          />
+        </div>
+
+                {/* Upload Aadhar */}
+                <div>
           <label className="block mb-1">Upload Aadhar:</label>
           <input 
             type="file" 
@@ -155,17 +180,7 @@ const VehicleBook = ({ closeModal }) => {
           />
         </div>
 
-        {/* No of Persons */}
-        <div>
-          <label className="block mb-1">No. of Persons:</label>
-          <input 
-            type="number" 
-            name="noOfPersons" 
-            value={formData.noOfPersons} 
-            onChange={handleChange} 
-            className="border p-2 w-full rounded" 
-          />
-        </div>
+
 
         {/* Vehicle Type */}
         <div>
@@ -212,13 +227,33 @@ const VehicleBook = ({ closeModal }) => {
         {/* Trip Type */}
         <div>
           <label className="block mb-1">Trip Type:</label>
-          <input 
-            type="text" 
+          <select 
             name="tripType" 
             value={formData.tripType} 
             onChange={handleChange} 
-            className="border p-2 w-full rounded" 
-          />
+            className="border p-2 w-full rounded"
+          >
+            <option value="">Select</option>
+            <option value="One Way">One Way</option>
+            <option value="Round Trip">Round Trip</option>
+          </select>
+        </div>
+
+        {/* Trip Area */}
+        <div>
+          <label className="block mb-1">Trip Area:</label>
+          <select 
+            name="tripArea" 
+            value={formData.tripArea} 
+            onChange={handleChange} 
+            className="border p-2 w-full rounded"
+          >
+            <option value="">Select</option>
+            <option value="Hill Station">Hill Station</option>
+            <option value="Adventure Travel">Adventure Travel</option>
+            <option value="Business Travel">Business Travel</option>
+            <option value="Others">Others</option>
+          </select>
         </div>
 
         {/* Pick Up Location */}
@@ -296,17 +331,6 @@ const VehicleBook = ({ closeModal }) => {
           </select>
         </div>
 
-        {/* Special Requirement */}
-        <div className="col-span-2">
-          <label className="block mb-1">Special Requirement:</label>
-          <textarea 
-            name="specialRequirement" 
-            value={formData.specialRequirement} 
-            onChange={handleChange} 
-            className="border p-2 w-full rounded" 
-          />
-        </div>
-
         {/* Agreement Checkbox */}
         <div className="col-span-2">
           <label className="flex items-center">
@@ -325,14 +349,14 @@ const VehicleBook = ({ closeModal }) => {
 <div className="col-span-2 flex justify-end space-x-4">
 <button 
             type="submit" 
-            className="bg-blue-500 text-white px-2 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-2 py-2 rounded-lg hover:bg-blue-600"
           >
             <i class="bi bi-caret-right-fill"></i> Continue
           </button>
           <button 
             type="button" 
             onClick={handleCancel}
-            className="bg-gray-500 text-white px-2 py-2 rounded hover:bg-gray-600"
+            className="bg-gray-500 text-white px-2 py-2 rounded-lg hover:bg-gray-600"
           >
             Cancel
           </button>

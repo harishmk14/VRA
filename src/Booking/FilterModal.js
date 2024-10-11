@@ -99,8 +99,8 @@ const FilterModal = ({ onClose, onApply }) => {
           </div>
 
           <div className="col-span-2 flex justify-end mt-4">
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply</button>
-            <button type="button" onClick={onClose} className="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+            <button type="submit" className="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">Apply</button>
+            <button type="button" onClick={onClose} className="ml-2 bg-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-400">Cancel</button>
           </div>
         </form>
       </div>

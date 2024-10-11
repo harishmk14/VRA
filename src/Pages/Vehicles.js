@@ -84,13 +84,6 @@ const Vehicles = () => {
   return (
     <div className="h-full flex flex-col p-5 py-3 pb-0">
       <div className="flex justify-between items-center pb-2 sticky top-0 z-10 px-3">
-        {/* Button to open Add Vehicle Modal */}
-        <button 
-          onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Vehicle Modal
-          className="bg-blue-500 text-white rounded-xl hover:bg-blue-300 px-1 py-0"
-        >
-          <i className="bi bi-plus text-3xl"></i>
-        </button>
 
         <div className="flex space-x-4">
           <button
@@ -118,13 +111,20 @@ const Vehicles = () => {
             Maintenance
           </button>
         </div>
+        <div  className='flex gap-3'>
+        <button 
+          onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Vehicle Modal
+          className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
+        >
+          <i className="bi bi-plus text-3xl"></i>
+        </button>
         <button
           onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
-          className="text-lg hover:text-blue-500 rounded-lg p-1"
+          className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
         >
-          <i className="bi bi-filter-right pr-2 size-3"></i>
-          Filter
+          <i className="bi bi-funnel"></i> Filter
         </button>
+        </div>
       </div>
 
       {/* Filter Modal */}
