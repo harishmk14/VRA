@@ -10,7 +10,7 @@ const Booking = () => {
     bookingType: index % 2 === 0 ? 'Online' : 'Offline',
     bookedAt: `2024-10-0${(index % 5) + 1}`,
     vehicleNo: `VEH${(index % 5) + 1}234`,
-    driverId: `D00${(index % 5) + 1}`,
+    // driverId: `D00${(index % 5) + 1}`,
     customerName: `Customer ${index + 1}`,
     journeyType: index % 2 === 0 ? 'One-way' : 'Round-trip',
     noOfPersons: (index % 5) + 1,
@@ -180,7 +180,7 @@ const Booking = () => {
                     <th className="px-4 py-2 text-left">Booking Type</th>
                     <th className="px-4 py-2 text-left">Booked At</th>
                     <th className="px-4 py-2 text-left">Vehicle No</th>
-                    <th className="px-4 py-2 text-left">Driver ID</th>
+                    {/* <th className="px-4 py-2 text-left">Driver ID</th> */}
                     <th className="px-4 py-2 text-left">Customer Name</th>
                     <th className="px-4 py-2 text-left">Journey Type</th>
                     <th className="px-4 py-2">Persons</th>
@@ -192,7 +192,7 @@ const Booking = () => {
                   {currentEntries.map((booking, index) => (
                     <tr key={booking.id} className="border-b border-gray-300 last:border-b-0">
                       <td className="px-4 py-3">{index + 1 + indexOfFirstEntry}</td>
-                      <td className="px-4 py-3 flex items-center gap-2">
+                      <td className="px-6 py-3 flex items-center gap-2 ">
   {booking.bookingType === 'Online' ? (
     <span className="online-dot"></span>
   ) : (
@@ -203,11 +203,11 @@ const Booking = () => {
 
                       <td className="px-4 py-3">{booking.bookedAt}</td>
                       <td className="px-4 py-3">{booking.vehicleNo}</td>
-                      <td className="px-4 py-3">{booking.driverId}</td>
+                      {/* <td className="px-4 py-3">{booking.driverId}</td> */}
                       <td className="px-4 py-3">{booking.customerName}</td>
                       <td className="px-4 py-3">{booking.journeyType}</td>
                       <td className="px-4 py-3 text-center">{booking.noOfPersons}</td>
-                      <td className="px-4 py-3 text-center">{booking.verified ? '✅' : '❌'}</td>
+                      <td className="pr-8  py-3 text-center">{booking.verified ? '✅' : '❌'}</td>
                       <td className="px-4 py-3">
                         <button
                           className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg flex items-center gap-1"
