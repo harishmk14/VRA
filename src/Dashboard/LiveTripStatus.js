@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TripDetailsModal from './TripDetailsModal'; // Import the new modal component
 
 const statusColor = {
   'Ongoing': 'bg-blue-500',
@@ -72,8 +73,8 @@ const LiveVehicleStatus = ({ trips }) => {
           <div className='flex w-1/6 h-full justify-center text-gray-500 text-sm'>Status</div>
         </div>
         <div className="flex w-full justify-center items-center px-5">
-                  <div className=" w-full h-[0.5px] bg-gray-300"></div>
-                </div>
+          <div className=" w-full h-[0.5px] bg-gray-300"></div>
+        </div>
         <div className='flex flex-col w-full overflow-auto max-h-[30vh]'>
           {trips.map((trip, index) => (
             <React.Fragment key={index}>
@@ -82,7 +83,7 @@ const LiveVehicleStatus = ({ trips }) => {
                 <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.vehicleNo}</div>
                 <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.driver}</div>
                 <div className='flex w-1/6 h-full justify-center font-bold text-gray-600 text-sm'>{trip.persons}</div>
-                <div className='flex w-1/6 h-full items-center font-bold text-gray-600 text-sm'>
+                <div className='flex w-1/6 h-full items-center font-bold text-gray-600 text-sm pl-5'>
                   <span className={`w-2.5 h-2.5 rounded-full mr-2 ${statusColor[trip.status]}`}></span>
                   {trip.status}
                 </div>
@@ -107,24 +108,10 @@ const LiveVehicleStatus = ({ trips }) => {
 
       {/* Modal for trip details */}
       {isModalOpen && selectedTrip && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold mb-4">Trip Details</h2>
-            <p><strong>Trip No:</strong> {selectedTrip.tripNo}</p>
-            <p><strong>Vehicle No:</strong> {selectedTrip.vehicleNo}</p>
-            <p><strong>Driver:</strong> {selectedTrip.driver}</p>
-            <p><strong>Persons:</strong> {selectedTrip.persons}</p>
-            <p><strong>Status:</strong> {selectedTrip.status}</p>
-            <div className="flex justify-end mt-4">
-              <button 
-                className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={handleCloseModal} // Close modal on click
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <TripDetailsModal 
+          selectedTrip={selectedTrip} 
+          onClose={handleCloseModal} 
+        />
       )}
 
       {/* Filter trip */}
@@ -175,7 +162,7 @@ const LiveVehicleStatus = ({ trips }) => {
             </div>
 
             <div className='px-2 py-3'>
-              <label className="block text-sm font-medium mb-1">Driver / Self-Drive</label>
+              <label className="block text-sm font-medium mb-1">Driver / Self Drive</label>
               <select 
                 className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
                 name="driveOption"
@@ -183,24 +170,17 @@ const LiveVehicleStatus = ({ trips }) => {
                 onChange={handleFilterChange}
               >
                 <option value="all" className="text-gray-400">All</option>
-                <option value="driver" className="text-gray-600">Driver</option>
-                <option value="self-drive" className="text-gray-600">Self-Drive</option>
+                <option value="driver" className="text-gray-600">With Driver</option>
+                <option value="selfDrive" className="text-gray-600">Self Drive</option>
               </select>
             </div>
 
-            {/* Apply and Reset buttons */}
-            <div className="flex justify-center space-x-3 px-1 pt-2">
+            <div className='flex justify-between mt-5'>
               <button 
-                className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={handleApplyFilters}
+                className='bg-blue-500 text-white px-4 py-2 rounded'
+                onClick={handleApplyFilters} // Apply filters
               >
-                Apply
-              </button>
-              <button 
-                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={() => setFilters({ vehicleType: 'all', status: 'all', driveOption: 'all' })} // Reset filters
-              >
-                Reset
+                Apply Filters
               </button>
             </div>
           </div>

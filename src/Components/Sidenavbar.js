@@ -31,12 +31,12 @@ const Sidebar = () => {
               { path: '/dashboard', icon: 'bi bi-grid-fill', label: 'Dashboard' },
               { path: '/vehicle', icon: 'bi bi-car-front', label: 'Vehicles' },
               { path: '/booking', icon: 'bi bi-ui-checks', label: 'Booking' },
-              { path: '/driver', icon: 'bi bi-person-check', label: 'Driver' },
-              { path: '/coupendiscount', icon: 'bi bi-ticket-perforated', label: 'Coupon & Discount' },
-              { path: '/tripassign', icon: 'bi bi-list-task', label: 'Trip Assign' },
+              { path: '/driver', icon: 'bi bi-person-fill-check', label: 'Driver' },
+              { path: '/Customer', icon: 'bi bi-people-fill', label: 'Customer' },
+              { path: '/coupendiscount', icon: 'bi bi-ticket-detailed-fill', label: 'Coupon & Discount' },
               { path: '/payment', icon: 'bi bi-cash-coin', label: 'Payment' },
               { path: '/maintenance', icon: 'bi bi-gear-wide-connected', label: 'Maintenance' },
-              { path: '/performance', icon: 'bi bi-graph-up-arrow', label: 'Performance' },
+              { path: '/performance', icon: 'bi bi-clipboard-data-fill', label: 'Performance' },
             ].map(({ path, icon, label }) => (
               <li
                 key={path}
@@ -59,7 +59,7 @@ const Sidebar = () => {
         <div className='flex flex-col w-full h-auto items-center justify-center pt-4 pb-4'>
           <ul className="space-y-6 text-gray-600 text-base items-center">
             {[
-              { path: '/setting', icon: 'bi bi-gear', label: 'Settings' },
+              { path: '/setting', icon: 'bi bi-gear-fill', label: 'Settings' },
               { path: '/customersupport', icon: 'bi bi-person-fill-gear', label: 'Customer Support' },
             ].map(({ path, icon, label }) => (
               <li

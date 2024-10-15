@@ -9,6 +9,7 @@ const FilterModal = ({ onClose, onApply }) => {
     verification: '',
     tripStartDate: '',
     tripEndDate: '',
+    tripStatus: '', // Added tripStatus state
   });
 
   const handleChange = (e) => {
@@ -24,7 +25,7 @@ const FilterModal = ({ onClose, onApply }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-6 shadow-lg w-1/3 relative">
+      <div className="bg-white rounded-lg p-6 shadow-lg w-3/6 relative">
 
         {/* X Button in the top-right corner */}
         <button 
@@ -76,8 +77,6 @@ const FilterModal = ({ onClose, onApply }) => {
             </select>
           </div>
 
-          {/* Removed Booked Date input field */}
-
           <div>
             <label className="block mb-1">Trip Start Date:</label>
             <input
@@ -96,6 +95,17 @@ const FilterModal = ({ onClose, onApply }) => {
               onChange={handleChange}
               className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
+          </div>
+
+          <div>
+            <label className="block mb-1">Trip Status:</label> {/* Changed name to "tripStatus" */}
+            <select name="tripStatus" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
+              <option value="">All</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
           </div>
 
           <div className="col-span-2 flex justify-end mt-4">

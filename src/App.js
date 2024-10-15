@@ -7,7 +7,7 @@ import Vehicle from './Pages/Vehicles';
 import Booking from './Pages/Bookings';
 import Driver from './Pages/Drivers';
 import CoupDiscount from './Pages/Coupendiscount';
-import TripAssign from './Pages/Tripassign';
+import Customer from './Pages/Customer';
 import Payment from './Pages/Payment';
 import Maintenance from './Pages/Maintenance';
 import Performance from './Pages/Performance';
@@ -26,7 +26,7 @@ const App = () => {
         <Route path="booking" element={<Booking />} />
         <Route path="driver" element={<Driver />} />
         <Route path="coupendiscount" element={<CoupDiscount />} />
-        <Route path="tripassign" element={<TripAssign />} />
+        <Route path="customer" element={<Customer />} />
         <Route path="payment" element={<Payment />} />
         <Route path="maintenance" element={<Maintenance />} />
         <Route path="performance" element={<Performance />} />
