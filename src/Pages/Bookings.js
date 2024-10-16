@@ -2,7 +2,59 @@ import React, { useState, useRef, useEffect } from 'react';
 import VehicleAvailability from '../Dashboard/VehicleAvailabilitys';
 import FilterModal from '../Booking/FilterModal'; // Import the filter modal
 import BookingDetailModal from '../Booking/BookingDetailModal';
+import DriverListModal from '../Booking/DriverListModal';
 import '../index.css';
+
+const driversData = [
+  {
+    id: 1,
+    name: "John Doe",
+    image: "https://imgcdn.stablediffusionweb.com/2024/10/14/b53d6677-8076-4e9e-a652-37d1995386f3.jpg",
+    driverId: "D1", 
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    image: "https://imgcdn.stablediffusionweb.com/2024/10/4/2d52a83c-0d15-4136-87a4-47e92d66b3b2.jpg",
+    driverId: "D2", 
+  },
+  {
+    id: 3,
+    name: "Michael Johnson",
+    image: "https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg",
+    driverId: "D3", 
+  },
+  {
+    id: 4,
+    name: "Emily Davis",
+    image: "https://imgcdn.stablediffusionweb.com/2024/9/8/04fdb256-b489-4571-972c-249a0cb35019.jpg",
+    driverId: "D4", 
+  },
+  {
+    id: 5,
+    name: "John Doe",
+    image: "https://imgcdn.stablediffusionweb.com/2024/10/14/b53d6677-8076-4e9e-a652-37d1995386f3.jpg",
+    driverId: "D1", 
+  },
+  {
+    id: 6,
+    name: "Jane Smith",
+    image: "https://imgcdn.stablediffusionweb.com/2024/10/4/2d52a83c-0d15-4136-87a4-47e92d66b3b2.jpg",
+    driverId: "D2", 
+  },
+  {
+    id: 7,
+    name: "Michael Johnson",
+    image: "https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg",
+    driverId: "D3", 
+  },
+  {
+    id: 8,
+    name: "Emily Davis",
+    image: "https://imgcdn.stablediffusionweb.com/2024/9/8/04fdb256-b489-4571-972c-249a0cb35019.jpg",
+    driverId: "D4", 
+  },
+];
 
 const Booking = () => {
   const bookingData = Array.from({ length: 25 }, (_, index) => ({
@@ -17,6 +69,10 @@ const Booking = () => {
     verified: Math.random() > 0.5,
   }));
 
+  const statusOptions = ["Pending", "Completed", "Started", "Cancelled"];
+
+  const [showDriverListModal, setShowDriverListModal] = useState(false);
+  // const [selectedBooking, setSelectedBooking] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -35,6 +91,17 @@ const Booking = () => {
       (filters.journeyType ? booking.journeyType === filters.journeyType : true)
     );
   });
+
+  const handleAssignClick = (booking) => {
+    setSelectedBooking(booking);
+    setShowDriverListModal(true);
+  };
+
+  const handleAssignDriver = (driver) => {
+    console.log(`Driver ${driver.name} assigned to booking ${selectedBooking.id}`);
+    setShowDriverListModal(false);
+  };
+
 
   const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
   
@@ -138,10 +205,10 @@ const Booking = () => {
       onClick={toggleModal}
       className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1"
     >
-      <i className="bi bi-clipboard-plus"></i> Book
+      <i class="bi bi-clipboard-plus-fill"></i>Book
     </button>
     <button onClick={toggleFilterModal} className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1">
-      <i className="bi bi-funnel"></i> Filter
+    <i class="bi bi-funnel-fill"></i> Filter
     </button>
   </div>
 </div>
@@ -154,6 +221,14 @@ const Booking = () => {
             onClose={() => setShowDetailModal(false)} // Close modal handler
           />
         )}
+
+{showDriverListModal && (
+        <DriverListModal
+        drivers={driversData}
+          onClose={() => setShowDriverListModal(false)}
+          onAssign={handleAssignDriver}
+        />
+      )}
 
         {/* Modal for Booking */}
         <div ref={modalRef} className={`absolute z-10 mt-14 mr-5 right-0 transition-opacity duration-300 ${showModal ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -177,43 +252,44 @@ const Booking = () => {
                 <thead>
                   <tr className="bg-blue-100">
                     <th className="px-4 py-2 text-left">S. No</th>
-                    <th className="px-4 py-2 text-left">Booking Type</th>
                     <th className="px-4 py-2 text-left">Booked At</th>
                     <th className="px-4 py-2 text-left">Vehicle No</th>
                     {/* <th className="px-4 py-2 text-left">Driver ID</th> */}
                     <th className="px-4 py-2 text-left">Customer Name</th>
                     <th className="px-4 py-2 text-left">Journey Type</th>
-                    <th className="px-4 py-2">Persons</th>
+                    <th className="px-4 py-2 text-left">Status</th>
                     <th className="px-4 py-2 text-left">Verification</th>
-                    <th className="px-4 py-2 text-left">Details</th>
+                    <th className="px-4 py-2 text-center">Driver</th>
+                    
+                    <th className="px-4 py-2 text-center">Details</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentEntries.map((booking, index) => (
                     <tr key={booking.id} className="border-b border-gray-300 last:border-b-0">
                       <td className="px-4 py-3">{index + 1 + indexOfFirstEntry}</td>
-                      <td className="px-6 py-3 flex items-center gap-2 ">
-  {booking.bookingType === 'Online' ? (
-    <span className="online-dot"></span>
-  ) : (
-    <span className="offline-dot"></span>
-  )}
-  {booking.bookingType}
-</td>
-
                       <td className="px-4 py-3">{booking.bookedAt}</td>
                       <td className="px-4 py-3">{booking.vehicleNo}</td>
                       {/* <td className="px-4 py-3">{booking.driverId}</td> */}
                       <td className="px-4 py-3">{booking.customerName}</td>
                       <td className="px-4 py-3">{booking.journeyType}</td>
-                      <td className="px-4 py-3 text-center">{booking.noOfPersons}</td>
+                      <td className="px-4 py-3">{statusOptions[index % statusOptions.length]}</td>
                       <td className="pr-8  py-3 text-center">{booking.verified ? '✅' : '❌'}</td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-center">
+                      <button
+    className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
+    onClick={() => handleAssignClick(booking)} // Call the function to open the modal with booking info
+  >
+    Assign
+  </button>
+      </td>
+                      
+                      <td className="px-4 py-3 text-center">
                         <button
-                          className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg flex items-center gap-1"
+                          className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
                           onClick={() => handleDetailsClick(booking)} 
                         >
-                          view
+                          <i class="bi bi-eye-fill"></i>
                         </button>
                       </td>
                     </tr>

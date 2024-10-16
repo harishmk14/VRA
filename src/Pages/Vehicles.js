@@ -122,7 +122,7 @@ const Vehicles = () => {
           onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
           className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
         >
-          <i className="bi bi-funnel"></i> Filter
+          <i class="bi bi-funnel-fill"></i> Filter
         </button>
         </div>
       </div>
@@ -188,13 +188,13 @@ const Vehicles = () => {
                     Rs {vehicle.price} <span className="text-xs text-gray-500">Per Day</span>
                   </div>
                   <button
-                    className="px-3 py-1 text-xs text-white bg-blue-500 rounded-full hover:bg-blue-600"
+                    className="px-2 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
                     onClick={() => {
                       setSelectedVehicle(vehicle); // Set the selected vehicle
                       setIsViewVehicleModalOpen(true); // Open View Vehicle Modal
                     }}
                   >
-                    View
+                    <i class="bi bi-eye-fill"></i>
                   </button>
                 </div>
               </div>

@@ -136,13 +136,13 @@ const Driver = () => {
             onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Driver Modal
             className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
           >
-            <i className="bi bi-person-plus-fill p-0.5 px-1 text-2xl"></i>
+            <i className="bi bi-person-plus-fill p-0.5 px-1 text-xl"></i>
           </button>
           <button
             onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
             className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
           >
-            <i className="bi bi-funnel"></i> Filter
+            <i class="bi bi-funnel-fill"></i> Filter
           </button>
         </div>
       </div>
@@ -210,13 +210,13 @@ const Driver = () => {
 
                 <div className="flex justify-end items-center">
                   <button
-                    className="px-3 py-1.5 text-sm text-white bg-blue-500 rounded-full hover:bg-blue-600"
+                    className="px-2.5 py-1.5 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
                     onClick={() => {
                       setSelectedDriver(driver); // Set the selected driver
                       setIsViewVehicleModalOpen(true); // Open View Driver Modal
                     }}
                   >
-                    View
+                    <i class="bi bi-eye-fill"></i>
                   </button>
                 </div>
               </div>

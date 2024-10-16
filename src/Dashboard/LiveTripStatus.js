@@ -61,7 +61,7 @@ const LiveVehicleStatus = ({ trips }) => {
           className='text-gray-600 font-bold'
           onClick={handleOpenFilter} // Open filter popup on click
         >
-          <i className="bi bi-funnel px-1"></i>Filter
+          <i class="bi bi-funnel-fill"></i> Filter
         </button>
       </div>
       <div className='flex flex-col w-full h-5/6 items-center'>

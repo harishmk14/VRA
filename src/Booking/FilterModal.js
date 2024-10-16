@@ -9,6 +9,7 @@ const FilterModal = ({ onClose, onApply }) => {
     verification: '',
     tripStartDate: '',
     tripEndDate: '',
+    bookedDate: '', // Added bookedDate state
     tripStatus: '', // Added tripStatus state
   });
 
@@ -39,7 +40,7 @@ const FilterModal = ({ onClose, onApply }) => {
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
           <div>
-            <label className="block mb-1">Booking Type:</label>
+            <label className="block mb-1">Booking Type</label>
             <select name="bookingType" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
               <option value="">All</option>
               <option value="Online">Online</option>
@@ -48,7 +49,7 @@ const FilterModal = ({ onClose, onApply }) => {
           </div>
 
           <div>
-            <label className="block mb-1">Vehicle Type:</label>
+            <label className="block mb-1">Vehicle Type</label>
             <select name="vehicleType" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
               <option value="">All</option>
               <option value="Bike">Bike</option>
@@ -60,7 +61,7 @@ const FilterModal = ({ onClose, onApply }) => {
           </div>
 
           <div>
-            <label className="block mb-1">Drive Mode:</label>
+            <label className="block mb-1">Drive Mode</label>
             <select name="driveMode" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
               <option value="">All</option>
               <option value="Driver">Driver</option>
@@ -69,7 +70,7 @@ const FilterModal = ({ onClose, onApply }) => {
           </div>
 
           <div>
-            <label className="block mb-1">Verification:</label>
+            <label className="block mb-1">Verification</label>
             <select name="verification" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
               <option value="">All</option>
               <option value="Verified">Verified</option>
@@ -78,7 +79,7 @@ const FilterModal = ({ onClose, onApply }) => {
           </div>
 
           <div>
-            <label className="block mb-1">Trip Start Date:</label>
+            <label className="block mb-1">Trip Start Date</label>
             <input
               type="date"
               name="tripStartDate"
@@ -88,7 +89,7 @@ const FilterModal = ({ onClose, onApply }) => {
           </div>
 
           <div>
-            <label className="block mb-1">Trip End Date:</label>
+            <label className="block mb-1">Trip End Date</label>
             <input
               type="date"
               name="tripEndDate"
@@ -96,9 +97,19 @@ const FilterModal = ({ onClose, onApply }) => {
               className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
           </div>
+          
+          <div>
+            <label className="block mb-1">Booked Date</label>
+            <input
+              type="date"
+              name="bookedDate"
+              onChange={handleChange}
+              className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            />
+          </div>
 
           <div>
-            <label className="block mb-1">Trip Status:</label> {/* Changed name to "tripStatus" */}
+            <label className="block mb-1">Trip Status</label>
             <select name="tripStatus" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
               <option value="">All</option>
               <option value="Ongoing">Ongoing</option>
