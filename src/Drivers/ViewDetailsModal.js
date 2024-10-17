@@ -1,340 +1,491 @@
-import React from 'react';
-import up1 from '../Assets/img/ford-1.jpg';
-import up2 from '../Assets/img/ford-2.jpeg';
-import up3 from '../Assets/img/ford-3.jpg';
-import aadhar from '../Assets/img/aadhar.jpg';
-import dl from '../Assets/img/DL.jpg';
-import docs from '../Assets/img/Harishdocs.pdf';
+import React, { useState } from 'react';
 
-const ViewVehicleModal = ({ isOpen, onClose, vehicleData }) => {
-  if (!isOpen) return null;
-
-  // Separate data into a variable
-  const data = {
-    vehicleType: 'Car',
-    brandName: 'Ford',
-    vehicleModel: 'Mustang',
-    registrationNo: 'ABC-1234',
-    registrationType: 'Commercial',
-    seater: 4,
-    acType: 'AC',
-    gearType: 'Manual',
-    fuelType: 'Petrol',
-    tollType: 'Toll',
-    color: 'White',
-    range: 120,
-    pricePerDay: 7500,
-    fuelCapacity: 45,
-    mileage: 12,
-    engineCC: 4400,
-    sunroof: true,
-    gpsTracking: true,
-    insuranceID: 'INS-2023-5678',
-    insuranceRenewalDate: '2025-01-15',
-    insuranceExpireDate: '2025-07-15',
-    lastServicedDate: '2024-06-20',
-    nextServiceDate: '2025-06-20',
-    holderName: 'Jaime Lannister',
-    holderMobile: '+91 9345450700',
-    holderEmail: 'JaimeLannister@gmail.com',
-    airbags: 6,
-    accidentHistory: 'No',
-    features: [
-      'Anti-lock Braking System',
-      'Lane Departure Warning',
-      'Adaptive Cruise Control',
-      '360-Degree Camera System',
-      'Collision Avoidance System'
-    ],
-    images: [up1, up2, up3],
+const ViewDriverModal = ({ isOpen, onClose }) => {
+  // Hooks must be declared at the top level
+  const defaultData = {
+    driverId: 'D123',
+    Name: 'John Doe',
+    gender: 'Male',
+    dateOfBirth: '1990-01-01',
+    batchNo: 'B2024',
+    experience: '5 years',
+    driverType: 'Full-time',
+    languageKnown: 'English, Hindi',
+    email: 'john.doe@example.com',
+    mobileNo: '1234567890',
+    alternateMobileNo: '0987654321',
+    shiftPreference: 'Day',
+    drivingLicenseNo: 'DL123456',
+    dlCategory: 'LMV',
+    licenseExpiryDate: '2025-01-01',
+    insuranceNo: 'INS123456',
+    address: '123 Main St, City, State',
+    criminalRecord: 'No',
+    drivingHistory: 'Clean',
+    accidentHistory: 'None',
     documents: {
-      registrationDoc: docs,
-      insuranceDoc: docs,
+      medicalCertificate: 'https://example.com/medical_certificate.pdf',
+      pcc: 'https://example.com/pcc.pdf',
     },
+    driverImage: 'https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg',
     holderDocuments: {
-      drivingLicense: dl,
-      aadharProof: aadhar,
+      drivingLicense: 'https://rtoimage.rto.care/rto_application/live/news_headline/544201641286938.jpg',
+      aadharProof: 'https://lawsisto.com/kkg_admin/images/categoryimages/1527952340Aadhar_format.png',
     },
   };
 
-    // Function to handle update action
-    const handleUpdate = () => {
-      // Update logic here
-      console.log("Update clicked");
-    };
-  
-    // Function to handle delete action
-    const handleDelete = () => {
-      // Delete logic here
-      console.log("Delete clicked");
-    };
+  // Hooks must be declared outside of conditionals
+  const [data, setData] = useState(defaultData);
+  const [isEdit, setIsEdit] = useState(false);
+
+  // Early return if the modal is not open
+  if (!isOpen) return null;
+
+  // Function to handle update action
+  const handleUpdate = () => {
+    console.log("Update clicked", data);
+    setIsEdit(false); // Exit edit mode
+  };
+
+  // Function to handle delete action
+  const handleDelete = () => {
+    console.log("Delete clicked");
+  };
+
+  // Function to handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-36">
       <div className="bg-white rounded-lg p-8 pt-0 shadow-lg w-4/5 relative overflow-auto max-h-[90vh]">
         <div className="flex justify-between items-center sticky top-0 bg-white z-10 p-5 px-1 mb-2">
-          <h2 className="text-2xl font-bold">View Vehicle Details</h2>
+          <h2 className="text-2xl font-bold">View Driver Details</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <span className="text-2xl">&times;</span>
           </button>
         </div>
 
         <div className="grid grid-cols-2 gap-5 gap-x-8">
-          {/* Vehicle Type */}
+          {/* Driver ID */}
           <div>
-            <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
-            <p>{data.vehicleType}</p>
+            <label className="grid text-sm font-medium mb-1">Driver ID</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="driverId"
+                value={data.driverId}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+                readOnly
+              />
+            ) : (
+              <p>{data.driverId}</p>
+            )}
           </div>
 
-          {/* Brand Name */}
+          {/* Driver Name */}
           <div>
-            <label className="grid text-sm font-medium mb-1">Brand Name</label>
-            <p>{data.brandName}</p>
+            <label className="grid text-sm font-medium mb-1">Driver Name</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="Name"
+                value={data.Name}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.Name}</p>
+            )}
           </div>
 
-          {/* Vehicle Model */}
+          {/* Gender */}
           <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Model</label>
-            <p>{data.vehicleModel}</p>
+            <label className="block text-sm font-medium mb-1">Gender</label>
+            {isEdit ? (
+              <select
+                name="gender"
+                value={data.gender}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            ) : (
+              <p>{data.gender}</p>
+            )}
           </div>
 
-          {/* Registration No */}
+          {/* Date of Birth */}
           <div>
-            <label className="block text-sm font-medium mb-1">Registration No</label>
-            <p>{data.registrationNo}</p>
+            <label className="block text-sm font-medium mb-1">Date of Birth</label>
+            {isEdit ? (
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={data.dateOfBirth}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.dateOfBirth}</p>
+            )}
           </div>
 
-          {/* Registration Type */}
+          {/* Batch No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Registration Type</label>
-            <p>{data.registrationType}</p>
+            <label className="block text-sm font-medium mb-1">Batch No</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="batchNo"
+                value={data.batchNo}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.batchNo}</p>
+            )}
           </div>
 
-          {/* Seater */}
+          {/* Experience */}
           <div>
-            <label className="block text-sm font-medium mb-1">Seater</label>
-            <p>{data.seater}</p>
+            <label className="block text-sm font-medium mb-1">Experience</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="experience"
+                value={data.experience}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.experience}</p>
+            )}
           </div>
 
-          {/* AC/Non-AC */}
-          {data.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
-              <p>{data.acType}</p>
-            </div>
-          )}
-
-          {/* Gear Type */}
+          {/* Driver Type */}
           <div>
-            <label className="block text-sm font-medium mb-1">Gear Type</label>
-            <p>{data.gearType}</p>
+            <label className="block text-sm font-medium mb-1">Driver Type</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="driverType"
+                value={data.driverType}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.driverType}</p>
+            )}
           </div>
 
-          {/* Fuel Type */}
+          {/* Language Known */}
           <div>
-            <label className="block text-sm font-medium mb-1">Fuel Type</label>
-            <p>{data.fuelType}</p>
+            <label className="block text-sm font-medium mb-1">Language Known</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="languageKnown"
+                value={data.languageKnown}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.languageKnown}</p>
+            )}
           </div>
 
-          {/* Toll Type */}
+          {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-1">Toll Type</label>
-            <p>{data.tollType}</p>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            {isEdit ? (
+              <input
+                type="email"
+                name="email"
+                value={data.email}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.email}</p>
+            )}
           </div>
 
-          {/* Color */}
+          {/* Mobile No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Color</label>
-            <p>{data.color}</p>
+            <label className="block text-sm font-medium mb-1">Mobile No</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="mobileNo"
+                value={data.mobileNo}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.mobileNo}</p>
+            )}
           </div>
 
-          {/* Range */}
+          {/* Alternate Mobile No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Range (in km)</label>
-            <p>{data.range}</p>
+            <label className="block text-sm font-medium mb-1">Alternate Mobile No</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="alternateMobileNo"
+                value={data.alternateMobileNo}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.alternateMobileNo}</p>
+            )}
           </div>
 
-          {/* Price Per Day */}
+          {/* Shift Preference */}
           <div>
-            <label className="block text-sm font-medium mb-1">Price Per Day</label>
-            <p>{data.pricePerDay}</p>
+            <label className="block text-sm font-medium mb-1">Shift Preference</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="shiftPreference"
+                value={data.shiftPreference}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.shiftPreference}</p>
+            )}
           </div>
 
-          {/* Fuel Capacity */}
+          {/* Driving License No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Fuel Capacity (in Liters)</label>
-            <p>{data.fuelCapacity}</p>
+            <label className="block text-sm font-medium mb-1">Driving License No</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="drivingLicenseNo"
+                value={data.drivingLicenseNo}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.drivingLicenseNo}</p>
+            )}
           </div>
 
-          {/* Mileage */}
+          {/* DL Category */}
           <div>
-            <label className="block text-sm font-medium mb-1">Mileage (per liter)</label>
-            <p>{data.mileage}</p>
+            <label className="block text-sm font-medium mb-1">DL Category</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="dlCategory"
+                value={data.dlCategory}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.dlCategory}</p>
+            )}
           </div>
 
-          {/* Engine CC */}
+          {/* License Expiry Date */}
           <div>
-            <label className="block text-sm font-medium mb-1">Engine CC</label>
-            <p>{data.engineCC}</p>
+            <label className="block text-sm font-medium mb-1">License Expiry Date</label>
+            {isEdit ? (
+              <input
+                type="date"
+                name="licenseExpiryDate"
+                value={data.licenseExpiryDate}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.licenseExpiryDate}</p>
+            )}
           </div>
 
-          {/* Sunroof */}
-          {data.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Sunroof</label>
-              <p>{data.sunroof ? 'Yes' : 'No'}</p>
-            </div>
-          )}
-
-          {/* GPS Tracking */}
-          {data.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">GPS Tracking</label>
-              <p>{data.gpsTracking ? 'Yes' : 'No'}</p>
-            </div>
-          )}
-
-          {/* Insurance ID */}
+          {/* Insurance No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Insurance ID</label>
-            <p>{data.insuranceID}</p>
+            <label className="block text-sm font-medium mb-1">Insurance No</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="insuranceNo"
+                value={data.insuranceNo}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.insuranceNo}</p>
+            )}
           </div>
 
-          {/* Insurance Renewal Date */}
+          {/* Address */}
           <div>
-            <label className="block text-sm font-medium mb-1">Insurance Renewal Date</label>
-            <p>{data.insuranceRenewalDate}</p>
+            <label className="block text-sm font-medium mb-1">Address</label>
+            {isEdit ? (
+              <textarea
+                name="address"
+                value={data.address}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.address}</p>
+            )}
           </div>
 
-          {/* Insurance Expire Date */}
+          {/* Criminal Record */}
           <div>
-            <label className="block text-sm font-medium mb-1">Insurance Expire Date</label>
-            <p>{data.insuranceExpireDate}</p>
+            <label className="block text-sm font-medium mb-1">Criminal Record</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="criminalRecord"
+                value={data.criminalRecord}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.criminalRecord}</p>
+            )}
           </div>
 
-          {/* Last Serviced Date */}
+          {/* Driving History */}
           <div>
-            <label className="block text-sm font-medium mb-1">Last Serviced Date</label>
-            <p>{data.lastServicedDate}</p>
+            <label className="block text-sm font-medium mb-1">Driving History</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name="drivingHistory"
+                value={data.drivingHistory}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.drivingHistory}</p>
+            )}
           </div>
-
-          {/* Next Service Date */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Next Service Date</label>
-            <p>{data.nextServiceDate}</p>
-          </div>
-
-          {/* Holder Name */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Holder Name</label>
-            <p>{data.holderName}</p>
-          </div>
-
-          {/* Holder Mobile */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Holder Mobile</label>
-            <p>{data.holderMobile}</p>
-          </div>
-
-          {/* Holder Email */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Holder Email</label>
-            <p>{data.holderEmail}</p>
-          </div>
-
-          {/* Airbags */}
-          {data.vehicleType !== 'bike' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Airbags</label>
-              <p>{data.airbags}</p>
-            </div>
-          )}
 
           {/* Accident History */}
           <div>
             <label className="block text-sm font-medium mb-1">Accident History</label>
-            <p>{data.accidentHistory}</p>
+            {isEdit ? (
+              <input
+                type="text"
+                name="accidentHistory"
+                value={data.accidentHistory}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-1 rounded"
+              />
+            ) : (
+              <p>{data.accidentHistory}</p>
+            )}
           </div>
 
-          {/* Vehicle Features */}
+          {/* Medical Certificate */}
           <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Features</label>
-            <ul>
-              {data.features.map((feature, index) => (
-                <li key={index} className="text-gray-600">
-                  - {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Vehicle Images */}
-          <div>
-          <label className="block text-sm font-medium mb-1">Vehicle Images</label>
-          <div className="flex gap-3">
-            {data.images.map((image, index) => (
-              <div key={index} className="w-full h-auto mb-2 border border-gray-300 p-2 rounded-md">
-                <img src={image} alt={`Vehicle ${index + 1}`} className="w-full h-auto object-cover" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Registration Document */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Registration Doc</label>
-          <div className="w-fit h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <a href={data.documents.registrationDoc} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-              View Registration Doc
+          <label className="block text-sm font-medium mb-1">Medical Certificate</label>
+          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+            <a
+              href={data.documents.medicalCertificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              View Medical Certificate
             </a>
           </div>
-        </div>
+          </div>
 
-        {/* Insurance Document */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Insurance Doc</label>
-          <div className="w-fit h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <a href={data.documents.insuranceDoc} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-              View Insurance Doc
+          {/* PCC */}
+          <div>
+          <label className="block text-sm font-medium mb-1">PCC</label>
+          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+            <a
+              href={data.documents.pcc}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              View PCC Document
             </a>
           </div>
-        </div>
+          </div>
 
-        {/* Holder Driving License */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Holder DL</label>
-          <div className="w-60 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <img src={data.holderDocuments.drivingLicense} alt="Driving License" className="w-full h-auto object-cover" />
+          {/* Driver Image */}
+          <div>
+          <label className="block text-sm font-medium mb-1">Driver Image</label>
+          <div className="w-40 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+            <img 
+              src={data.driverImage} 
+              alt="Driver"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+          </div>
+
+          {/* Driving License */}
+          <div>
+          <label className="block text-sm font-medium mb-1">Driving License</label>
+          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+            <img 
+              src={data.holderDocuments.drivingLicense} 
+              alt="Driving License" 
+              className="w-full h-auto object-cover" 
+            />
+          </div>
+          </div>
+
+          {/* Aadhar */}
+          <div>
+          <label className="block text-sm font-medium mb-1">Aadhar Proof</label>
+          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+            <img 
+              src={data.holderDocuments.aadharProof} 
+              alt="Aadhar Proof" 
+              className="w-full h-auto object-cover" 
+            />
+          </div>
           </div>
         </div>
 
-        {/* Holder Proof */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Holder Proof</label>
-          <div className="w-60 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <img src={data.holderDocuments.aadharProof} alt="Aadhar Card" className="w-full h-auto object-cover" />
-          </div>
-        </div>
-        </div>
-                {/* Action Buttons */}
-                <div className="flex justify-end mt-4">
-          <button
-            onClick={handleUpdate}
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-blue-600"
-          >
-            Update
-          </button>
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600"
-          >
-            Delete
-          </button>
-        </div>
-
+        {/* Action Buttons */}
+<div className="flex justify-end mt-4">
+  {isEdit ? (
+    <button
+      onClick={handleUpdate}
+      className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-blue-600"
+    >
+      Update
+    </button>
+  ) : (
+    <button
+      onClick={() => setIsEdit(true)} // Set isEdit to true when Edit button is clicked
+      className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-blue-600"
+    >
+      Edit
+    </button>
+  )}
+  <button
+    onClick={handleDelete}
+    className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600"
+  >
+    Delete
+  </button>
+</div>
       </div>
     </div>
   );
 };
 
-export default ViewVehicleModal;
+export default ViewDriverModal;
