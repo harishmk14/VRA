@@ -5,7 +5,7 @@ const DriverListModal = ({ drivers, onClose, onAssign }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 py-32">
       <div className="bg-zinc-100 p-6 py-0 rounded-xl shadow-lg overflow-auto w-1/3 h-full">
         <div className="flex justify-between items-center sticky top-0 bg-zinc-100 z-10 p-4 px-1">
-          <h2 className="text-2xl font-bold">Assign Driver</h2>
+          <h2 className="text-2xl font-bold">Available Drivers</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <span className="text-2xl">&times;</span>
           </button>
