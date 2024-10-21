@@ -1,42 +1,21 @@
-import React, { useState, useEffect } from 'react';
-
-const vehicleCategoriesMap = {
-  Bike: [
-    'Scooters', 'Commuter Bikes', 'Sportbikes', 'Cruiser Bikes',
-    'Touring Bikes', 'Adventure Bikes', 'Dirt Bikes', 'Electric Bikes'
-  ],
-  Car: [
-    'Economy Hatchbacks', 'Sedans', 'Crossovers', 'Full-Size SUVs',
-    'Luxury Cars', 'MUVs / MPVs', 'Electric Cars'
-  ],
-  Van: ['Normal', 'Mini Van'],
-  Bus: ['Normal', 'Mini Bus'],
-  'Delivery Truck': [
-    'Mini Trucks', 'Pickup Trucks', 'Intermediate Commercial Vehicles (ICVs)',
-    'Heavy Commercial Vehicles (HCVs)', 'Multi-Axle Trucks', 'Container Trucks',
-    'Tipper Trucks'
-  ],
-};
+import React, { useState } from 'react';
 
 const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
-  const [selectedVehicleType, setSelectedVehicleType] = useState('');
-  const [availableCategories, setAvailableCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [status, setStatus] = useState('');
+  const [gender, setGender] = useState('');
+  const [driverType, setDriverType] = useState('');
+  const [shift, setShift] = useState('');
+  const [dlCategory, setDlCategory] = useState('');
   const [priceRange, setPriceRange] = useState([0, 50000]); // Slider range from 0 to 50000
   const [minPrice, maxPrice] = priceRange;
 
-  // Update available categories based on vehicle type
-  useEffect(() => {
-    if (selectedVehicleType) {
-      setAvailableCategories(vehicleCategoriesMap[selectedVehicleType]);
-      setSelectedCategory(''); // Reset the selected category when vehicle type changes
-    }
-  }, [selectedVehicleType]);
-
   const handleFilterClick = () => {
     const filterData = {
-      vehicleType: selectedVehicleType,
-      category: selectedCategory,
+      status,
+      gender,
+      driverType,
+      shift,
+      dlCategory,
       priceRange,
     };
     onFilterSelect(filterData);
@@ -50,9 +29,11 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
   };
 
   const handleReset = () => {
-    setSelectedVehicleType('');
-    setAvailableCategories([]);
-    setSelectedCategory('');
+    setStatus('');
+    setGender('');
+    setDriverType('');
+    setShift('');
+    setDlCategory('');
     setPriceRange([0, 50000]);
   };
 
@@ -60,7 +41,7 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-6 shadow-lg w-96 relative">
+      <div className="bg-white rounded-lg p-6 shadow-lg w-1/3 relative">
         
         {/* 'X' Button to close modal */}
         <button 
@@ -69,46 +50,73 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
           &times;
         </button>
         
-        <h2 className="text-xl font-semibold mb-4">Filter Vehicles</h2>
+        <h2 className="text-xl font-semibold mb-4">Filter Drivers</h2>
 
-        {/* Vehicle Type */}
-        <div className="px-2 py-3">
-          <label className="block text-sm font-medium mb-1">Vehicle Type</label>
-          <select
-            value={selectedVehicleType}
-            onChange={(e) => setSelectedVehicleType(e.target.value)}
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-          >
-            <option value="" className="text-gray-400">Select Vehicle Type</option>
-            <option value="Bike" className="text-gray-600">Bike</option>
-            <option value="Car" className="text-gray-600">Car</option>
-            <option value="Van" className="text-gray-600">Van</option>
-            <option value="Bus" className="text-gray-600">Bus</option>
-            <option value="Delivery Truck" className="text-gray-600">Delivery Truck</option>
-          </select>
-        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {/* Gender */}
+          <div className="col-span-1">
+            <label className="block text-sm font-medium mb-1">Gender</label>
+            <select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            >
+              <option value="" className="text-gray-400">Select Gender</option>
+              <option value="Male" className="text-gray-600">Male</option>
+              <option value="Female" className="text-gray-600">Female</option>
+              <option value="Others" className="text-gray-600">Others</option>
+            </select>
+          </div>
 
-        {/* Vehicle Categories */}
-        <div className="px-2 py-3">
-          <label className="block text-sm font-medium mb-1">Vehicle Categories</label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            disabled={!availableCategories.length}
-          >
-            <option value="" className="text-gray-400">Select Category</option>
-            {availableCategories.map((category) => (
-              <option key={category} value={category} className="text-gray-600">
-                {category}
-              </option>
-            ))}
-          </select>
+          {/* Driver Type */}
+          <div className="col-span-1">
+            <label className="block text-sm font-medium mb-1">Driver Type</label>
+            <select
+              value={driverType}
+              onChange={(e) => setDriverType(e.target.value)}
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            >
+              <option value="" className="text-gray-400">Select Driver Type</option>
+              <option value="Permanent" className="text-gray-600">Permanent</option>
+              <option value="Acting" className="text-gray-600">Acting</option>
+            </select>
+          </div>
+
+          {/* Shift */}
+          <div className="col-span-1">
+            <label className="block text-sm font-medium mb-1">Shift</label>
+            <select
+              value={shift}
+              onChange={(e) => setShift(e.target.value)}
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            >
+              <option value="" className="text-gray-400">Select Shift</option>
+              <option value="Day" className="text-gray-600">Day</option>
+              <option value="Night" className="text-gray-600">Night</option>
+              <option value="Both" className="text-gray-600">Both</option>
+            </select>
+          </div>
+
+          {/* DL Category */}
+          <div className="col-span-1">
+            <label className="block text-sm font-medium mb-1">DL Category</label>
+            <select
+              value={dlCategory}
+              onChange={(e) => setDlCategory(e.target.value)}
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            >
+              <option value="" className="text-gray-400">Select DL Category</option>
+              {/* Add relevant DL categories as options */}
+              <option value="Light Motor Vehicle" className="text-gray-600">Light Motor Vehicle</option>
+              <option value="Heavy Motor Vehicle" className="text-gray-600">Heavy Motor Vehicle</option>
+              <option value="Commercial Vehicle" className="text-gray-600">Commercial Vehicle</option>
+            </select>
+          </div>
         </div>
 
         {/* Price Range */}
-        <div className="px-2 py-3">
-          <label className="block text-sm font-medium mb-1">Price Range: {minPrice} - {maxPrice}</label>
+        <div className="mt-4">
+          <label className="block text-sm font-medium mb-1">Salary Range: {minPrice} - {maxPrice}</label>
           <div className="flex space-x-4">
             <input
               type="range"
@@ -132,16 +140,16 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-center space-x-3 px-2 pt-3  ">
-        <button
+        <div className="col-span-2 flex justify-end mt-4">
+          <button
             onClick={handleFilterClick}
-            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600"
           >
             Apply
           </button>
           <button
             onClick={handleReset}
-            className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+            className="ml-2 bg-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-400"
           >
             Reset
           </button>

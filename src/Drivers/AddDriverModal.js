@@ -20,6 +20,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
   const [criminalRecord, setCriminalRecord] = useState('');
   const [drivingHistory, setDrivingHistory] = useState('');
   const [accidentHistory, setAccidentHistory] = useState('');
+  const [salary, setSalary] = useState('');
   const [medicalCertificate, setMedicalCertificate] = useState(null);
   const [pcc, setPcc] = useState(null);
   const [driverImage, setDriverImage] = useState(null);
@@ -45,6 +46,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     setCriminalRecord('');
     setDrivingHistory('');
     setAccidentHistory('');
+    setSalary('');
     setMedicalCertificate(null);
     setPcc(null);
     setDriverImage(null);
@@ -367,6 +369,18 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     placeholder="Provide details about your accident history..."
   />
 </div>
+
+          {/* Salary */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Salary <span className="text-red-500">*</span></label>
+            <input
+              type="number"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={salary}
+              onChange={(e) => setExperience(e.target.value)}
+              required
+            />
+          </div>
 
           {/* Medical Certificate */}
           <div>

@@ -23,6 +23,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
     criminalRecord: 'No',
     drivingHistory: 'Clean',
     accidentHistory: 'None',
+    salary:'15000',
     documents: {
       medicalCertificate: 'https://example.com/medical_certificate.pdf',
       pcc: 'https://example.com/pcc.pdf',
@@ -78,7 +79,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="driverId"
                 value={data.driverId}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
                 readOnly
               />
             ) : (
@@ -95,7 +96,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="Name"
                 value={data.Name}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.Name}</p>
@@ -110,7 +111,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="gender"
                 value={data.gender}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -130,7 +131,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="dateOfBirth"
                 value={data.dateOfBirth}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.dateOfBirth}</p>
@@ -146,7 +147,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="batchNo"
                 value={data.batchNo}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.batchNo}</p>
@@ -162,7 +163,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="experience"
                 value={data.experience}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.experience}</p>
@@ -178,7 +179,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="driverType"
                 value={data.driverType}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.driverType}</p>
@@ -194,7 +195,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="languageKnown"
                 value={data.languageKnown}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.languageKnown}</p>
@@ -210,7 +211,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="email"
                 value={data.email}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.email}</p>
@@ -226,7 +227,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="mobileNo"
                 value={data.mobileNo}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.mobileNo}</p>
@@ -242,7 +243,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="alternateMobileNo"
                 value={data.alternateMobileNo}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.alternateMobileNo}</p>
@@ -258,7 +259,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="shiftPreference"
                 value={data.shiftPreference}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.shiftPreference}</p>
@@ -274,7 +275,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="drivingLicenseNo"
                 value={data.drivingLicenseNo}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.drivingLicenseNo}</p>
@@ -290,7 +291,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="dlCategory"
                 value={data.dlCategory}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.dlCategory}</p>
@@ -306,7 +307,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="licenseExpiryDate"
                 value={data.licenseExpiryDate}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.licenseExpiryDate}</p>
@@ -322,7 +323,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="insuranceNo"
                 value={data.insuranceNo}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.insuranceNo}</p>
@@ -337,7 +338,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="address"
                 value={data.address}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.address}</p>
@@ -353,7 +354,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="criminalRecord"
                 value={data.criminalRecord}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.criminalRecord}</p>
@@ -369,7 +370,7 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="drivingHistory"
                 value={data.drivingHistory}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.drivingHistory}</p>
@@ -385,77 +386,143 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 name="accidentHistory"
                 value={data.accidentHistory}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-1 rounded"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
               <p>{data.accidentHistory}</p>
             )}
           </div>
 
+                    {/* Salary */}
+                    <div>
+            <label className="grid text-sm font-medium mb-1">Salary</label>
+            {isEdit ? (
+              <input
+                type="number"
+                name="salary"
+                value={data.salary}
+                onChange={handleInputChange}
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              />
+            ) : (
+              <p>{data.salary}</p>
+            )}
+          </div>
+
           {/* Medical Certificate */}
           <div>
           <label className="block text-sm font-medium mb-1">Medical Certificate</label>
-          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <a
-              href={data.documents.medicalCertificate}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 underline"
-            >
-              View Medical Certificate
-            </a>
-          </div>
+          {isEdit ? (
+            <input
+            type="file"
+            accept="application/pdf"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+            required
+          />
+            ) : (
+              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+              <a
+                href={data.documents.medicalCertificate}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                View Medical Certificate
+              </a>
+            </div>
+            )}
           </div>
 
           {/* PCC */}
           <div>
           <label className="block text-sm font-medium mb-1">PCC</label>
-          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <a
-              href={data.documents.pcc}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 underline"
-            >
-              View PCC Document
-            </a>
-          </div>
+          {isEdit ? (
+            <input
+            type="file"
+            accept="application/pdf"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+            required
+          />
+            ) : (
+              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+              <a
+                href={data.documents.pcc}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                View PCC Document
+              </a>
+            </div>
+            )}
           </div>
 
           {/* Driver Image */}
           <div>
           <label className="block text-sm font-medium mb-1">Driver Image</label>
-          <div className="w-40 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <img 
-              src={data.driverImage} 
-              alt="Driver"
-              className="w-full h-auto object-cover"
-            />
-          </div>
+          {isEdit ? (
+            <input
+            type="file"
+            accept="application/pdf"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+            required
+          />
+            ) : (
+              <div className="w-40 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+              <img 
+                src={data.driverImage} 
+                alt="Driver"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+            )}
           </div>
 
           {/* Driving License */}
           <div>
           <label className="block text-sm font-medium mb-1">Driving License</label>
-          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <img 
-              src={data.holderDocuments.drivingLicense} 
-              alt="Driving License" 
-              className="w-full h-auto object-cover" 
-            />
-          </div>
+          {isEdit ? (
+            <input
+            type="file"
+            accept="application/pdf"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+            required
+          />
+            ) : (
+              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+              <img 
+                src={data.holderDocuments.drivingLicense} 
+                alt="Driving License" 
+                className="w-full h-auto object-cover" 
+              />
+            </div>
+            )}
           </div>
 
           {/* Aadhar */}
           <div>
           <label className="block text-sm font-medium mb-1">Aadhar Proof</label>
-          <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-            <img 
-              src={data.holderDocuments.aadharProof} 
-              alt="Aadhar Proof" 
-              className="w-full h-auto object-cover" 
-            />
-          </div>
+          {isEdit ? (
+            <input
+            type="file"
+            accept="application/pdf"
+            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+            required
+          />
+            ) : (
+              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+              <img 
+                src={data.holderDocuments.aadharProof} 
+                alt="Aadhar Proof" 
+                className="w-full h-auto object-cover" 
+              />
+            </div>
+            )}
           </div>
         </div>
 

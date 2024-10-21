@@ -132,20 +132,11 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-center space-x-3 px-2 pt-3  ">
-        <button
-            onClick={handleFilterClick}
-            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Apply
-          </button>
-          <button
-            onClick={handleReset}
-            className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-          >
-            Reset
-          </button>
-        </div>
+
+        <div className="col-span-2 flex justify-end mt-4">
+            <button type="submit" onClick={handleFilterClick} className="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">Apply</button>
+            <button type="button" onClick={handleReset} className="ml-2 bg-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-400">Reset</button>
+          </div>
       </div>
     </div>
   );
