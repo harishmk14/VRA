@@ -22,13 +22,9 @@ const DriverListModal = ({ drivers, onClose, onAssign }) => {
                 />
                 <span className="font-medium">{driver.name}</span>
               </div>
-              <div className="flex space-x-2"> {/* Added a flex container for buttons */}
-                <button
-                  className="bg-green-500 text-white px-2 py-1 rounded-lg"
-                  onClick={() => onAssign(driver)}
-                >
-                <i class="bi bi-eye-fill"></i>
-                </button>
+              <div className="flex space-x-4"> {/* Added a flex container for buttons */}
+                <i class="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
+                onClick={() => onAssign(driver)}></i>
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded-lg"
                   onClick={() => onAssign(driver)}

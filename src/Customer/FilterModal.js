@@ -3,14 +3,13 @@ import React from 'react';
 
 const FilterModal = ({ onClose, onApply }) => {
   const [filterValues, setFilterValues] = React.useState({
-    bookingType: '',
-    vehicleType: '',
-    driveMode: '',
-    verification: '',
-    tripStartDate: '',
-    tripEndDate: '',
-    bookedDate: '', // Added bookedDate state
-    tripStatus: '', // Added tripStatus state
+    gender: '', // Added gender state
+    registrationDate: '',
+    customerIdPrefix: '',
+    customerIdSuffix: '',
+    performance: '',
+    numberOfTrips: '',
+    // Other states can be added here if needed
   });
 
   const handleChange = (e) => {
@@ -39,89 +38,83 @@ const FilterModal = ({ onClose, onApply }) => {
         <h3 className="text-xl font-semibold mb-4">Filter Bookings</h3>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
-          <div>
-            <label className="block mb-1">Booking Type</label>
-            <select name="bookingType" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
-              <option value="">All</option>
-              <option value="Online">Online</option>
-              <option value="Offline">Offline</option>
-            </select>
-          </div>
 
-          <div>
-            <label className="block mb-1">Vehicle Type</label>
-            <select name="vehicleType" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
-              <option value="">All</option>
-              <option value="Bike">Bike</option>
-              <option value="Car">Car</option>
-              <option value="Van">Van</option>
-              <option value="Bus">Bus</option>
-              <option value="Delivery Truck">Delivery Truck</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-1">Drive Mode</label>
-            <select name="driveMode" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
-              <option value="">All</option>
-              <option value="Driver">Driver</option>
-              <option value="Self Drive">Self Drive</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-1">Verification</label>
-            <select name="verification" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
-              <option value="">All</option>
-              <option value="Verified">Verified</option>
-              <option value="Not Verified">Not Verified</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-1">Trip Start Date</label>
-            <input
-              type="date"
-              name="tripStartDate"
-              onChange={handleChange}
+        <div>
+            <label className="block mb-1">Registration Date</label>
+            <input 
+              type="date" 
+              name="registrationDate" 
+              onChange={handleChange} 
               className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Trip End Date</label>
-            <input
-              type="date"
-              name="tripEndDate"
-              onChange={handleChange}
-              className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required // Optional: Add this if the field is mandatory
             />
           </div>
           
           <div>
-            <label className="block mb-1">Booked Date</label>
-            <input
-              type="date"
-              name="bookedDate"
-              onChange={handleChange}
+            <label className="block mb-1">Gender</label>
+            <select 
+              name="gender" 
+              onChange={handleChange} 
               className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            />
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
           </div>
 
           <div>
-            <label className="block mb-1">Trip Status</label>
-            <select name="tripStatus" onChange={handleChange} className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300">
-              <option value="">All</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Pending">Pending</option>
-              <option value="Completed">Completed</option>
-              <option value="Cancelled">Cancelled</option>
+            <label className="block mb-1">Customer ID</label>
+            <div className="flex space-x-2">
+              <input 
+                type="number" 
+                name="customerIdPrefix" 
+                onChange={handleChange} 
+                className="border p-1 w-1/2 rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                placeholder="CUS From"
+                maxLength={5} // Optional: Set a max length if needed
+              />
+              <input 
+                type="number" 
+                name="customerIdSuffix" 
+                onChange={handleChange} 
+                className="border p-1 w-1/2 rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                placeholder="CUS To"
+                maxLength={5} // Optional: Set a max length if needed
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-1">Performance</label>
+            <select 
+              name="performance" 
+              onChange={handleChange} 
+              className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+            >
+              <option value="">Select Performance</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block mb-1">Number of Trips Attended</label>
+            <input 
+              type="number" 
+              name="numberOfTrips" 
+              onChange={handleChange} 
+              className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              min={0} // Optional: Set minimum value
+              placeholder="Enter number of trips" // Optional: Add a placeholder for guidance
+              required // Optional: Add if the field is mandatory
+            />
           </div>
 
           <div className="col-span-2 flex justify-end mt-4">
             <button type="submit" className="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">Apply</button>
-            <button type="button" className="ml-2 bg-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-400">Reset</button>
+            <button type="button" className="ml-2 bg-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-400" onClick={() => setFilterValues({})}>Reset</button>
           </div>
         </form>
       </div>

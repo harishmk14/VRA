@@ -20,12 +20,7 @@ const Trip = ({ Trip, onClose, onAssign }) => {
   </span>
 </div>
               <div className="flex space-x-2"> {/* Added a flex container for buttons */}
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded-lg"
-                  onClick={() => onAssign(Trip)}
-                >
-                  <i className="bi bi-eye-fill"></i>
-                </button>
+                  <i className="bi bi-eye-fill text-blue-500 text-lg cursor-pointer" onClick={() => onAssign(Trip)}></i>
                 <div
     className={` flex px-2 py-1 w-28 justify-center rounded-lg ${
       Trip.status === 'Completed' ? 'text-blue-500' : 

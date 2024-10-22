@@ -3,6 +3,7 @@ import '../index.css';
 import FilterModal from '../Drivers/FilterModal'; // Import the FilterModal component
 import AddDriverModal from '../Drivers/AddDriverModal'; // Import AddVehicleModal component
 import ViewDetailModal from '../Drivers/ViewDetailsModal'; // Import the ViewVehicleModal component
+import ReviewModal from '../Drivers/ReviewModal';
 import { GiSteeringWheel } from "react-icons/gi";
 
 const Driver = () => {
@@ -18,6 +19,18 @@ const Driver = () => {
       vehicleCategory: "Car, Bus",
       status: "Available",
       shift: "Day",
+      reviews: [
+        {
+          user: "Alice",
+          comment: "Very professional and experienced driver!",
+          rating: 5,
+        },
+        {
+          user: "Bob",
+          comment: "Smooth ride, but could improve punctuality.",
+          rating: 4,
+        },
+      ],
     },
     {
       id: 2,
@@ -30,6 +43,18 @@ const Driver = () => {
       vehicleCategory: "Car, SUV",
       status: "Pending",
       shift: "Day / Night",
+      reviews: [
+        {
+          user: "Charlie",
+          comment: "Great driver, very friendly!",
+          rating: 5,
+        },
+        {
+          user: "Diana",
+          comment: "Could have driven a bit faster.",
+          rating: 3,
+        },
+      ],
     },
     {
       id: 3,
@@ -42,6 +67,68 @@ const Driver = () => {
       vehicleCategory: "Car",
       status: "In Journey",
       shift: "Day / Night",
+      reviews: [
+        {
+          user: "Eve",
+          comment: "Excellent service! Highly recommend.",
+          rating: 5,
+        },
+        {
+          user: "Frank",
+          comment: "Good, but could improve communication.",
+          rating: 4,
+        },
+        {
+          user: "Eve",
+          comment: "Excellent service! Highly recommend.",
+          rating: 5,
+        },
+        {
+          user: "Frank",
+          comment: "Good, but could improve communication.",
+          rating: 4,
+        },
+        {
+          user: "Eve",
+          comment: "Excellent service! Highly recommend.",
+          rating: 5,
+        },
+        {
+          user: "Frank",
+          comment: "Good, but could improve communication.",
+          rating: 4,
+        },
+        {
+          user: "Eve",
+          comment: "Excellent service! Highly recommend.",
+          rating: 5,
+        },
+        {
+          user: "Frank",
+          comment: "Good, but could improve communication.",
+          rating: 4,
+        },
+        {
+          user: "Eve",
+          comment: "Excellent service! Highly recommend.",
+          rating: 5,
+        },
+        {
+          user: "Frank",
+          comment: "Good, but could improve communication.",
+          rating: 4,
+        },
+        {
+          user: "Eve",
+          comment: "Excellent service! Highly recommend.",
+          rating: 5,
+        },
+        {
+          user: "Frank",
+          comment: "Good, but could improve communication.",
+          rating: 4,
+        },
+      ],
     },
     {
       id: 4,
@@ -53,15 +140,30 @@ const Driver = () => {
       age: 40,
       vehicleCategory: "Bus",
       status: "Unavailable",
-      shift: "Night", // Changed from "Service" to "Unavailable"
+      shift: "Night",
+      reviews: [
+        {
+          user: "George",
+          comment: "Very nice and courteous.",
+          rating: 4,
+        },
+        {
+          user: "Hannah",
+          comment: "The bus was clean and comfortable.",
+          rating: 5,
+        },
+      ],
     },
   ];
+  
 
   const [filter, setFilter] = useState("All");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); // State for Add Vehicle Modal
   const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); // State for View Vehicle Modal
   const [selectedDriver, setSelectedDriver] = useState(null); // State to hold the selected driver
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // State for Review Modal
+
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -167,6 +269,13 @@ const Driver = () => {
         driver={selectedDriver} // Pass the selected driver to the modal
       />
 
+<ReviewModal
+  isOpen={isReviewModalOpen}
+  onClose={() => setIsReviewModalOpen(false)} // Close Review Modal
+  driver={selectedDriver} // Pass the selected driver to the review modal
+/>
+
+
       <div className="flex-grow overflow-auto hide-scroll p-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-5">
           {filteredDrivers.map((driver) => (
@@ -192,7 +301,7 @@ const Driver = () => {
                     Exp - {driver.experience}
                   </span>
                   <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Rating - {driver.starRating} ⭐
+                    Rating - {driver.starRating} <i class="bi bi-star-fill text-yellow-500 ml-1"></i>
                   </span>
                   <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
                     Age - {driver.age}
@@ -208,19 +317,22 @@ const Driver = () => {
                   </span>
                 </div>
 
-                <div className="flex justify-end items-center">
-                  <button
-                    className="px-2.5 py-1.5 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                <div className="flex justify-end items-center space-x-5">
+                <i 
+  class="bi bi-card-text text-blue-500 text-2xl mt-1 cursor-pointer"
+  onClick={() => {
+    setSelectedDriver(driver); // Set the selected driver for the review modal
+    setIsReviewModalOpen(true); // Open Review Modal
+  }}
+></i>
+                    <i class="bi bi-eye-fill text-blue-500 text-2xl mr-3 mt-1 cursor-pointer"
                     onClick={() => {
                       setSelectedDriver(driver); // Set the selected driver
                       setIsViewVehicleModalOpen(true); // Open View Driver Modal
-                    }}
-                  >
-                    <i class="bi bi-eye-fill"></i>
-                  </button>
+                    }}></i>
                 </div>
               </div>
-            </div>
+            </div> 
           ))}
         </div>
       </div>

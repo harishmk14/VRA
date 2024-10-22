@@ -285,12 +285,8 @@ const Booking = () => {
       </td>
                       
                       <td className="px-4 py-3 text-center">
-                        <button
-                          className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
-                          onClick={() => handleDetailsClick(booking)} 
-                        >
-                          <i class="bi bi-eye-fill"></i>
-                        </button>
+                          <i class="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
+                          onClick={() => handleDetailsClick(booking)}></i>
                       </td>
                     </tr>
                   ))}
