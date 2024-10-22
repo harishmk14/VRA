@@ -24,7 +24,7 @@ const FilterModal = ({ onClose, onApply }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-6 shadow-lg w-3/6 relative">
 
         {/* X Button in the top-right corner */}

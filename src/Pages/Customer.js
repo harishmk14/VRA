@@ -25,7 +25,7 @@ const reviews = [
     rating: 5,
     content: 'Excellent service! The trip was smooth and enjoyable.',
     profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-20", 
+    date: "2024-10-20",
     tripAreaDetails: "Pondicherry to Chennai",
     tripDetails: [
       { label: 'Start Date', value: '2024-10-15' },
@@ -39,7 +39,7 @@ const reviews = [
     rating: 4,
     content: 'Very nice experience. The vehicle was clean and well-maintained.',
     profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-21", 
+    date: "2024-10-21",
     tripAreaDetails: "Pondicherry to Bangalore",
     tripDetails: [
       { label: 'Start Date', value: '2024-10-19' },
@@ -53,7 +53,7 @@ const reviews = [
     rating: 5,
     content: 'Fantastic! The driver was friendly and punctual.',
     profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-22", 
+    date: "2024-10-22",
     tripAreaDetails: "Pondicherry to Madurai",
     tripDetails: [
       { label: 'Start Date', value: '2024-10-20' },
@@ -67,7 +67,7 @@ const reviews = [
     rating: 3,
     content: 'Average experience. The car was fine, but the wait was too long.',
     profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-19", 
+    date: "2024-10-19",
     tripAreaDetails: "Pondicherry to Coimbatore",
     tripDetails: [
       { label: 'Start Date', value: '2024-10-17' },
@@ -81,7 +81,7 @@ const reviews = [
     rating: 4,
     content: 'Good service overall. Will use again for future trips!',
     profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-18", 
+    date: "2024-10-18",
     tripAreaDetails: "Pondicherry to Tiruchirappalli",
     tripDetails: [
       { label: 'Start Date', value: '2024-10-16' },
@@ -138,7 +138,7 @@ const Customer = () => {
   };
 
   const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
-  
+
   // Update currentEntries based on filtered data
   const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
 
@@ -163,13 +163,13 @@ const Customer = () => {
         setShowFilterModal(false);
       }
     };
-  
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  
+
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -249,7 +249,7 @@ const Customer = () => {
             </button>
           </div>
         </div>
-  
+
         {/* Booking Detail Modal */}
         {showDetailModal && (
           <CustomerDetailModal
@@ -257,7 +257,7 @@ const Customer = () => {
             onClose={() => setShowDetailModal(false)} // Close modal handler
           />
         )}
-  
+
         {showTrip && (
           <Trip
             Trip={bookingsData}
@@ -265,11 +265,11 @@ const Customer = () => {
             onAssign={handleAssignDriver}
           />
         )}
-  
+
         {showAddModal && (
           <AddCustomerModal onClose={() => setShowAddModal(false)} />
         )}
-  
+
         {/* Filter Modal */}
         {showFilterModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -278,8 +278,8 @@ const Customer = () => {
             </div>
           </div>
         )}
-        
-  
+
+
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 h-full">
           <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
             <div className="flex flex-col h-full">
@@ -302,9 +302,9 @@ const Customer = () => {
                         <td className="px-4 py-3">{customer.regdate}</td> {/* Registration Date */}
                         <td className="px-4 py-3">{customer.id}</td> {/* Display Customer Id */}
                         <td className="px-4 py-3 flex items-center">
-                          <img 
+                          <img
                             src='https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg' // Use the actual URL for the profile picture
-                            alt={`${customer.name}'s profile`} 
+                            alt={`${customer.name}'s profile`}
                             className="w-8 h-8 rounded-full mr-2" // Adjust size and rounding
                           />
                           {customer.name}
@@ -326,7 +326,7 @@ const Customer = () => {
                   </tbody>
                 </table>
               </div>
-  
+
               <div className="flex justify-between items-center px-4 py-2">
                 <div className='text-gray-500 w-2/3'>
                   Showing {indexOfFirstEntry + 1} to {Math.min(indexOfLastEntry, CustomerData.length)} of {CustomerData.length} entries
@@ -351,56 +351,61 @@ const Customer = () => {
               </div>
             </div>
           </div>
- {/* Reviews Section */}
-<div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden py-3">
-  <div className="flex justify-between items-center mb-4 px-4">
-    <h2 className="text-blue-500 text-xl font-semibold">Reviews</h2>
-    <i
-      className="bi bi-arrows-angle-expand text-blue-400 text-lg cursor-pointer"
-      onClick={() => setShowReviewModal(true)}  // Open the modal
-    ></i>
+          <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden py-3 ">
+            <div className="flex justify-between items-center mb-4 px-4">
+              <h2 className="text-blue-500 text-xl font-semibold">Reviews</h2>
+              <i
+                className="bi bi-arrows-angle-expand text-blue-400 text-lg cursor-pointer"
+                onClick={() => setShowReviewModal(true)}  // Open the modal
+              ></i>
 
-    {showReviewModal && (
-      <ReviewModal 
-        reviews={reviews} 
-        onClose={() => setShowReviewModal(false)} 
-      />
-    )}
-  </div>
-  <div className="h-[27.5rem] overflow-y-auto px-4">
-    {reviews.map((review, index) => (
-      <div key={index} className="border rounded-lg p-4 shadow-sm mb-3 relative">
-        {/* User profile image and content */}
-        <div className="flex items-start">
-          <img
-            src={review.profilePic}
-            alt={`${review.name}'s profile picture`}
-            className="w-10 h-10 rounded-full mr-3"
-          />
-          <div className="flex-1">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium">{review.name}</h3>
-              {/* Date displayed in the top right corner */}
-              <p className="mt-1 text-gray-500 text-sm">{review.date}</p>
+              {/* ReviewModal */}
+              {showReviewModal && (
+                <div className="fixed inset-0 z-50"> {/* Ensure modal has a higher z-index */}
+                  <ReviewModal
+                    reviews={reviews}
+                    onClose={() => setShowReviewModal(false)}
+                  />
+                </div>
+              )}
             </div>
-            <div className="flex items-center">
-              {[...Array(review.rating)].map((_, i) => (
-                <i key={i} className="bi bi-star-fill text-yellow-400"></i>
+
+            {/* Ensure the review list container has no relative positioning */}
+            <div className="flex flex-col h-[27.5rem] overflow-y-auto px-4">
+              {reviews.map((review, index) => (
+                <div key={index} className="border rounded-lg p-4 shadow-sm mb-3">
+                  {/* User profile image and content */}
+                  <div className="flex items-start">
+                    <img
+                      src={review.profilePic}
+                      alt={`${review.name}'s profile picture`}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-lg font-medium">{review.name}</h3>
+                        {/* Date displayed in the top right corner */}
+                        <p className="mt-1 text-gray-500 text-sm">{review.date}</p>
+                      </div>
+                      <div className="flex items-center">
+                        {[...Array(review.rating)].map((_, i) => (
+                          <i key={i} className="bi bi-star-fill text-yellow-400"></i>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-gray-600">{review.content}</p>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-        <p className="mt-2 text-gray-600">{review.content}</p>
-      </div>
-    ))}
-  </div>
-</div>
+
 
         </div>
       </div>
     </div>
   );
-  
+
 };
 
 export default Customer;
