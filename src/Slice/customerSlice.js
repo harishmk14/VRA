@@ -35,6 +35,20 @@ export const uploadCustomerImage = createAsyncThunk(
   }
 );
 
+// Async thunk for fetching all customers
+export const getAllCustomers = createAsyncThunk(
+  'customer/getAllCustomers',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('http://localhost:7000/user/getAll');
+      return response.data; // Assuming the response contains an array of customers
+    } catch (error) {
+      return rejectWithValue(
+        error.response ? error.response.data : 'Failed to fetch customers. Please try again.'
+      );
+    }
+  }
+);
 
 const customerSlice = createSlice({
   name: 'customer',
@@ -75,6 +89,19 @@ const customerSlice = createSlice({
       })
       .addCase(uploadCustomerImage.rejected, (state, action) => {
         state.imageStatus = 'failed';
+        state.error = action.payload;
+      })
+      // Fetch all customers cases
+      .addCase(getAllCustomers.pending, (state) => {
+        state.status = 'loading';
+        state.error = null; // Clear any previous errors
+      })
+      .addCase(getAllCustomers.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.customers = action.payload; // Assuming payload is an array of customers
+      })
+      .addCase(getAllCustomers.rejected, (state, action) => {
+        state.status = 'failed';
         state.error = action.payload;
       });
   },

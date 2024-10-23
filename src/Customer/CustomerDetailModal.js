@@ -6,6 +6,8 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCustomer, setEditedCustomer] = useState({ ...customer });
 
+  console.log(customer);
+
   if (!customer) return null;
 
   const handleInputChange = (e) => {
@@ -29,7 +31,7 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
         </div>
 
         <div className='grid grid-cols-2 gap-5 gap-x-8'>
-          {['customerName', 'dob', 'email', 'mobileNo', 'alternateMobileNo', 'address', 'noOfTrips', 'gender', 'password', 'securityQuestion', 'securityAnswer'].map((field, index) => (
+          {['name', 'DOB', 'gender', 'email', 'phoneNo', 'altNo', 'address', 'noOfTrips', 'password', 'securityQuestion', 'securityAnswer'].map((field, index) => (
             <div key={index}>
               <label className="grid text-sm font-medium mb-1">{field.replace(/([A-Z])/g, ' $1').toUpperCase()}</label>
               {isEditing ? (
@@ -59,7 +61,7 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
               />
             ) : (
               <div className="w-36 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-                <img src='https://www.artmajeur.com/medias/mini/n/a/nadezhda-zueva/artwork/14843120_dsc05836.jpg?v=1634884855' alt="Customer" className="w-full h-auto object-cover" />
+                <img src='customer.pImg' alt="Customer" className="w-full h-auto object-cover" />
               </div>
             )}
           </div>

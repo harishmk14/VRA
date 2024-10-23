@@ -4,10 +4,12 @@ import CustomerDetailModal from '../Customer/CustomerDetailModal';
 import Trip from '../Customer/Trip';
 import AddCustomerModal from '../Customer/AddCustomerModal';
 import ReviewModal from '../Customer/ReviewModal'; // Import the ReviewModal
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCustomers, resetError } from '../Slice/customerSlice'
 
 import '../index.css';
 
-// Updated bookingsData with random statuses
+
 const bookingsData = [
   { bookingId: "BOOK1", tripArea: "Delhi", tripDate: "2024-10-21", status: 'Completed', tripType: 'Round' },
   { bookingId: "BOOK2", tripArea: "Mumbai", tripDate: "2024-10-21", status: "Cancelled", tripType: "One-way" },
@@ -92,134 +94,132 @@ const reviews = [
   },
 ];
 
-
-
-
 const Customer = () => {
-  const names = ['John Doe', 'Jane Smith', 'Alice Johnson', 'Bob Brown', 'Charlie Davis'];
+  const dispatch = useDispatch();
+const { customers, status, error } = useSelector((state) => state.customer);
 
-  const CustomerData = Array.from({ length: 25 }, (_, index) => ({
-    id: 'CUS' + String(index + 1).padStart(3, '0'),
-    regdate: new Date(2024, 9, (index % 5) + 1).toLocaleDateString(), // Converts to "MM/DD/YYYY"
-    name: names[index % names.length], // Converts vehicleNo to Name
-  }));
+// Fetch customers data
+useEffect(() => {
+  dispatch(getAllCustomers());
 
-  const [showTrip, setShowTrip] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [showModal, setShowModal] = useState(false);
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [showDetailModal, setShowDetailModal] = useState(false); // State for booking detail modal
-  const [selectedBooking, setSelectedBooking] = useState(null); // State for selected booking
-  const [filters, setFilters] = useState({ bookingType: '' });
-  const [showAddModal, setShowAddModal] = useState(false);  // Removed journeyType filter
-  const [showReviewModal, setShowReviewModal] = useState(false);
+  // Optionally reset error after fetching
+  return () => {
+    dispatch(resetError());
+  };
+}, [dispatch]);
+
+const [showTrip, setShowTrip] = useState(false);
+const [currentPage, setCurrentPage] = useState(1);
+const [showFilterModal, setShowFilterModal] = useState(false);
+const [showDetailModal, setShowDetailModal] = useState(false);
+const [selectedBooking, setSelectedBooking] = useState(null);
+const [filters, setFilters] = useState({ bookingType: '' });
+const [showAddModal, setShowAddModal] = useState(false);
+const [showReviewModal, setShowReviewModal] = useState(false);
+
+const entriesPerPage = 7;
+const indexOfLastEntry = currentPage * entriesPerPage;
+const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+
+// Ensure customers is an array before slicing
+const allCustomers = Array.isArray(customers.data) ? customers.data : [];
 
 
-  const entriesPerPage = 7;
-  const indexOfLastEntry = currentPage * entriesPerPage;
-  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+// Current entries for the current page
+const currentEntries = allCustomers;
 
-  // Filter the booking data based on the selected filters
-  const filteredEntries = CustomerData.filter((booking) => {
-    return (
-      (filters.bookingType ? booking.bookingType === filters.bookingType : true)
-      // Removed journeyType filter condition
-    );
-  });
+const totalPages = Math.ceil((Array.isArray(customers.data) ? customers.data.length : 0) / entriesPerPage);
 
-  const handleAssignClick = (booking) => {
-    setSelectedBooking(booking);
-    setShowTrip(true);
+const handleAssignClick = (booking) => {
+  setSelectedBooking(booking);
+  setShowTrip(true);
+};
+
+const handleAssignDriver = (driver) => {
+  console.log(`Driver ${driver.name} assigned to booking ${selectedBooking.id}`);
+  setShowTrip(false);
+};
+
+const filterModalRef = useRef(null);
+
+const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+const handleDetailsClick = (booking) => {
+  setSelectedBooking(booking);
+  setShowDetailModal(true);
+};
+
+const toggleFilterModal = () => setShowFilterModal(!showFilterModal);
+
+const applyFilters = (filterValues) => {
+  setFilters(filterValues);
+};
+
+// Close modals if the user clicks outside of them
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (filterModalRef.current && !filterModalRef.current.contains(event.target)) {
+      setShowFilterModal(false);
+    }
   };
 
-  const handleAssignDriver = (driver) => {
-    console.log(`Driver ${driver.name} assigned to booking ${selectedBooking.id}`);
-    setShowTrip(false);
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
   };
+}, []);
 
-  const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
-
-  // Update currentEntries based on filtered data
-  const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
-
-  // const modalRef = useRef(null); // Create a ref for the booking modal
-  const filterModalRef = useRef(null); // Create a ref for the filter modal
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-  const handleDetailsClick = (booking) => {
-    setSelectedBooking(booking); // Set the selected booking
-    setShowDetailModal(true); // Open the detail modal
-  };
-  const toggleFilterModal = () => setShowFilterModal(!showFilterModal);
-
-  const applyFilters = (filterValues) => {
-    setFilters(filterValues);
-  };
-
-  // Close modals if the user clicks outside of them
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterModalRef.current && !filterModalRef.current.contains(event.target)) {
-        setShowFilterModal(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    if (totalPages <= 6) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
+const renderPageNumbers = () => {
+  const pageNumbers = [];
+  if (totalPages <= 6) {
+    for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(
         <button
-          key={1}
-          onClick={() => handlePageChange(1)}
-          className={`px-2 py-0.5 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
         >
-          1
-        </button>
-      );
-      if (currentPage > 4) pageNumbers.push(<span key="dots-start">...</span>);
-      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-        pageNumbers.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-          >
-            {i}
-          </button>
-        );
-      }
-      if (currentPage < totalPages - 3) pageNumbers.push(<span key="dots-end">...</span>);
-      pageNumbers.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className={`px-2 py-0.5 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-        >
-          {totalPages}
+          {i}
         </button>
       );
     }
-    return pageNumbers;
-  };
+  } else {
+    pageNumbers.push(
+      <button
+        key={1}
+        onClick={() => handlePageChange(1)}
+        className={`px-2 py-0.5 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+      >
+        1
+      </button>
+    );
+    if (currentPage > 4) pageNumbers.push(<span key="dots-start">...</span>);
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    if (currentPage < totalPages - 3) pageNumbers.push(<span key="dots-end">...</span>);
+    pageNumbers.push(
+      <button
+        key={totalPages}
+        onClick={() => handlePageChange(totalPages)}
+        className={`px-2 py-0.5 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+      >
+        {totalPages}
+      </button>
+    );
+  }
+  return pageNumbers;
+};
+
+console.log(currentEntries);
 
   return (
     <div className="p-5 pt-2 h-full w-full">
@@ -296,40 +296,52 @@ const Customer = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentEntries.map((customer, index) => (
-                      <tr key={customer.id} className="border-b border-gray-300 last:border-b-0">
-                        <td className="px-4 py-3">{index + 1 + indexOfFirstEntry}</td> {/* Serial Number */}
-                        <td className="px-4 py-3">{customer.regdate}</td> {/* Registration Date */}
-                        <td className="px-4 py-3">{customer.id}</td> {/* Display Customer Id */}
-                        <td className="px-4 py-3 flex items-center">
-                          <img
-                            src='https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg' // Use the actual URL for the profile picture
-                            alt={`${customer.name}'s profile`}
-                            className="w-8 h-8 rounded-full mr-2" // Adjust size and rounding
-                          />
-                          {customer.name}
-                        </td> {/* Display Customer Name */}
-                        <td className="px-4 py-3 text-center">
-                          <button
-                            className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
-                            onClick={() => handleAssignClick(customer)}
-                          >
-                            Trip {index}
-                          </button>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <i className="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
-                            onClick={() => handleDetailsClick(customer)}></i>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+    {Array.isArray(currentEntries) && currentEntries?.length > 0 ? (
+      currentEntries.map((customer, index) => (
+        <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
+          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> {/* Dynamic Serial Number */}
+          <td className="px-4 py-3">
+  {customer.createAt ? new Date(customer.createAt).toLocaleDateString('en-GB') : 'N/A'}
+</td> {/* Registration Date */}
+          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> {/* Customer ID */}
+          <td className="px-4 py-3 flex items-center">
+            <img
+              src={customer.pImg}
+              alt={`${customer.name || 'User'}'s profile`}
+              className="w-8 h-8 rounded-full mr-2"
+            />
+            {customer.name || 'Unnamed'}
+          </td> {/* Customer Name */}
+          <td className="px-4 py-3 text-center">
+            <button
+              className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
+              onClick={() => handleAssignClick(customer)}
+            >
+              Trip
+            </button>
+          </td>
+          <td className="px-4 py-3 text-center">
+            <i
+              className="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
+              onClick={() => handleDetailsClick(customer)}
+            ></i>
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="6" className="text-center py-4">No customers available</td>
+      </tr>
+    )}
+  </tbody>
+
+
                 </table>
               </div>
 
               <div className="flex justify-between items-center px-4 py-2">
                 <div className='text-gray-500 w-2/3'>
-                  Showing {indexOfFirstEntry + 1} to {Math.min(indexOfLastEntry, CustomerData.length)} of {CustomerData.length} entries
+                  Showing {indexOfFirstEntry + 1} to {Math.min(indexOfLastEntry, customers.data?.length)} of {customers.data?.length} entries
                 </div>
                 <div className="flex items-center w-full">
                   <button
