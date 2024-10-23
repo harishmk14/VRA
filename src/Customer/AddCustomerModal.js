@@ -1,19 +1,57 @@
-import React, { useState } from 'react';
 
-const AddCustomerModal = ({ onClose, onAdd }) => {
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCustomer, uploadCustomerImage } from '../Slice/customerSlice';
+
+const AddCustomerModal = ({ onClose }) => {
   const [customerName, setCustomerName] = useState('');
   const [gender, setGender] = useState('');
   const [dob, setDob] = useState('');
   const [email, setEmail] = useState('');
   const [mobileNo, setMobileNo] = useState('');
+  const [altMobileNo, setAltMobileNo] = useState('');
   const [address, setAddress] = useState('');
-  
-  const handleAddCustomer = () => {
-    if (customerName) {
-      onAdd({ name: customerName, gender, dob, email, mobileNo, address });
-      onClose();
+  const [pImg, setPImg] = useState(null);
+  const [DL, setDL] = useState(null);
+  const [proof, setProof] = useState(null);
+
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.customer.error);
+
+  const handleAddCustomer = async () => {
+    if (customerName && mobileNo) {
+      const newCustomer = {
+        name: customerName,
+        gender,
+        DOB: dob,
+        email,
+        phoneNo: mobileNo,
+        altNo: altMobileNo,
+        address,
+        pImg,
+        DL,
+        proof,
+      };
+
+      await dispatch(addCustomer(newCustomer));
+      if (!error) {
+        onClose();
+        handleReset();
+      }
     }
   };
+
+  const handleFileUpload = async (file, setFile) => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('logo', file); // Change this to 'logo'
+      const response = await dispatch(uploadCustomerImage(formData)); // Make sure to send FormData
+      if (response.payload) {
+        setFile(response.payload.path); // Assuming API returns filePath in response
+      }
+    }
+  };
+  
 
   const handleReset = () => {
     setCustomerName('');
@@ -21,30 +59,29 @@ const AddCustomerModal = ({ onClose, onAdd }) => {
     setDob('');
     setEmail('');
     setMobileNo('');
+    setAltMobileNo('');
     setAddress('');
+    setPImg(null);
+    setDL(null);
+    setProof(null);
   };
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-36`}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-36`}
+    >
       <div className="bg-white rounded-lg p-8 pt-0 shadow-lg w-4/5 relative overflow-auto max-h-[90vh]">
         <div className="flex justify-between items-center sticky top-0 bg-white z-10 p-5 px-1 mb-2">
-          <h2 className="text-2xl font-bold">Add New Customer</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 id="modal-title" className="text-2xl font-bold">Add New Customer</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700" aria-label="Close modal">
             <span className="text-2xl">&times;</span>
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-5 gap-x-8">
-          {/* Customer Id */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Customer Id <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              value="CUS001"
-              readOnly
-            />
-          </div>
 
+        <div className="grid grid-cols-2 gap-5 gap-x-8">
           {/* Customer Name */}
           <div>
             <label className="block text-sm font-medium mb-1">Name <span className="text-red-500">*</span></label>
@@ -73,7 +110,7 @@ const AddCustomerModal = ({ onClose, onAdd }) => {
             </select>
           </div>
 
-          {/* Date Of Birth */}
+          {/* Date of Birth */}
           <div>
             <label className="block text-sm font-medium mb-1">Date Of Birth <span className="text-red-500">*</span></label>
             <input
@@ -114,10 +151,12 @@ const AddCustomerModal = ({ onClose, onAdd }) => {
 
           {/* Alternate Mobile No */}
           <div>
-            <label className="block text-sm font-medium mb-1">Alternate Mobile No <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium mb-1">Alternate Mobile No</label>
             <input
               type="tel"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={altMobileNo}
+              onChange={(e) => setAltMobileNo(e.target.value)}
               placeholder="Enter alternate mobile number"
               pattern="[0-9]{10}"
             />
@@ -143,6 +182,7 @@ const AddCustomerModal = ({ onClose, onAdd }) => {
               type="file"
               accept="image/*"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], setPImg)}
               required
             />
           </div>
@@ -154,17 +194,19 @@ const AddCustomerModal = ({ onClose, onAdd }) => {
               type="file"
               accept="image/*"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], setDL)}
               required
             />
           </div>
 
-          {/* Aadhar */}
+          {/* Proof */}
           <div>
-            <label className="block text-sm font-medium mb-1">Aadhar Card <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium mb-1">Proof <span className="text-red-500">*</span></label>
             <input
               type="file"
               accept="image/*"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], setProof)}
               required
             />
           </div>
@@ -175,10 +217,13 @@ const AddCustomerModal = ({ onClose, onAdd }) => {
           <button onClick={handleAddCustomer} className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">
             Add
           </button>
-          <button onClick={handleReset} className="px-4 py-2 bg-gray-400 text-white rounded-lg ">
+          <button onClick={handleReset} className="px-4 py-2 bg-gray-400 text-white rounded-lg">
             Reset
           </button>
         </div>
+
+        {/* Display Error Message */}
+        {error && <p className="text-red-500">{error}</p>}
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const ReviewModal = ({ reviews, onClose }) => {
             <div className="flex items-start">
               <img
                 src={review.profilePic}
-                alt={`${review.name}'s profile picture`}
+                alt={`${review.name}'s profile`}
                 className="w-10 h-10 rounded-full mr-3"
               />
               <div className="flex-1">

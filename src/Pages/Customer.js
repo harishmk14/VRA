@@ -376,11 +376,11 @@ const Customer = () => {
                 <div key={index} className="border rounded-lg p-4 shadow-sm mb-3">
                   {/* User profile image and content */}
                   <div className="flex items-start">
-                    <img
-                      src={review.profilePic}
-                      alt={`${review.name}'s profile picture`}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
+                  <img
+  src={review.profilePic}
+  alt={`${review.name}'s profile`}
+  className="w-10 h-10 rounded-full mr-3"
+/>
                     <div className="flex-1">
                       <div className="flex justify-between items-center">
                         <h3 className="text-lg font-medium">{review.name}</h3>
