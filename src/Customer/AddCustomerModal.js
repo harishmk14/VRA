@@ -1,7 +1,9 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, uploadCustomerImage } from '../Slice/customerSlice';
+import { addCustomer, getAllCustomers, uploadCustomerImage } from '../Slice/customerSlice';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddCustomerModal = ({ onClose }) => {
   const [customerName, setCustomerName] = useState('');
@@ -33,24 +35,51 @@ const AddCustomerModal = ({ onClose }) => {
         proof,
       };
 
-      await dispatch(addCustomer(newCustomer));
+      await dispatch(addCustomer(newCustomer)).then(() => {
+        dispatch(getAllCustomers());
+      });
+
       if (!error) {
+        toast.success('Customer added successfully!'); // Success toast
         onClose();
         handleReset();
+      } else {
+        toast.error('Failed to add customer.'); // Error toast
       }
+    } else {
+      toast.warn('Please fill in required fields.'); // Warning toast for missing data
     }
   };
 
   const handleFileUpload = async (file, setFile) => {
+    const acceptedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
     if (file) {
+      if (!acceptedFileTypes.includes(file.type)) {
+        toast.error('Invalid file format. Please upload a JPG or PNG image.');
+        return;
+      }
+
       const formData = new FormData();
-      formData.append('logo', file); // Change this to 'logo'
-      const response = await dispatch(uploadCustomerImage(formData)); // Make sure to send FormData
-      if (response.payload) {
-        setFile(response.payload.path); // Assuming API returns filePath in response
+      formData.append('logo', file);
+
+      try {
+        const response = await dispatch(uploadCustomerImage(formData));
+
+        if (response.payload && typeof response.payload.path === 'string') {
+          setFile(response.payload.path);
+          // toast.success('File uploaded successfully.');
+        } else {
+          console.error('Invalid response format:', response.payload);
+          toast.error('Error uploading file. Please try again.');
+        }
+      } catch (error) {
+        console.error('File upload failed:', error);
+        toast.error('Error uploading file. Please try again.');
       }
     }
   };
+  
   
 
   const handleReset = () => {
@@ -180,7 +209,7 @@ const AddCustomerModal = ({ onClose }) => {
             <label className="block text-sm font-medium mb-1">Customer Image <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               onChange={(e) => handleFileUpload(e.target.files[0], setPImg)}
               required
@@ -192,7 +221,7 @@ const AddCustomerModal = ({ onClose }) => {
             <label className="block text-sm font-medium mb-1">Driving License <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               onChange={(e) => handleFileUpload(e.target.files[0], setDL)}
               required
@@ -204,7 +233,7 @@ const AddCustomerModal = ({ onClose }) => {
             <label className="block text-sm font-medium mb-1">Proof <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               onChange={(e) => handleFileUpload(e.target.files[0], setProof)}
               required

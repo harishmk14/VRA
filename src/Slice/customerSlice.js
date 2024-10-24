@@ -72,7 +72,11 @@ const customerSlice = createSlice({
       })
       .addCase(addCustomer.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.customers.push(action.payload);
+        if (Array.isArray(state.customers)) {
+          state.customers.push(action.payload); // Ensure state.customers is an array
+        } else {
+          state.customers = [action.payload]; // Reset as an array if not
+        }
       })
       .addCase(addCustomer.rejected, (state, action) => {
         state.status = 'failed';
@@ -85,7 +89,6 @@ const customerSlice = createSlice({
       })
       .addCase(uploadCustomerImage.fulfilled, (state, action) => {
         state.imageStatus = 'succeeded';
-        // Optionally update state with uploaded image data
       })
       .addCase(uploadCustomerImage.rejected, (state, action) => {
         state.imageStatus = 'failed';

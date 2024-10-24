@@ -121,12 +121,11 @@ const entriesPerPage = 7;
 const indexOfLastEntry = currentPage * entriesPerPage;
 const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
 
-// Ensure customers is an array before slicing
 const allCustomers = Array.isArray(customers.data) ? customers.data : [];
 
 
-// Current entries for the current page
-const currentEntries = allCustomers;
+const currentEntries = allCustomers.slice(indexOfFirstEntry, indexOfLastEntry);
+
 
 const totalPages = Math.ceil((Array.isArray(customers.data) ? customers.data.length : 0) / entriesPerPage);
 
@@ -219,7 +218,7 @@ const renderPageNumbers = () => {
   return pageNumbers;
 };
 
-console.log(currentEntries);
+
 
   return (
     <div className="p-5 pt-2 h-full w-full">
@@ -250,13 +249,13 @@ console.log(currentEntries);
           </div>
         </div>
 
-        {/* Booking Detail Modal */}
-        {showDetailModal && (
-          <CustomerDetailModal
-            customer={selectedBooking}
-            onClose={() => setShowDetailModal(false)} // Close modal handler
-          />
-        )}
+{/* customer Detail Modal */}
+{showDetailModal && (
+  <CustomerDetailModal
+    customer={selectedBooking}
+    onClose={() => setShowDetailModal(false)} // Close modal handler
+  />
+)}
 
         {showTrip && (
           <Trip
@@ -301,13 +300,14 @@ console.log(currentEntries);
         <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
           <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> {/* Dynamic Serial Number */}
           <td className="px-4 py-3">
-  {customer.createAt ? new Date(customer.createAt).toLocaleDateString('en-GB') : 'N/A'}
+          {customer.createAt ? new Date(customer.createAt).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}
+
 </td> {/* Registration Date */}
           <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> {/* Customer ID */}
           <td className="px-4 py-3 flex items-center">
             <img
               src={customer.pImg}
-              alt={`${customer.name || 'User'}'s profile`}
+              alt="customer img"
               className="w-8 h-8 rounded-full mr-2"
             />
             {customer.name || 'Unnamed'}

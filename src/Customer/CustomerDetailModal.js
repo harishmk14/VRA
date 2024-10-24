@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import aadhar from '../Assets/img/aadhar.jpg';
+import { useDispatch } from 'react-redux';
+import { updateCustomer } from '../Slice/updateCustomerSlice';
+import { getAllCustomers } from '../Slice/customerSlice'; // Adjust path if needed
+import { toast } from 'react-toastify'; // Import toast
 
-const CustomerDetailModal = ({ customer, onClose, onSave }) => {
-  // Declare state hooks at the top level
+const CustomerDetailModal = ({ customer, onClose}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCustomer, setEditedCustomer] = useState({ ...customer });
-
-  console.log(customer);
+  const dispatch = useDispatch();  // Initialize dispatch
 
   if (!customer) return null;
 
@@ -15,9 +16,22 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
     setEditedCustomer((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    onSave(editedCustomer);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const updatedData = Object.keys(editedCustomer).reduce((acc, key) => {
+        if (editedCustomer[key] !== customer[key]) {
+          acc[key] = editedCustomer[key];
+        }
+        return acc;
+      }, {});
+
+      await dispatch(updateCustomer({ id: customer.uniqId, updatedData }));
+      dispatch(getAllCustomers());
+      setIsEditing(false);
+      toast.success("Customer details updated successfully!");
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
   };
 
   return (
@@ -31,26 +45,30 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
         </div>
 
         <div className='grid grid-cols-2 gap-5 gap-x-8'>
-          {['name', 'DOB', 'gender', 'email', 'phoneNo', 'altNo', 'address', 'noOfTrips', 'password', 'securityQuestion', 'securityAnswer'].map((field, index) => (
-            <div key={index}>
-              <label className="grid text-sm font-medium mb-1">{field.replace(/([A-Z])/g, ' $1').toUpperCase()}</label>
-              {isEditing ? (
-                <input
-                  type={field === 'dob' ? 'date' : field === 'noOfTrips' ? 'number' : field === 'password' ? 'password' : 'text'}
-                  name={field}
-                  value={editedCustomer[field] || ''}
-                  onChange={handleInputChange}
-                  className="border rounded px-2 py-1 w-full"
-                  placeholder={field === 'noOfTrips' ? "1" : ""}
-                  min={field === 'noOfTrips' ? "1" : undefined}
-                  required={field !== 'alternateMobileNo' && field !== 'address'}
-                />
-              ) : (
-                <p>{editedCustomer[field] || '-'}</p>
-              )}
-            </div>
-          ))}
-                    <div>
+        {['name', 'DOB', 'gender', 'email', 'phoneNo', 'altNo', 'address', 'password', 'securityQuestion', 'securityAnswer'].map((field, index) => (
+  <div key={index}>
+    <label className="grid text-sm font-medium mb-1">{field.replace(/([A-Z])/g, ' $1').toUpperCase()}</label>
+    {isEditing ? (
+      <input
+        type={field === 'DOB' ? 'date' : field === 'password' ? 'password' : 'text'}
+        name={field}
+        value={field === 'DOB' && editedCustomer[field] ? new Date(editedCustomer[field]).toISOString().split('T')[0] : editedCustomer[field] || ''}
+        onChange={handleInputChange}
+        className="border rounded px-2 py-1 w-full"
+        required={field !== 'altNo' && field !== 'address'}
+      />
+    ) : (
+      <p>
+        {field === 'DOB' && editedCustomer[field]
+          ? new Date(editedCustomer[field]).toISOString().split('T')[0].split('-').reverse().join('/') // Convert to DD/MM/YYYY
+          : editedCustomer[field] || '-'}
+      </p>
+    )}
+  </div>
+))}
+
+
+          <div>
             <label className="block text-sm font-medium mb-1">Customer Image</label>
             {isEditing ? (
               <input
@@ -61,7 +79,7 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
               />
             ) : (
               <div className="w-36 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-                <img src='customer.pImg' alt="Customer" className="w-full h-auto object-cover" />
+                <img src={customer.pImg} alt="Customer" className="w-full h-auto object-cover" />
               </div>
             )}
           </div>
@@ -76,7 +94,7 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
               />
             ) : (
               <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-                <img src={aadhar} alt="Aadhar Card" className="w-full h-auto object-cover" />
+                <img src={customer.proof} alt="proof" className="w-full h-auto object-cover" />
               </div>
             )}
           </div>
@@ -91,7 +109,7 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
               />
             ) : (
               <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-                <img src='https://www.informalnewz.com/wp-content/uploads/2024/02/DL-Convert-PVC-Card.jpg' alt="Driving License" className="w-full h-auto object-cover" />
+                <img src={customer.DL} alt="Driving License" className="w-full h-auto object-cover" />
               </div>
             )}
           </div>
@@ -100,14 +118,12 @@ const CustomerDetailModal = ({ customer, onClose, onSave }) => {
         <div className="flex justify-end mt-4 gap-3">
           {isEditing ? (
             <>
-              {/* <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Not Verify</button> */}
               <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Save</button>
               <button onClick={() => setIsEditing(false)} className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Cancel</button>
             </>
           ) : (
             <>
               <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Edit</button>
-              {/* <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Cancel Trip</button> */}
             </>
           )}
         </div>

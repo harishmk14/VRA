@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import customerReducer from './Slice/customerSlice';
+import updateCustomerReducer from './Slice/updateCustomerSlice';
 
-// Create the Redux store
 const store = configureStore({
   reducer: {
     customer: customerReducer,
+    updateCustomer: updateCustomerReducer,
   },
 });
 
-// Export the store as the default export
 export default store;
