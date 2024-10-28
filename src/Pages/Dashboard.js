@@ -6,7 +6,7 @@ import ExpenseCard from '../Dashboard/ExpenseCard';
 import VehicleSection from '../Dashboard/VehicleSection';
 import VehicleAvailability from '../Dashboard/VehicleAvailabilitys';
 import LiveVehicleStatus from '../Dashboard/LiveTripStatus';
-import UserDriverStats from '../Dashboard/UserDriverStats';  // Import the new component
+import UserDriverStats from '../Dashboard/UserDriverStats';
 import '../index.css';
 
 const Dashboard = () => {

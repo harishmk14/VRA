@@ -96,127 +96,127 @@ const reviews = [
 
 const Customer = () => {
   const dispatch = useDispatch();
-const { customers, status, error } = useSelector((state) => state.customer);
+  const { customers, status, error } = useSelector((state) => state.customer);
 
-// Fetch customers data
-useEffect(() => {
-  dispatch(getAllCustomers());
+  // Fetch customers data
+  useEffect(() => {
+    dispatch(getAllCustomers());
 
-  // Optionally reset error after fetching
-  return () => {
-    dispatch(resetError());
-  };
-}, [dispatch]);
+    // Optionally reset error after fetching
+    return () => {
+      dispatch(resetError());
+    };
+  }, [dispatch]);
 
-const [showTrip, setShowTrip] = useState(false);
-const [currentPage, setCurrentPage] = useState(1);
-const [showFilterModal, setShowFilterModal] = useState(false);
-const [showDetailModal, setShowDetailModal] = useState(false);
-const [selectedBooking, setSelectedBooking] = useState(null);
-const [filters, setFilters] = useState({ bookingType: '' });
-const [showAddModal, setShowAddModal] = useState(false);
-const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showTrip, setShowTrip] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [filters, setFilters] = useState({ bookingType: '' });
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
-const entriesPerPage = 7;
-const indexOfLastEntry = currentPage * entriesPerPage;
-const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+  const entriesPerPage = 7;
+  const indexOfLastEntry = currentPage * entriesPerPage;
+  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
 
-const allCustomers = Array.isArray(customers.data) ? customers.data : [];
-
-
-const currentEntries = allCustomers.slice(indexOfFirstEntry, indexOfLastEntry);
+  const allCustomers = Array.isArray(customers.data) ? customers.data : [];
 
 
-const totalPages = Math.ceil((Array.isArray(customers.data) ? customers.data.length : 0) / entriesPerPage);
+  const currentEntries = allCustomers.slice(indexOfFirstEntry, indexOfLastEntry);
 
-const handleAssignClick = (booking) => {
-  setSelectedBooking(booking);
-  setShowTrip(true);
-};
 
-const handleAssignDriver = (driver) => {
-  console.log(`Driver ${driver.name} assigned to booking ${selectedBooking.id}`);
-  setShowTrip(false);
-};
+  const totalPages = Math.ceil((Array.isArray(customers.data) ? customers.data.length : 0) / entriesPerPage);
 
-const filterModalRef = useRef(null);
-
-const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-const handleDetailsClick = (booking) => {
-  setSelectedBooking(booking);
-  setShowDetailModal(true);
-};
-
-const toggleFilterModal = () => setShowFilterModal(!showFilterModal);
-
-const applyFilters = (filterValues) => {
-  setFilters(filterValues);
-};
-
-// Close modals if the user clicks outside of them
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (filterModalRef.current && !filterModalRef.current.contains(event.target)) {
-      setShowFilterModal(false);
-    }
+  const handleAssignClick = (booking) => {
+    setSelectedBooking(booking);
+    setShowTrip(true);
   };
 
-  document.addEventListener('mousedown', handleClickOutside);
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
+  const handleAssignDriver = (driver) => {
+    console.log(`Driver ${driver.name} assigned to booking ${selectedBooking.id}`);
+    setShowTrip(false);
   };
-}, []);
 
-const renderPageNumbers = () => {
-  const pageNumbers = [];
-  if (totalPages <= 6) {
-    for (let i = 1; i <= totalPages; i++) {
+  const filterModalRef = useRef(null);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleDetailsClick = (booking) => {
+    setSelectedBooking(booking);
+    setShowDetailModal(true);
+  };
+
+  const toggleFilterModal = () => setShowFilterModal(!showFilterModal);
+
+  const applyFilters = (filterValues) => {
+    setFilters(filterValues);
+  };
+
+  // Close modals if the user clicks outside of them
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterModalRef.current && !filterModalRef.current.contains(event.target)) {
+        setShowFilterModal(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    if (totalPages <= 6) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
       pageNumbers.push(
         <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={`px-2 py-0.5 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
         >
-          {i}
+          1
+        </button>
+      );
+      if (currentPage > 4) pageNumbers.push(<span key="dots-start">...</span>);
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+          >
+            {i}
+          </button>
+        );
+      }
+      if (currentPage < totalPages - 3) pageNumbers.push(<span key="dots-end">...</span>);
+      pageNumbers.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={`px-2 py-0.5 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+        >
+          {totalPages}
         </button>
       );
     }
-  } else {
-    pageNumbers.push(
-      <button
-        key={1}
-        onClick={() => handlePageChange(1)}
-        className={`px-2 py-0.5 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-      >
-        1
-      </button>
-    );
-    if (currentPage > 4) pageNumbers.push(<span key="dots-start">...</span>);
-    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`px-2 py-0.5 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-        >
-          {i}
-        </button>
-      );
-    }
-    if (currentPage < totalPages - 3) pageNumbers.push(<span key="dots-end">...</span>);
-    pageNumbers.push(
-      <button
-        key={totalPages}
-        onClick={() => handlePageChange(totalPages)}
-        className={`px-2 py-0.5 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-      >
-        {totalPages}
-      </button>
-    );
-  }
-  return pageNumbers;
-};
+    return pageNumbers;
+  };
 
 
 
@@ -249,13 +249,13 @@ const renderPageNumbers = () => {
           </div>
         </div>
 
-{/* customer Detail Modal */}
-{showDetailModal && (
-  <CustomerDetailModal
-    customer={selectedBooking}
-    onClose={() => setShowDetailModal(false)} // Close modal handler
-  />
-)}
+        {/* customer Detail Modal */}
+        {showDetailModal && (
+          <CustomerDetailModal
+            customer={selectedBooking}
+            onClose={() => setShowDetailModal(false)} // Close modal handler
+          />
+        )}
 
         {showTrip && (
           <Trip
@@ -295,47 +295,44 @@ const renderPageNumbers = () => {
                     </tr>
                   </thead>
                   <tbody>
-    {Array.isArray(currentEntries) && currentEntries?.length > 0 ? (
-      currentEntries.map((customer, index) => (
-        <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
-          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> {/* Dynamic Serial Number */}
-          <td className="px-4 py-3">
-          {customer.createAt ? new Date(customer.createAt).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}
-
-</td> {/* Registration Date */}
-          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> {/* Customer ID */}
-          <td className="px-4 py-3 flex items-center">
-            <img
-              src={customer.pImg}
-              alt="customer img"
-              className="w-8 h-8 rounded-full mr-2"
-            />
-            {customer.name || 'Unnamed'}
-          </td> {/* Customer Name */}
-          <td className="px-4 py-3 text-center">
-            <button
-              className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
-              onClick={() => handleAssignClick(customer)}
-            >
-              Trip
-            </button>
-          </td>
-          <td className="px-4 py-3 text-center">
-            <i
-              className="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
-              onClick={() => handleDetailsClick(customer)}
-            ></i>
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan="6" className="text-center py-4">No customers available</td>
-      </tr>
-    )}
-  </tbody>
-
-
+                    {Array.isArray(currentEntries) && currentEntries?.length > 0 ? (
+                      currentEntries.map((customer, index) => (
+                        <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
+                          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> {/* Dynamic Serial Number */}
+                          <td className="px-4 py-3">
+                            {customer.createAt ? new Date(customer.createAt).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}
+                          </td> {/* Registration Date */}
+                          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> {/* Customer ID */}
+                          <td className="px-4 py-3 flex items-center">
+                            <img
+                              src={customer.pImg}
+                              alt="customer img"
+                              className="w-8 h-8 rounded-full mr-2"
+                            />
+                            {customer.name || 'Unnamed'}
+                          </td> {/* Customer Name */}
+                          <td className="px-4 py-3 text-center">
+                            <button
+                              className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
+                              onClick={() => handleAssignClick(customer)}
+                            >
+                              Trip
+                            </button>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <i
+                              className="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
+                              onClick={() => handleDetailsClick(customer)}
+                            ></i>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="text-center py-4">No customers available</td>
+                      </tr>
+                    )}
+                  </tbody>
                 </table>
               </div>
 
@@ -388,11 +385,11 @@ const renderPageNumbers = () => {
                 <div key={index} className="border rounded-lg p-4 shadow-sm mb-3">
                   {/* User profile image and content */}
                   <div className="flex items-start">
-                  <img
-  src={review.profilePic}
-  alt={`${review.name}'s profile`}
-  className="w-10 h-10 rounded-full mr-3"
-/>
+                    <img
+                      src={review.profilePic}
+                      alt={`${review.name}'s profile`}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
                     <div className="flex-1">
                       <div className="flex justify-between items-center">
                         <h3 className="text-lg font-medium">{review.name}</h3>

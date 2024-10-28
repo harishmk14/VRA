@@ -10,49 +10,49 @@ const driversData = [
     id: 1,
     name: "John Doe",
     image: "https://imgcdn.stablediffusionweb.com/2024/10/14/b53d6677-8076-4e9e-a652-37d1995386f3.jpg",
-    driverId: "D1", 
+    driverId: "D1",
   },
   {
     id: 2,
     name: "Jane Smith",
     image: "https://imgcdn.stablediffusionweb.com/2024/10/4/2d52a83c-0d15-4136-87a4-47e92d66b3b2.jpg",
-    driverId: "D2", 
+    driverId: "D2",
   },
   {
     id: 3,
     name: "Michael Johnson",
     image: "https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg",
-    driverId: "D3", 
+    driverId: "D3",
   },
   {
     id: 4,
     name: "Emily Davis",
     image: "https://imgcdn.stablediffusionweb.com/2024/9/8/04fdb256-b489-4571-972c-249a0cb35019.jpg",
-    driverId: "D4", 
+    driverId: "D4",
   },
   {
     id: 5,
     name: "John Doe",
     image: "https://imgcdn.stablediffusionweb.com/2024/10/14/b53d6677-8076-4e9e-a652-37d1995386f3.jpg",
-    driverId: "D1", 
+    driverId: "D1",
   },
   {
     id: 6,
     name: "Jane Smith",
     image: "https://imgcdn.stablediffusionweb.com/2024/10/4/2d52a83c-0d15-4136-87a4-47e92d66b3b2.jpg",
-    driverId: "D2", 
+    driverId: "D2",
   },
   {
     id: 7,
     name: "Michael Johnson",
     image: "https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg",
-    driverId: "D3", 
+    driverId: "D3",
   },
   {
     id: 8,
     name: "Emily Davis",
     image: "https://imgcdn.stablediffusionweb.com/2024/9/8/04fdb256-b489-4571-972c-249a0cb35019.jpg",
-    driverId: "D4", 
+    driverId: "D4",
   },
 ];
 
@@ -104,7 +104,7 @@ const Booking = () => {
 
 
   const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
-  
+
   // Update currentEntries based on filtered data
   const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
 
@@ -133,7 +133,7 @@ const Booking = () => {
         setShowFilterModal(false);
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -193,25 +193,25 @@ const Booking = () => {
   return (
     <div className="p-5 pt-2 h-full w-full">
       <div className="h-full w-full grid grid-rows-[auto_1fr]">
-<div className="relative w-full h-auto flex items-center justify-between py-3">
-  <input
-    type="search"
-    placeholder="Search Booking"
-    className="w-1/5 pl-10 py-[6px] bg-white rounded-lg border border-gray-300 focus:outline-none focus:border-gray-500 placeholder-gray-400 text-sm"
-  />
-  <i className="bi bi-search text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
-  <div className="flex items-center gap-3">
-    <button
-      onClick={toggleModal}
-      className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1"
-    >
-      <i class="bi bi-clipboard-plus-fill"></i>Book
-    </button>
-    <button onClick={toggleFilterModal} className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1">
-    <i class="bi bi-funnel-fill"></i> Filter
-    </button>
-  </div>
-</div>
+        <div className="relative w-full h-auto flex items-center justify-between py-3">
+          <input
+            type="search"
+            placeholder="Search Booking"
+            className="w-1/5 pl-10 py-[6px] bg-white rounded-lg border border-gray-300 focus:outline-none focus:border-gray-500 placeholder-gray-400 text-sm"
+          />
+          <i className="bi bi-search text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleModal}
+              className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1"
+            >
+              <i class="bi bi-clipboard-plus-fill"></i>Book
+            </button>
+            <button onClick={toggleFilterModal} className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1">
+              <i class="bi bi-funnel-fill"></i> Filter
+            </button>
+          </div>
+        </div>
 
 
         {/* Booking Detail Modal */}
@@ -222,13 +222,13 @@ const Booking = () => {
           />
         )}
 
-{showDriverListModal && (
-        <DriverListModal
-        drivers={driversData}
-          onClose={() => setShowDriverListModal(false)}
-          onAssign={handleAssignDriver}
-        />
-      )}
+        {showDriverListModal && (
+          <DriverListModal
+            drivers={driversData}
+            onClose={() => setShowDriverListModal(false)}
+            onAssign={handleAssignDriver}
+          />
+        )}
 
         {/* Modal for Booking */}
         <div ref={modalRef} className={`absolute z-10 mt-14 mr-5 right-0 transition-opacity duration-300 ${showModal ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -236,14 +236,14 @@ const Booking = () => {
             <VehicleAvailability />
           </div>
         </div>
-{/* Filter Modal */}
-{showFilterModal && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-5 rounded-md shadow-lg w-96 z-10">
-      <FilterModal onClose={toggleFilterModal} onApply={applyFilters} />
-    </div>
-  </div>
-)}
+        {/* Filter Modal */}
+        {showFilterModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-5 rounded-md shadow-lg w-96 z-10">
+              <FilterModal onClose={toggleFilterModal} onApply={applyFilters} />
+            </div>
+          </div>
+        )}
 
         <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
           <div className="flex flex-col h-full">
@@ -254,13 +254,11 @@ const Booking = () => {
                     <th className="px-4 py-2 text-left">S. No</th>
                     <th className="px-4 py-2 text-left">Booked At</th>
                     <th className="px-4 py-2 text-left">Vehicle No</th>
-                    {/* <th className="px-4 py-2 text-left">Driver ID</th> */}
                     <th className="px-4 py-2 text-left">Customer Name</th>
                     <th className="px-4 py-2 text-left">Journey Type</th>
                     <th className="px-4 py-2 text-left">Status</th>
                     <th className="px-4 py-2 text-left">Verification</th>
                     <th className="px-4 py-2 text-center">Driver</th>
-                    
                     <th className="px-4 py-2 text-center">Details</th>
                   </tr>
                 </thead>
@@ -270,22 +268,20 @@ const Booking = () => {
                       <td className="px-4 py-3">{index + 1 + indexOfFirstEntry}</td>
                       <td className="px-4 py-3">{booking.bookedAt}</td>
                       <td className="px-4 py-3">{booking.vehicleNo}</td>
-                      {/* <td className="px-4 py-3">{booking.driverId}</td> */}
                       <td className="px-4 py-3">{booking.customerName}</td>
                       <td className="px-4 py-3">{booking.journeyType}</td>
                       <td className="px-4 py-3">{statusOptions[index % statusOptions.length]}</td>
                       <td className="pr-8  py-3 text-center">{booking.verified ? '✅' : '❌'}</td>
                       <td className="px-4 py-3 text-center">
-                      <button
-    className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
-    onClick={() => handleAssignClick(booking)} // Call the function to open the modal with booking info
-  >
-    Assign
-  </button>
-      </td>
-                      
+                        <button
+                          className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
+                          onClick={() => handleAssignClick(booking)} // Call the function to open the modal with booking info
+                        >
+                          Assign
+                        </button>
+                      </td>
                       <td className="px-4 py-3 text-center">
-                          <i class="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
+                        <i class="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
                           onClick={() => handleDetailsClick(booking)}></i>
                       </td>
                     </tr>
@@ -294,27 +290,27 @@ const Booking = () => {
               </table>
             </div>
             <div className="flex justify-between items-center px-4 py-2"> {/* Centered pagination */}
-  <div className='text-gray-500 w-2/3'>
-    Showing {indexOfFirstEntry + 1} to {Math.min(indexOfLastEntry, bookingData.length)} of {bookingData.length} entries
-  </div>
-  <div className="flex items-center  w-full">
-    <button
-      onClick={() => handlePageChange(currentPage - 1)}
-      className={`text-xl text-blue-500 px-2 py-0.5 rounded mr-2 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-      disabled={currentPage === 1}
-    >
-      {'<'}
-    </button>
-    {renderPageNumbers()}
-    <button
-      onClick={() => handlePageChange(currentPage + 1)}
-      className={`text-xl text-blue-500 px-2 py-0.5 rounded ml-2 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
-      disabled={currentPage === totalPages}
-    >
-      {'>'}
-    </button>
-  </div>
-</div>
+              <div className='text-gray-500 w-2/3'>
+                Showing {indexOfFirstEntry + 1} to {Math.min(indexOfLastEntry, bookingData.length)} of {bookingData.length} entries
+              </div>
+              <div className="flex items-center  w-full">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={`text-xl text-blue-500 px-2 py-0.5 rounded mr-2 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={currentPage === 1}
+                >
+                  {'<'}
+                </button>
+                {renderPageNumbers()}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={`text-xl text-blue-500 px-2 py-0.5 rounded ml-2 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={currentPage === totalPages}
+                >
+                  {'>'}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

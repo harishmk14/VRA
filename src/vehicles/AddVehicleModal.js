@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-
+import React, { useState , useEffect } from 'react';
+import { addVehicle } from '../Slice/vehicleSlice';
+import { useDispatch , useSelector} from 'react-redux';
+import { fetchVehicleFeatures } from '../Slice/vehicleFeaturesSlice';
+import {uploadCustomerImage } from '../Slice/customerSlice';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const vehicleTypes = {
   bike: ['Scooters', 'Commuter Bikes', 'Sportbikes', 'Cruiser Bikes', 'Touring Bikes', 'Adventure Bikes', 'Dirt Bikes', 'Electric Bikes'],
@@ -9,85 +14,202 @@ const vehicleTypes = {
   truck: ['Mini Trucks', 'Pickup Trucks', 'Intermediate Commercial Vehicles (ICVs)', 'Heavy Commercial Vehicles (HCVs)', 'Multi-Axle Trucks', 'Container Trucks', 'Tipper Trucks'],
 };
 
-const commonFeatures = [
-  'Anti-lock Braking System', 'Electronic Stability Control', 'Traction Control',
-  'Forward Collision Warning', 'Automatic Emergency Braking', 'Blind Spot Detection',
-  'Lane Departure Warning', 'Lane Keeping Assist', 'Adaptive Cruise Control',
-  'Driver Monitoring System', 'Adaptive Headlights', 'Seatbelts',
-  'Crumple Zones', 'Head Restraints', 'Side-Impact Protection',
-  'Collision Safety Features', '360-Degree Camera System',
-  'Traffic Sign Recognition', 'Cross-Traffic Alert', 'Collision Avoidance System'
-];
-
-const bikeFeatures = ['Anti-lock Braking System'];
-
 const AddVehicleModal = ({ isOpen, onClose }) => {
   const [vehicleType, setVehicleType] = useState('');
+  const [brand, setBrand] = useState('');
   const [vehicleModel, setVehicleModel] = useState('');
-  const [fuelType, setFuelType] = useState('');
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [airbags, setAirbags] = useState('');
+  const [registrationNo, setRegistrationNumber] = useState('');
+  const [registrationType, setRegistrationType] = useState('Commercial');
+  const [seater, setSeater] = useState('');
   const [acType, setAcType] = useState('');
+  const [gearType, setGearType] = useState('');
+  const [fuelType, setFuelType] = useState('');
   const [tollType, setTollType] = useState('');
+  const [color, setColor] = useState('');
+  const [rangeKm, setRangeKm] = useState('');
+  const [pricePerDay, setPricePerDay] = useState('');
+  const [fuelCapacity, setFuelCapacity] = useState('');
+  const [mileage, setMileage] = useState('');
+  const [engineCC, setEngineCC] = useState('');
   const [sunroof, setSunroof] = useState(false);
-const [gpsTracking, setGpsTracking] = useState(false);
+  const [gps, setGps] = useState(false);
+  const [insuranceId, setInsuranceId] = useState('');
+  const [insuranceRenewalDate, setInsuranceRenewalDate] = useState('');
+  const [insuranceExpiryDate, setInsuranceExpiryDate] = useState('');
+  const [lastServiceDate, setLastServiceDate] = useState('');
+  const [nextServiceDate, setNextServiceDate] = useState('');
+  const [holderName, setHolderName] = useState('');
+  const [holderMobile, setHolderMobile] = useState('');
+  const [holderEmail, setHolderEmail] = useState('');
+  const [airbags, setAirbags] = useState('');
+  const [accidentHistory, setAccidentHistory] = useState('');
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [vehicleImages, setVehicleImages] = useState([]);
+  const [registrationDocument, setRegistrationDocument] = useState('');
+  const [insuranceDocument, setInsuranceDocument] = useState('');
+  const [holderDL, setHolderDL] = useState('');
+  const [holderProof, setHolderProof] = useState('');
+
+  const dispatch = useDispatch();
+
+  const { features, status, error } = useSelector((state) => state.vehicleFeatures);
+  useEffect(() => {
+      dispatch(fetchVehicleFeatures(vehicleType));
+
+  }, [vehicleType, dispatch]);
+
+  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'failed') return <p>Error: {error}</p>;
   
   const handleVehicleTypeChange = (e) => {
     const type = e.target.value;
     setVehicleType(type);
-    setVehicleModel(''); // Reset vehicle model
-    setSelectedFeatures([]); // Reset selected features
-    setAirbags(type === 'bike' ? 'No' : ''); // Set airbags based on vehicle type
-    setTollType(type === 'bike' ? 'Toll Free' : 'Toll'); // Set toll type based on vehicle type
+    setVehicleModel(''); 
+    setAirbags(type === 'bike' ? 'No' : ''); 
+    setTollType(type === 'bike' ? 'Toll Free' : 'Toll'); 
   };
 
   const handleVehicleModelChange = (e) => {
     const model = e.target.value;
     setVehicleModel(model);
     if (model.includes('Electric')) setFuelType('electric');
-    else setFuelType('petrol'); // Default fuel type
+    else setFuelType('petrol'); 
   };
 
-  const handleFeatureChange = (e) => {
-    const value = e.target.value;
-    setSelectedFeatures(prevState => 
-      prevState.includes(value) 
-        ? prevState.filter(feature => feature !== value) 
-        : [...prevState, value]
+  const handleFeatureChange = (event) => {
+    const { value, checked } = event.target;
+    setSelectedFeatures((prevFeatures) => 
+      checked 
+        ? [...prevFeatures, value] // Add if checked
+        : prevFeatures.filter((id) => id !== value) // Remove if unchecked
     );
   };
+  
 
   if (!isOpen) return null;
 
-  const featuresToShow = vehicleType === 'bike' 
-  ? bikeFeatures 
-  : ['car', 'van', 'bus', 'truck'].includes(vehicleType) 
-  ? commonFeatures 
-  : [];
+  const handleAdd = (e) => {
+    e.preventDefault();
 
-const handleReset = () => {
-  setVehicleType('');
-  setVehicleModel('');
-  setFuelType('');
-  setSelectedFeatures([]);
-  setAirbags('');
-  setAcType('');
-  setTollType('');
-  setSunroof(false);
-  setGpsTracking(false);
+    const vehicleData = {
+      vType: vehicleType,
+      brand: brand,
+      vModel: vehicleModel,
+      regNo: registrationNo,
+      regType: registrationType,
+      seatCnt: seater,
+      ac: acType,
+      gear: gearType,
+      fuel: fuelType,
+      toll: tollType,
+      color: color,
+      rangeKm: rangeKm,
+      priceDay: pricePerDay,
+      fuelCap: fuelCapacity,
+      mileage: mileage,
+      engineCC: engineCC,
+      sunroof: sunroof ? 'Yes' : 'No',
+      gps: gps ? 'Included' : 'Not Included',
+      insId: insuranceId,
+      insRenewalDay: insuranceRenewalDate,
+      insExpDay: insuranceExpiryDate,
+      lastService: lastServiceDate,
+      nextService: nextServiceDate,
+      holderName: holderName,
+      holderMobile: holderMobile,
+      holderEmail: holderEmail,
+      airBag: airbags,
+      accHis: accidentHistory,
+      featureId: selectedFeatures,
+      vImg: vehicleImages,
+      regDoc: registrationDocument,
+      insDoc: insuranceDocument,
+      holderDL: holderDL,
+      holderProof: holderProof,
+    };
 
-  // Reset the rest of the input fields that are controlled by state
-  // For example, if you have state variables for these fields:
-  document.querySelectorAll('input').forEach(input => {
-    input.value = '';
-  });
-  
-  document.querySelectorAll('textarea').forEach(textarea => {
-    textarea.value = '';
-  });
+    dispatch(addVehicle(vehicleData));
+    onClose();
+    handleReset();
+  };
 
-  // Reset the select dropdowns
-  document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+  const handleReset = () => {
+    setVehicleType('');
+    setBrand('');
+    setVehicleModel('');
+    setRegistrationNumber('');
+    setRegistrationType('');
+    setSeater('');
+    setAcType('');
+    setGearType('');
+    setFuelType('');
+    setTollType('');
+    setColor('');
+    setRangeKm('');
+    setPricePerDay('');
+    setFuelCapacity('');
+    setMileage('');
+    setEngineCC('');
+    setSunroof(false);
+    setGps(false);
+    setInsuranceId('');
+    setInsuranceRenewalDate('');
+    setInsuranceExpiryDate('');
+    setLastServiceDate('');
+    setNextServiceDate('');
+    setHolderName('');
+    setHolderMobile('');
+    setHolderEmail('');
+    setAirbags('');
+    setAccidentHistory('');
+    setSelectedFeatures(''); 
+    setVehicleImages([]);
+    setRegistrationDocument('');
+    setInsuranceDocument('');
+    setHolderDL('');
+    setHolderProof('');
+  };
+
+  const handleFileUpload = async (file, index, type) => {
+    const acceptedFileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+
+    if (file) {
+      if (!acceptedFileTypes.includes(file.type)) {
+        toast.error('Invalid file format. Please upload a valid image or PDF document.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('logo', file);  // Changed 'logo' to 'file' for generality
+
+      try {
+        const response = await dispatch(uploadCustomerImage(formData));
+
+        if (response.payload && typeof response.payload.path === 'string') {
+          if (type === 'vehicleImage') {
+            setVehicleImages((prevImages) => {
+              const updatedImages = [...prevImages];
+              updatedImages[index] = response.payload.path;
+              return updatedImages;
+            });
+          } else if (type === 'registrationDocument') {
+            setRegistrationDocument(response.payload.path);
+          } else if (type === 'insuranceDocument') {
+            setInsuranceDocument(response.payload.path);
+          } else if (type === 'holderDL') {
+            setHolderDL(response.payload.path);
+          } else if (type === 'holderProof') {
+            setHolderProof(response.payload.path);
+          }
+        } else {
+          console.error('Invalid response format:', response.payload);
+          toast.error('Error uploading file. Please try again.');
+        }
+      } catch (error) {
+        console.error('File upload failed:', error);
+        toast.error('Error uploading file. Please try again.');
+      }
+    }
 };
 
   return (
@@ -122,6 +244,8 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Brand Name <span className="text-red-500">*</span></label>
             <input
               type="text"
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
           </div>
@@ -148,7 +272,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Registration No <span className="text-red-500">*</span></label>
             <input
               type="text"
+              value={registrationNo}
+              onChange={(e) => setRegistrationNumber(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -168,7 +295,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Seater <span className="text-red-500">*</span></label>
             <input
               type="number"
+              value={seater}
+              onChange={(e) => setSeater(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -191,7 +321,9 @@ const handleReset = () => {
           {/* Gear Type */}
           <div>
             <label className="block text-sm font-medium mb-1">Gear Type <span className="text-red-500">*</span></label>
-            <select className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'>
+            <select className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
+                value={gearType}
+                onChange={(e) => setGearType(e.target.value)}>
             <option>Select Gear Type</option>
               <option value="manual">Manual</option>
               <option value="auto">Automatic</option>
@@ -205,6 +337,7 @@ const handleReset = () => {
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               value={fuelType}
               onChange={(e) => setFuelType(e.target.value)}
+              required 
             >
               <option>Select Fuel Type</option>
               <option value="petrol">Petrol</option>
@@ -221,6 +354,7 @@ const handleReset = () => {
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               value={tollType}
               onChange={(e) => setTollType(e.target.value)}
+              required
             >
               <option>Select Toll Type</option>
               <option value="Toll Free">Toll Free</option>
@@ -233,7 +367,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Color <span className="text-red-500">*</span></label>
             <input
               type="text"
+              value={color}
+              onChange={(e) => setColor(e.target.value)} 
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -242,7 +379,11 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Range (in km) <span className="text-red-500">*</span></label>
             <input
               type="number"
+              value={rangeKm}
+              onChange={(e) => setRangeKm(Math.max(0, e.target.value))}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              min="0"
+              required
             />
           </div>
 
@@ -251,7 +392,11 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Price Per Day <span className="text-red-500">*</span></label>
             <input
               type="number"
+              value={pricePerDay}
+              onChange={(e) => setPricePerDay(Math.max(0, e.target.value))}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              min="0"
+              required
             />
           </div>
 
@@ -260,7 +405,11 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Fuel Capacity (in Liters) <span className="text-red-500">*</span></label>
             <input
               type="number"
+              value={fuelCapacity}
+              onChange={(e) => setFuelCapacity(Math.max(0, e.target.value))}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              min="0"
+              required
             />
           </div>
 
@@ -269,6 +418,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Mileage (per liter) <span className="text-red-500">*</span></label>
             <input
               type="number"
+              value={mileage}
+              required
+              min="0"
+              onChange={(e) => setMileage(Math.max(0, e.target.value))}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
           </div>
@@ -278,19 +431,22 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Engine CC <span className="text-red-500">*</span></label>
             <input
               type="number"
+              value={engineCC}
+              onChange={(e) => setEngineCC(Math.max(0, e.target.value))}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              min="0"
+              required
             />
           </div>
 
-{/* Sunroof */}
-{vehicleType !== 'bike' && (
+          {vehicleType !== 'bike' && (
   <div className="flex flex-col gap-1">
     <div className="flex items-center">
       <input 
         type="checkbox" 
         className="mr-2"
-        checked={sunroof} // Controlled by state
-        onChange={(e) => setSunroof(e.target.checked)} // Update state on change
+        checked={sunroof}
+        onChange={(e) => setSunroof(e.target.checked)}
       />
       <span>Sunroof <span className="text-red-500">*</span></span>
     </div>
@@ -298,20 +454,24 @@ const handleReset = () => {
       <input 
         type="checkbox" 
         className="mr-2"
-        checked={gpsTracking} // Controlled by state
-        onChange={(e) => setGpsTracking(e.target.checked)} // Update state on change
+        checked={gps}
+        onChange={(e) => setGps(e.target.checked)}
       />
       <span>GPS Tracking <span className="text-red-500">*</span></span>
     </div>
   </div>
 )}
 
+
           {/* Insurance ID */}
           <div>
             <label className="block text-sm font-medium mb-1">Insurance ID <span className="text-red-500">*</span></label>
             <input
               type="text"
+              value={insuranceId}
+              onChange={(e) => setInsuranceId(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -320,7 +480,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Insurance Renewal Date <span className="text-red-500">*</span></label>
             <input
               type="date"
+              value={insuranceRenewalDate}
+              onChange={(e) => setInsuranceRenewalDate(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -329,7 +492,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Insurance Expire Date <span className="text-red-500">*</span></label>
             <input
               type="date"
+              value={insuranceExpiryDate}
+              onChange={(e) => setInsuranceExpiryDate(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -338,7 +504,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Last Serviced Date <span className="text-red-500">*</span></label>
             <input
               type="date"
+              value={lastServiceDate}
+              onChange={(e) => setLastServiceDate(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -347,7 +516,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Next Service Date <span className="text-red-500">*</span></label>
             <input
               type="date"
+              value={nextServiceDate}
+              onChange={(e) => setNextServiceDate(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -356,7 +528,10 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Holder Name <span className="text-red-500">*</span></label>
             <input
               type="text"
+              value={holderName}
+              onChange={(e) => setHolderName(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
@@ -365,15 +540,20 @@ const handleReset = () => {
             <label className="block text-sm font-medium mb-1">Holder Mobile <span className="text-red-500">*</span></label>
             <input
               type="tel"
+              value={holderMobile}
+              onChange={(e) => setHolderMobile(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              required
             />
           </div>
 
           {/* Holder Email */}
           <div>
-            <label className="block text-sm font-medium mb-1">Holder Email <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium mb-1">Holder Email</label>
             <input
               type="email"
+              value={holderEmail}
+              onChange={(e) => setHolderEmail(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
           </div>
@@ -395,74 +575,123 @@ const handleReset = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Accident History <span className="text-red-500">*</span></label>
             <textarea
+            value={accidentHistory}
+            onChange={(e) => setAccidentHistory(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
           </div>
 
 
 
-          {/* Vehicle Features */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Vehicle Features <span className="text-red-500">*</span></label>
-            <div className="flex flex-wrap gap-2">
-              {featuresToShow.map(feature => (
-                <div key={feature} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value={feature}
-                    onChange={handleFeatureChange}
-                    className="mr-2"
-                    checked={selectedFeatures.includes(feature)}
-                  />
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+{/* Vehicle Features */}
+<div>
+  <label className="block text-sm font-medium mb-1">Vehicle Features</label>
+  <div className="flex flex-wrap gap-2">
+    {features.data.map(feature => (
+      <div key={feature.id} className="flex items-center">
+        <input
+          type="checkbox"
+          value={feature.uniqId} // Set value to feature.uniqId
+          onChange={handleFeatureChange}
+          className="mr-2"
+          checked={selectedFeatures.includes(feature.uniqId)}  // Check if uniqId is selected
+        />
+        <span>{feature.name}</span>
+      </div>
+    ))}
+  </div>
+</div>
 
-          {/* Upload Vehicle Image 1 , 2 , 3 */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Vehicle Image 1 <span className="text-red-500">*</span></label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Vehicle Image 2</label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Vehicle Image 3</label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
+{/* Upload Vehicle Image 1 */}
+<div>
+  <label className="block text-sm font-medium mb-1">
+    Upload Vehicle Image 1 <span className="text-red-500">*</span>
+  </label>
+  <input
+    type="file"
+    accept=".jpg,.jpeg,.png"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], 0, 'vehicleImage')}
+  />
+</div>
 
-          {/* Upload Registration Doc */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Registration Doc <span className="text-red-500">*</span></label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
+{/* Upload Vehicle Image 2 */}
+<div>
+  <label className="block text-sm font-medium mb-1">
+    Upload Vehicle Image 2
+  </label>
+  <input
+    type="file"
+    accept=".jpg,.jpeg,.png"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], 1, 'vehicleImage')}
+  />
+</div>
 
-          {/* Upload Insurance Doc */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Insurance Doc <span className="text-red-500">*</span></label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
+{/* Upload Vehicle Image 3 */}
+<div>
+  <label className="block text-sm font-medium mb-1">
+    Upload Vehicle Image 3
+  </label>
+  <input
+    type="file"
+    accept=".jpg,.jpeg,.png"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], 2, 'vehicleImage')}
+  />
+</div>
 
-          {/* Upload Holder DL */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Holder DL <span className="text-red-500">*</span></label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
+{/* Upload Registration Doc */}
+<div>
+  <label className="block text-sm font-medium mb-1">Upload Registration Doc <span className="text-red-500">*</span></label>
+  <input 
+    type="file"
+    accept=".pdf"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], null, 'registrationDocument')}
+    required
+  />
+</div>
 
-          {/* Upload Holder Proof */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Upload Holder Proof <span className="text-red-500">*</span></label>
-            <input type="file" className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300" />
-          </div>
+{/* Upload Insurance Doc */}
+<div>
+  <label className="block text-sm font-medium mb-1">Upload Insurance Doc <span className="text-red-500">*</span></label>
+  <input  
+    type="file"
+    accept=".pdf"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], null, 'insuranceDocument')}
+    required 
+  />
+</div>
+
+{/* Upload Holder DL */}
+<div>
+  <label className="block text-sm font-medium mb-1">Upload Holder DL <span className="text-red-500">*</span></label>
+  <input 
+    type="file"
+    accept=".jpg,.jpeg,.png"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], null, 'holderDL')} 
+  />
+</div>
+
+{/* Upload Holder Proof */}
+<div>
+  <label className="block text-sm font-medium mb-1">Upload Holder Proof <span className="text-red-500">*</span></label>
+  <input 
+    type="file"
+    accept=".jpg,.jpeg,.png"
+    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+    onChange={(e) => handleFileUpload(e.target.files[0], null, 'holderProof')} 
+  />
+</div>
         </div>
 
         {/* Close Button */}
         <div className="flex justify-center mt-8 gap-4">
         <button
-              // onClick={handleAdd}
+              onClick={handleAdd}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Add

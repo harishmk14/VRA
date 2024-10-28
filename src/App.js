@@ -13,14 +13,12 @@ import Maintenance from './Pages/Maintenance';
 import Performance from './Pages/Performance';
 import Setting from './Pages/Settings';
 import CustomerSupport from './Pages/Customersupport';
-import Login from './Pages/Login'; // Import the Login component
-import { ToastContainer } from 'react-toastify'; // Import ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
+import { ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const App = () => {
   return (
     <>
-      {/* ToastContainer to show toast notifications globally */}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -33,7 +31,6 @@ const App = () => {
         pauseOnHover
       />
 
-      {/* Define your application routes */}
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
@@ -49,7 +46,6 @@ const App = () => {
           <Route path="setting" element={<Setting />} />
           <Route path="customersupport" element={<CustomerSupport />} />
         </Route>
-        <Route path="/login" element={<Login />} /> {/* Separate route for Login */}
       </Routes>
     </>
   );

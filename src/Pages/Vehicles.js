@@ -122,7 +122,7 @@ const Vehicles = () => {
           onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
           className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
         >
-          <i class="bi bi-funnel-fill"></i> Filter
+          <i className="bi bi-funnel-fill"></i> Filter
         </button>
         </div>
       </div>
@@ -194,7 +194,7 @@ const Vehicles = () => {
                       setIsViewVehicleModalOpen(true); // Open View Vehicle Modal
                     }}
                   >
-                    <i class="bi bi-eye-fill"></i>
+                    <i className="bi bi-eye-fill"></i>
                   </button>
                 </div>
               </div>
