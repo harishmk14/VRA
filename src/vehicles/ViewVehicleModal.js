@@ -7,7 +7,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [editedVehicle, setEditedVehicle] = useState(vehicle || {});
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState(vehicle?.featureId || []);
 
   const { features, status, error } = useSelector((state) => state.vehicleFeatures);
 
@@ -15,6 +15,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
     if (isOpen) {
       dispatch(fetchVehicleFeatures());
       setEditedVehicle(vehicle); // Set initial vehicle details in editedVehicle when modal opens
+      setSelectedFeatures(vehicle?.featureId || []); // Set initial selected features
     }
   }, [dispatch, isOpen, vehicle]);
 
@@ -25,29 +26,34 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
 
   // Handle input change for editable fields
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedVehicle({
-      ...editedVehicle,
-      [name]: value,
-    });
+    const { name, type, checked, value } = e.target;
+    setEditedVehicle((prevVehicle) => ({
+      ...prevVehicle,
+      [name]: type === 'checkbox' ? (checked ? 'Yes' : 'No') : value, // Store 'Yes' or 'No' for checkboxes
+    }));
   };
 
+  // Handle checkbox change for features
   const handleFeatureChange = (e) => {
-    const { options } = e.target;
-    const selectedFeaturesArray = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-    setSelectedFeatures(selectedFeaturesArray);
+    const featureId = e.target.value;
+    setSelectedFeatures((prevSelectedFeatures) => {
+      if (prevSelectedFeatures.includes(featureId)) {
+        return prevSelectedFeatures.filter((id) => id !== featureId);
+      } else {
+        return [...prevSelectedFeatures, featureId];
+      }
+    });
   };
 
   // Handle save action
   const handleSave = () => {
     const updatedVehicle = {
       ...editedVehicle,
-      features: selectedFeatures, // Send selected features as an array
+      featureId: selectedFeatures, // Send selected features as an array
     };
     dispatch(updateVehicle({ vehicleId: vehicle.uniqId, updatedData: updatedVehicle }));
     setIsEditing(false); // Exit edit mode after saving
+    onClose(); // Close modal after saving (optional)
   };
 
   return (
@@ -339,44 +345,45 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
           </div>
 
           {/* Sunroof */}
-          <div>
-            {vehicle.vType !== 'bike' && (
-              <div className="mb-2">
-                <label className="text-sm font-medium mb-1">Sunroof</label>
-                {isEditing ? (
-                  <input
-                    type="checkbox"
-                    name="sunroof"
-                    checked={editedVehicle.sunroof || false}
-                    onChange={handleInputChange}
-                    className="border rounded ml-20"
-                  />
-                ) : (
-                  <p>{vehicle.sunroof}</p>
-                )}
-              </div>
+      <div>
+        {vehicle.vType !== 'bike' && (
+          <div className="mb-2">
+            <label className="text-sm font-medium mb-1">Sunroof</label>
+            {isEditing ? (
+              <input
+                type="checkbox"
+                name="sunroof"
+                checked={editedVehicle.sunroof === 'Yes'} // Check if stored value is 'Yes'
+                onChange={handleInputChange}
+                className="border rounded ml-20"
+              />
+            ) : (
+              <p>{editedVehicle.sunroof}</p>
             )}
           </div>
+        )}
+      </div>
 
-          {/* GPS Tracking */}
+      {/* GPS Tracking */}
+      <div>
+        {vehicle.vType !== 'bike' && (
           <div>
-            {vehicle.vType !== 'bike' && (
-              <div>
-                <label className="text-sm font-medium mb-1">GPS Tracking</label>
-                {isEditing ? (
-                  <input
-                    type="checkbox"
-                    name="gps"
-                    checked={editedVehicle.gps || false}
-                    onChange={handleInputChange}
-                    className="border rounded ml-11"
-                  />
-                ) : (
-                  <p>{vehicle.gps}</p>
-                )}
-              </div>
+            <label className="text-sm font-medium mb-1">GPS Tracking</label>
+            {isEditing ? (
+              <input
+                type="checkbox"
+                name="gps"
+                checked={editedVehicle.gps === 'Yes'} // Check if stored value is 'Yes'
+                onChange={handleInputChange}
+                className="border rounded ml-11"
+              />
+            ) : (
+              <p>{editedVehicle.gps}</p>
             )}
           </div>
+        )}
+      </div>
+
 
           {/* Insurance ID */}
           <div>
@@ -538,6 +545,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
               <p>{vehicle.accHis}</p>
             )}
           </div>
+
 {/* Vehicle Features */}
 <div>
   <label className="block text-sm font-medium mb-1">Vehicle Features</label>
@@ -545,13 +553,13 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
     <div className="flex flex-wrap gap-2">
       {features.data.map(feature => (
         <div key={feature.uniqId} className="flex items-center">
-          <input
-            type="checkbox"
-            value={feature.uniqId}
-            onChange={handleFeatureChange}
-            className="mr-2"
-            checked={vehicle.featureId.includes(feature.uniqId)} // checked if in vehicle.featureId
-          />
+<input
+  type="checkbox"
+  value={feature.uniqId}
+  onChange={handleFeatureChange}
+  className="mr-2"
+  checked={selectedFeatures.includes(feature.uniqId)}
+/>
           <span>{feature.name}</span>
         </div>
       ))}
@@ -692,7 +700,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
                 Save
               </button>
               <button
-                onClick={handleSave}
+                onClick={() => setIsEditing(false)}
                 className="bg-gray-500 text-white font-bold py-1.5 px-3 rounded-lg mr-2 hover:bg-gray-600"
               >
                 Cancel
