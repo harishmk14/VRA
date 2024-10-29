@@ -1,11 +1,41 @@
 // vehicles/Vehicles.js
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import '../index.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllVehicles } from '../Slice/vehicleSlice';
 import FilterModal from '../vehicles/FilterModal'; // Import the FilterModal component
 import AddVehicleModal from '../vehicles/AddVehicleModal'; // Import AddVehicleModal component
 import ViewVehicleModal from '../vehicles/ViewVehicleModal'; // Import the ViewVehicleModal component
 
 const Vehicles = () => {
+  const dispatch = useDispatch();
+  const vehicles = useSelector((state) => state.vehicles.vehicles);
+  const status = useSelector((state) => state.vehicles.status);
+  const error = useSelector((state) => state.vehicles.error);
+
+  const [filter, setFilter] = useState("All");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); // State for Add Vehicle Modal
+  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); // State for View Vehicle Modal
+  const [selectedVehicle, setSelectedVehicle] = useState(null); // State to hold the selected vehicle
+
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchAllVehicles());
+    }
+  }, [status, dispatch]);
+
+  if (status === 'loading') {
+    return <p>Loading vehicles...</p>;
+  }
+
+  if (status === 'failed') {
+    return <p>Error: {error}</p>;
+  }
+
+  console.log(vehicles.data);
+
   const vehiclesData = [
     {
       id: 1,
@@ -52,12 +82,6 @@ const Vehicles = () => {
       status: "Service", // New status added here
     },
   ];
-  const [filter, setFilter] = useState("All");
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); // State for Add Vehicle Modal
-  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); // State for View Vehicle Modal
-  const [selectedVehicle, setSelectedVehicle] = useState(null); // State to hold the selected vehicle
-
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
@@ -149,49 +173,50 @@ const Vehicles = () => {
 
       <div className="flex-grow overflow-auto hide-scroll p-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {filteredVehicles.map((vehicle) => (
+          {vehicles.data?.map((vehicle) => (
             <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
               <div className="relative">
                 <img
-                  src={vehicle.image}
-                  alt={vehicle.model}
+                  src={vehicle.vImg[1]}
+                  alt={vehicle.vModel}
                   className="w-full h-44 object-cover rounded-md"
                 />
                 <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
-                  {vehicle.status}
+                  {vehicle.color}
                 </span>
               </div>
 
               <div className="p-2 space-y-2">
                 <h2 className="text-sm font-semibold text-gray-800">
-                  {vehicle.model}
+                  {vehicle.brand}
                 </h2>
 
                 <div className="grid grid-cols-3 gap-1 mt-2">
                   <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
-                    {vehicle.fuelType}
+                    {vehicle.fuel}
                   </span>
                   <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
-                    {vehicle.transmission}
+                    {vehicle.gear}
                   </span>
                   <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Seater {vehicle.seater}
+                    Seater {vehicle.seatCnt}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-500 text-xs">Range {vehicle.range}</span>
+                  <span className="text-gray-500 text-xs">Range {vehicle.rangeKm}</span>
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
                   <div className="text-sm font-bold text-gray-900">
-                    Rs {vehicle.price} <span className="text-xs text-gray-500">Per Day</span>
+                    Rs {vehicle.priceDay} <span className="text-xs text-gray-500">Per Day</span>
                   </div>
                   <button
                     className="px-2 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
                     onClick={() => {
                       setSelectedVehicle(vehicle); // Set the selected vehicle
-                      setIsViewVehicleModalOpen(true); // Open View Vehicle Modal
+                      setIsViewVehicleModalOpen(true);
+                      // setEditedVehicle(vehicle); // Open View Vehicle Modal
                     }}
                   >
                     <i className="bi bi-eye-fill"></i>
