@@ -44,12 +44,11 @@ const vehicleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Add Vehicle
-      .addCase(addVehicle.fulfilled, (state, action) => {
-        state.vehicles.push(action.payload);
-        state.error = null;
+      .addCase(addVehicle.fulfilled, (state) => {
+            state.status = 'succeeded';
       })
-      .addCase(addVehicle.rejected, (state, action) => {
-        state.error = action.payload;
+      .addCase(addVehicle.rejected, (state) => {
+        state.status = 'failed';
       })
 
       // Fetch All Vehicles

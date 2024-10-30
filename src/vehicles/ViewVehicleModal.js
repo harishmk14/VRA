@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVehicleFeatures } from '../Slice/vehicleFeaturesSlice';
 import { updateVehicle } from '../Slice/updateVehicleSlice';
+import { deleteVehicle } from '../Slice/vehicleDelete';
 
 const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,10 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
       ...prevVehicle,
       [name]: type === 'checkbox' ? (checked ? 'Yes' : 'No') : value, // Store 'Yes' or 'No' for checkboxes
     }));
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteVehicle(id));
   };
 
   // Handle checkbox change for features
@@ -715,7 +720,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
                 Edit
               </button>
               <button
-                // onClick={handleDelete}
+                onClick={() => handleDelete(vehicle.uniqId)}
                 className="bg-red-500 text-white font-bold py-1.5 px-3 rounded-lg hover:bg-red-600"
               >
                 Delete

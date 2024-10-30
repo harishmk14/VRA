@@ -4,6 +4,7 @@ import updateCustomerReducer from './Slice/updateCustomerSlice';
 import vehicleReducer from './Slice/vehicleSlice';
 import vehicleFeaturesReducer from './Slice/vehicleFeaturesSlice';
 import updateVehicleReducer from './Slice/updateVehicleSlice'; 
+import vehiclesReducer2 from './Slice/vehicleDelete';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     vehicles: vehicleReducer,
     vehicleFeatures: vehicleFeaturesReducer,
     updateVehicle: updateVehicleReducer,
+    vehicles1: vehiclesReducer2,
   },
 });
 

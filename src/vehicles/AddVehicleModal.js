@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from 'react';
-import { addVehicle } from '../Slice/vehicleSlice';
+import { addVehicle , fetchAllVehicles } from '../Slice/vehicleSlice';
 import { useDispatch , useSelector} from 'react-redux';
 import { fetchVehicleFeatures } from '../Slice/vehicleFeaturesSlice';
 import {uploadCustomerImage } from '../Slice/customerSlice';
@@ -128,7 +128,9 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
       holderProof: holderProof,
     };
 
-    dispatch(addVehicle(vehicleData));
+    dispatch(addVehicle(vehicleData)).then(() => {
+      dispatch(fetchAllVehicles());
+    });
     onClose();
     handleReset();
   };
