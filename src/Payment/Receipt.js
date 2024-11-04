@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Performance = () => {
+const Receipt = () => {
   return (
     <div className="max-w-72 mx-auto p-4 border border-gray-300 shadow-lg rounded-md bg-white">
       <div className="text-center mb-4">
@@ -33,10 +33,10 @@ const Performance = () => {
       </div>
       <div className="mt-4">
         <h3 className="text-sm font-semibold">Billing Information</h3>
-        <p className="text-sm">Jhonny Smith</p>
-        <p className="text-sm">Flat No. 5B, Tower 3, Prestige Lakeside Habitat, Bengaluru, Karnataka-560087,</p>
-        <p className="text-sm">India</p>
-        <p className="text-sm">+91 98765 43210</p>
+        <p className="text-sm">Philip Brooks</p>
+        <p className="text-sm">134 Madison Ave.</p>
+        <p className="text-sm">New York NY 00102</p>
+        <p className="text-sm">United States</p>
       </div>
       <div className="mt-4">
         <h3 className="text-sm font-semibold">Payment Information</h3>
@@ -48,4 +48,4 @@ const Performance = () => {
   );
 };
 
-export default Performance;
+export default Receipt;

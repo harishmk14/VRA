@@ -212,7 +212,7 @@ const Vehicles = () => {
                     Rs {vehicle.priceDay} <span className="text-xs text-gray-500">Per Day</span>
                   </div>
                   <button
-                    className="px-2 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                    className="text-blue-500 rounded-lg text-xl "
                     onClick={() => {
                       setSelectedVehicle(vehicle); // Set the selected vehicle
                       setIsViewVehicleModalOpen(true);

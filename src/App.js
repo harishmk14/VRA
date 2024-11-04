@@ -6,7 +6,7 @@ import Dashboard from './Pages/Dashboard';
 import Vehicle from './Pages/Vehicles';
 import Booking from './Pages/Bookings';
 import Driver from './Pages/Drivers';
-import CoupDiscount from './Pages/Coupendiscount';
+import Invoice from './Pages/Invoice';
 import Customer from './Pages/Customer';
 import Payment from './Pages/Payment';
 import Maintenance from './Pages/Maintenance';
@@ -38,9 +38,9 @@ const App = () => {
           <Route path="vehicle" element={<Vehicle />} />
           <Route path="booking" element={<Booking />} />
           <Route path="driver" element={<Driver />} />
-          <Route path="coupendiscount" element={<CoupDiscount />} />
           <Route path="customer" element={<Customer />} />
           <Route path="payment" element={<Payment />} />
+          <Route path="invoice" element={<Invoice/>} />
           <Route path="maintenance" element={<Maintenance />} />
           <Route path="performance" element={<Performance />} />
           <Route path="setting" element={<Setting />} />

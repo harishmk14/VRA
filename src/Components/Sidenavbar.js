@@ -16,7 +16,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className='flex flex-col bg-white min-h-screen shadow-lg sticky top-0'>
+    <div className='flex flex-col bg-white min-h-screen shadow-lg sticky top-0 px-8'>
       {/* Logo Section */}
       <div className='flex flex-col w-full h-20 p-2 items-center'>
         <img src={logo} className='max-w-48' alt="Company Logo" />
@@ -25,7 +25,7 @@ const Sidebar = () => {
       {/* Scrollable Wrapper for Navigation and Settings */}
       <div className='flex flex-col w-full h-auto overflow-y-auto flex-grow'>
         {/* Navigation Section */}
-        <div className='flex flex-col w-full h-auto items-center justify-center pt-7 pb-5'>
+        <div className='flex flex-col w-full h-auto pt-7 pb-5'>
           <ul className="space-y-7 text-gray-600 text-base items-center">
             {[
               { path: '/dashboard', icon: 'bi bi-grid-fill', label: 'Dashboard' },
@@ -33,8 +33,8 @@ const Sidebar = () => {
               { path: '/booking', icon: 'bi bi-ui-checks', label: 'Booking' },
               { path: '/driver', icon: 'bi bi-person-fill-check', label: 'Driver' },
               { path: '/Customer', icon: 'bi bi-people-fill', label: 'Customer' },
-              { path: '/coupendiscount', icon: 'bi bi-ticket-detailed-fill', label: 'Coupon & Discount' },
               { path: '/payment', icon: 'bi bi-cash-coin', label: 'Payment' },
+              { path: '/Invoice', icon: 'bi bi-receipt-cutoff', label: 'Invoice' },
               { path: '/maintenance', icon: 'bi bi-gear-wide-connected', label: 'Maintenance' },
               { path: '/performance', icon: 'bi bi-clipboard-data-fill', label: 'Performance' },
             ].map(({ path, icon, label }) => (
@@ -56,7 +56,7 @@ const Sidebar = () => {
         </div>
 
         {/* Settings Section */}
-        <div className='flex flex-col w-full h-auto items-center justify-center pt-4 pb-4'>
+        <div className='flex flex-col w-full h-auto pt-4 pb-4'>
           <ul className="space-y-6 text-gray-600 text-base items-center">
             {[
               { path: '/setting', icon: 'bi bi-gear-fill', label: 'Settings' },

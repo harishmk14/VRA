@@ -271,7 +271,7 @@ const Booking = () => {
                       <td className="px-4 py-3">{booking.customerName}</td>
                       <td className="px-4 py-3">{booking.journeyType}</td>
                       <td className="px-4 py-3">{statusOptions[index % statusOptions.length]}</td>
-                      <td className="pr-8  py-3 text-center">{booking.verified ? '✅' : '❌'}</td>
+                      <td className="pr-8  py-3 text-center">{booking.verified ? <i class="bi bi-check-lg text-green-500 text-3xl"></i> : <i class="bi bi-x-lg text-red-500 text-xl"></i>}</td>
                       <td className="px-4 py-3 text-center">
                         <button
                           className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"

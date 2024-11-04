@@ -238,7 +238,7 @@ const Driver = () => {
             onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Driver Modal
             className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
           >
-            <i className="bi bi-person-plus-fill p-0.5 px-1 text-xl"></i>
+            <i className="bi bi-person-plus-fill p-1 px-1.5 text-xl"></i>
           </button>
           <button
             onClick={() => setIsFilterModalOpen(true)} // Open Filter modal

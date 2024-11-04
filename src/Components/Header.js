@@ -27,15 +27,15 @@ const Header = () => {
 
   return (
     <>
-      <div className='flex flex-col md:flex-row w-full py-3 bg-zinc-100'>
+      <div className='flex flex-col justify-between md:flex-row w-full py-3 px-5 bg-zinc-100'>
         {/* Left Section */}
-        <div className='flex flex-col justify-center items-start w-full md:w-2/5 h-full px-4 mb-3 md:mb-0'>
+        <div className='flex flex-col justify-center items-start w-full md:w-2/5 h-full mb-3 md:mb-0'>
           <h1 className='text-xl font-bold text-gray-600'>Welcome, Johny Smith!</h1>
           <p className='text-gray-600 text-sm'>Have a Nice Day...</p>
         </div>
 
         {/* Search Input */}
-        <div className='flex w-full md:w-2/5 h-full items-center justify-center mb-3 md:mb-0'>
+        {/* <div className='flex w-full md:w-2/5 h-full items-center justify-center mb-3 md:mb-0'>
           <div className="relative w-full max-w-lg">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <i className="bi bi-search text-gray-400"></i>
@@ -46,7 +46,7 @@ const Header = () => {
               className="w-full h-10 pl-10 pr-4 py-2 bg-white rounded-full border border-gray-300 focus:outline-none focus:border-gray-500 placeholder-gray-400 text-sm"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Right Section */}
         <div className='flex w-full md:w-56 h-full items-center justify-center gap-6 pl-0 md:pl-10'>
