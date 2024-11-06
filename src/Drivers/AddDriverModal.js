@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addDriver } from '../Slice/driverSlice';
+import React, { useState , useEffect } from 'react';
+import { useDispatch , useSelector } from 'react-redux';
+import { addDriver ,fetchDrivers } from '../Slice/driverSlice';
+import { fetchDriverLanguages } from '../Slice/driversLang';
 
 const AddDriverModal = ({ isOpen, onClose }) => {
   // Redux dispatch hook
   const dispatch = useDispatch();
 
+  const { languages, loading, error } = useSelector((state) => state.driverLanguages);
+
+  useEffect(() => {
+    dispatch(fetchDriverLanguages());
+  }, [dispatch]);
   // State variables
   const [driverName, setDriverName] = useState('');
   const [gender, setGender] = useState('');
@@ -101,7 +107,9 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     };
 
     // Dispatch the action to add the driver
-    dispatch(addDriver(driverData));
+    dispatch(addDriver(driverData)).then(() => {
+      dispatch(fetchDrivers());
+    });
 
     // Optionally reset the form after adding
     handleReset();
@@ -204,20 +212,15 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               Language Known <span className="text-red-500">*</span>
             </label>
             <div className="flex flex-wrap gap-5"> {/* Updated flex and added gap */}
-              {[
-                "Tamil", "English", "Hindi", "Bengali",
-                "Telugu", "Marathi", "Urdu", "Gujarati",
-                "Malayalam", "Kannada"
-              ].map((language) => (
-                <label key={language} className="flex items-center">
+              {languages.map((language) => (
+                <label key={language.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    value={language}
-                    checked={languagesKnown.includes(language)}
+                    value={language.uniqId}
                     onChange={handleLanguageChange}
                     className="mr-2"
                   />
-                  {language}
+                  {language.lang}
                 </label>
               ))}
             </div>
@@ -277,7 +280,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               <option value="">Select Preference</option>
               <option value="Day">Day</option>
               <option value="Night">Night</option>
-              <option value="Both">Both</option>
+              <option value="Remote">Remote</option>
             </select>
           </div>
 

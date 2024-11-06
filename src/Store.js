@@ -6,7 +6,9 @@ import vehicleReducer from './Slice/vehicleSlice';
 import vehicleFeaturesReducer from './Slice/vehicleFeaturesSlice';
 import updateVehicleReducer from './Slice/updateVehicleSlice'; 
 import vehiclesReducer2 from './Slice/vehicleDelete';
-import driverReducer from './Slice/driverSlice';  // Import the driver reducer
+import driverReducer from './Slice/driverSlice';
+import driverLangReducer from './Slice/driversLang';
+import uploadImgReducer from './Slice/uploadImgSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,7 +18,9 @@ const store = configureStore({
     vehicleFeatures: vehicleFeaturesReducer,
     updateVehicle: updateVehicleReducer,
     vehicles1: vehiclesReducer2,
-    drivers: driverReducer, // Add the drivers reducer
+    drivers: driverReducer, 
+    driverLanguages: driverLangReducer,
+    uploadImg: uploadImgReducer,
   },
 });
 

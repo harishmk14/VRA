@@ -1,8 +1,8 @@
-import React, { useState , useEffect } from 'react';
-import { addVehicle , fetchAllVehicles } from '../Slice/vehicleSlice';
-import { useDispatch , useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { addVehicle, fetchAllVehicles } from '../Slice/vehicleSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchVehicleFeatures } from '../Slice/vehicleFeaturesSlice';
-import {uploadCustomerImage } from '../Slice/customerSlice';
+import { uploadImg } from '../Slice/uploadImgSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -54,37 +54,37 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
 
   const { features, status, error } = useSelector((state) => state.vehicleFeatures);
   useEffect(() => {
-      dispatch(fetchVehicleFeatures(vehicleType));
+    dispatch(fetchVehicleFeatures(vehicleType));
 
   }, [vehicleType, dispatch]);
 
   if (status === 'loading') return <p>Loading...</p>;
   if (status === 'failed') return <p>Error: {error}</p>;
-  
+
   const handleVehicleTypeChange = (e) => {
     const type = e.target.value;
     setVehicleType(type);
-    setVehicleModel(''); 
-    setAirbags(type === 'bike' ? 'No' : ''); 
-    setTollType(type === 'bike' ? 'Toll Free' : 'Toll'); 
+    setVehicleModel('');
+    setAirbags(type === 'bike' ? 'No' : '');
+    setTollType(type === 'bike' ? 'Toll Free' : 'Toll');
   };
 
   const handleVehicleModelChange = (e) => {
     const model = e.target.value;
     setVehicleModel(model);
     if (model.includes('Electric')) setFuelType('electric');
-    else setFuelType('petrol'); 
+    else setFuelType('petrol');
   };
 
   const handleFeatureChange = (event) => {
     const { value, checked } = event.target;
-    setSelectedFeatures((prevFeatures) => 
-      checked 
+    setSelectedFeatures((prevFeatures) =>
+      checked
         ? [...prevFeatures, value] // Add if checked
         : prevFeatures.filter((id) => id !== value) // Remove if unchecked
     );
   };
-  
+
 
   if (!isOpen) return null;
 
@@ -164,7 +164,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
     setHolderEmail('');
     setAirbags('');
     setAccidentHistory('');
-    setSelectedFeatures(''); 
+    setSelectedFeatures('');
     setVehicleImages([]);
     setRegistrationDocument('');
     setInsuranceDocument('');
@@ -174,19 +174,19 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
 
   const handleFileUpload = async (file, index, type) => {
     const acceptedFileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-
+  
     if (file) {
       if (!acceptedFileTypes.includes(file.type)) {
         toast.error('Invalid file format. Please upload a valid image or PDF document.');
         return;
       }
-
+  
       const formData = new FormData();
       formData.append('logo', file);  // Changed 'logo' to 'file' for generality
-
+  
       try {
-        const response = await dispatch(uploadCustomerImage(formData));
-
+        const response = await dispatch(uploadImg({ formData, variable: 'vehicle' }));
+  
         if (response.payload && typeof response.payload.path === 'string') {
           if (type === 'vehicleImage') {
             setVehicleImages((prevImages) => {
@@ -212,22 +212,23 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
         toast.error('Error uploading file. Please try again.');
       }
     }
-};
+  };
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-36">
       <div className="bg-white rounded-lg p-8 pt-0 shadow-lg w-4/5  relative overflow-auto max-h-[90vh]">
-      <div className="flex justify-between items-center sticky top-0 bg-white z-10 p-5 px-1 mb-2">
-        <h2 className="text-2xl font-bold">Add Vehicles</h2>
-        <button onClick={onClose}  className="text-gray-500 hover:text-gray-700">
-          <span className="text-2xl ">&times;</span>
-        </button>
-      </div>
+        <div className="flex justify-between items-center sticky top-0 bg-white z-10 p-5 px-1 mb-2">
+          <h2 className="text-2xl font-bold">Add Vehicles</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <span className="text-2xl ">&times;</span>
+          </button>
+        </div>
         <div className="grid grid-cols-2 gap-5 gap-x-8">
-{/* Vehicle Type */}
-<div>
+          {/* Vehicle Type */}
+          <div>
             <label className="block text-sm font-medium mb-1">Vehicle Type <span className="text-red-500">*</span></label>
-            <select 
+            <select
               className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
               value={vehicleType}
               onChange={handleVehicleTypeChange}
@@ -256,7 +257,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
           {/* Vehicle Model */}
           <div>
             <label className="block text-sm font-medium mb-1">Vehicle Model <span className="text-red-500">*</span></label>
-            <select 
+            <select
               className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
               value={vehicleModel}
               onChange={handleVehicleModelChange}
@@ -304,29 +305,29 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-{/* AC/Non-AC */}
-{vehicleType !== 'bike' && (
-  <div>
-    <label className="block text-sm font-medium mb-1">AC/Non-AC <span className="text-red-500">*</span></label>
-    <select
-      className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-      value={acType}
-      onChange={(e) => setAcType(e.target.value)}
-    >
-      <option>Select </option>
-      <option value="AC">AC</option>
-      <option value="Non-AC">Non-AC</option>
-    </select>
-  </div>
-)}
+          {/* AC/Non-AC */}
+          {vehicleType !== 'bike' && (
+            <div>
+              <label className="block text-sm font-medium mb-1">AC/Non-AC <span className="text-red-500">*</span></label>
+              <select
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                value={acType}
+                onChange={(e) => setAcType(e.target.value)}
+              >
+                <option>Select </option>
+                <option value="AC">AC</option>
+                <option value="Non-AC">Non-AC</option>
+              </select>
+            </div>
+          )}
 
           {/* Gear Type */}
           <div>
             <label className="block text-sm font-medium mb-1">Gear Type <span className="text-red-500">*</span></label>
             <select className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
-                value={gearType}
-                onChange={(e) => setGearType(e.target.value)}>
-            <option>Select Gear Type</option>
+              value={gearType}
+              onChange={(e) => setGearType(e.target.value)}>
+              <option>Select Gear Type</option>
               <option value="manual">Manual</option>
               <option value="auto">Automatic</option>
             </select>
@@ -339,7 +340,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               value={fuelType}
               onChange={(e) => setFuelType(e.target.value)}
-              required 
+              required
             >
               <option>Select Fuel Type</option>
               <option value="petrol">Petrol</option>
@@ -370,7 +371,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             <input
               type="text"
               value={color}
-              onChange={(e) => setColor(e.target.value)} 
+              onChange={(e) => setColor(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               required
             />
@@ -442,27 +443,27 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
           </div>
 
           {vehicleType !== 'bike' && (
-  <div className="flex flex-col gap-1">
-    <div className="flex items-center">
-      <input 
-        type="checkbox" 
-        className="mr-2"
-        checked={sunroof}
-        onChange={(e) => setSunroof(e.target.checked)}
-      />
-      <span>Sunroof <span className="text-red-500">*</span></span>
-    </div>
-    <div className="flex items-center">
-      <input 
-        type="checkbox" 
-        className="mr-2"
-        checked={gps}
-        onChange={(e) => setGps(e.target.checked)}
-      />
-      <span>GPS Tracking <span className="text-red-500">*</span></span>
-    </div>
-  </div>
-)}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={sunroof}
+                  onChange={(e) => setSunroof(e.target.checked)}
+                />
+                <span>Sunroof <span className="text-red-500">*</span></span>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={gps}
+                  onChange={(e) => setGps(e.target.checked)}
+                />
+                <span>GPS Tracking <span className="text-red-500">*</span></span>
+              </div>
+            </div>
+          )}
 
 
           {/* Insurance ID */}
@@ -560,150 +561,149 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-{/* Airbags */}
-{vehicleType !== 'bike' && (
-  <div>
-    <label className="block text-sm font-medium mb-1">Airbags <span className="text-red-500">*</span></label>
-    <input
-      type="number"
-      className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-      value={airbags}
-      onChange={(e) => setAirbags(e.target.value)}
-    />
-  </div>
-)}
+          {/* Airbags */}
+          {vehicleType !== 'bike' && (
+            <div>
+              <label className="block text-sm font-medium mb-1">Airbags <span className="text-red-500">*</span></label>
+              <input
+                type="number"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                value={airbags}
+                onChange={(e) => setAirbags(e.target.value)}
+              />
+            </div>
+          )}
 
           {/* Accident History */}
           <div>
             <label className="block text-sm font-medium mb-1">Accident History <span className="text-red-500">*</span></label>
             <textarea
-            value={accidentHistory}
-            onChange={(e) => setAccidentHistory(e.target.value)}
+              value={accidentHistory}
+              onChange={(e) => setAccidentHistory(e.target.value)}
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             />
           </div>
 
 
 
-{/* Vehicle Features */}
-<div>
-  <label className="block text-sm font-medium mb-1">Vehicle Features</label>
-  <div className="flex flex-wrap gap-2">
-    {features.data.map(feature => (
-      <div key={feature.id} className="flex items-center">
-        <input
-          type="checkbox"
-          value={feature.uniqId} // Set value to feature.uniqId
-          onChange={handleFeatureChange}
-          className="mr-2"
-          checked={selectedFeatures.includes(feature.uniqId)}  // Check if uniqId is selected
-        />
-        <span>{feature.name}</span>
-      </div>
-    ))}
-  </div>
-</div>
+          {/* Vehicle Features */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Vehicle Features</label>
+            <div className="flex flex-wrap gap-2">
+              {features.data.map(feature => (
+                <div key={feature.id} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value={feature.uniqId} // Set value to feature.uniqId
+                    onChange={handleFeatureChange}
+                    className="mr-2"
+                  />
+                  <span>{feature.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-{/* Upload Vehicle Image 1 */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Upload Vehicle Image 1 <span className="text-red-500">*</span>
-  </label>
-  <input
-    type="file"
-    accept=".jpg,.jpeg,.png"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], 0, 'vehicleImage')}
-  />
-</div>
+          {/* Upload Vehicle Image 1 */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Upload Vehicle Image 1 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], 0, 'vehicleImage')}
+            />
+          </div>
 
-{/* Upload Vehicle Image 2 */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Upload Vehicle Image 2
-  </label>
-  <input
-    type="file"
-    accept=".jpg,.jpeg,.png"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], 1, 'vehicleImage')}
-  />
-</div>
+          {/* Upload Vehicle Image 2 */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Upload Vehicle Image 2
+            </label>
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], 1, 'vehicleImage')}
+            />
+          </div>
 
-{/* Upload Vehicle Image 3 */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Upload Vehicle Image 3
-  </label>
-  <input
-    type="file"
-    accept=".jpg,.jpeg,.png"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], 2, 'vehicleImage')}
-  />
-</div>
+          {/* Upload Vehicle Image 3 */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Upload Vehicle Image 3
+            </label>
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], 2, 'vehicleImage')}
+            />
+          </div>
 
-{/* Upload Registration Doc */}
-<div>
-  <label className="block text-sm font-medium mb-1">Upload Registration Doc <span className="text-red-500">*</span></label>
-  <input 
-    type="file"
-    accept=".pdf"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], null, 'registrationDocument')}
-    required
-  />
-</div>
+          {/* Upload Registration Doc */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Registration Doc <span className="text-red-500">*</span></label>
+            <input
+              type="file"
+              accept=".pdf"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], null, 'registrationDocument')}
+              required
+            />
+          </div>
 
-{/* Upload Insurance Doc */}
-<div>
-  <label className="block text-sm font-medium mb-1">Upload Insurance Doc <span className="text-red-500">*</span></label>
-  <input  
-    type="file"
-    accept=".pdf"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], null, 'insuranceDocument')}
-    required 
-  />
-</div>
+          {/* Upload Insurance Doc */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Insurance Doc <span className="text-red-500">*</span></label>
+            <input
+              type="file"
+              accept=".pdf"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], null, 'insuranceDocument')}
+              required
+            />
+          </div>
 
-{/* Upload Holder DL */}
-<div>
-  <label className="block text-sm font-medium mb-1">Upload Holder DL <span className="text-red-500">*</span></label>
-  <input 
-    type="file"
-    accept=".jpg,.jpeg,.png"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], null, 'holderDL')} 
-  />
-</div>
+          {/* Upload Holder DL */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Holder DL <span className="text-red-500">*</span></label>
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], null, 'holderDL')}
+            />
+          </div>
 
-{/* Upload Holder Proof */}
-<div>
-  <label className="block text-sm font-medium mb-1">Upload Holder Proof <span className="text-red-500">*</span></label>
-  <input 
-    type="file"
-    accept=".jpg,.jpeg,.png"
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    onChange={(e) => handleFileUpload(e.target.files[0], null, 'holderProof')} 
-  />
-</div>
+          {/* Upload Holder Proof */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Holder Proof <span className="text-red-500">*</span></label>
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              onChange={(e) => handleFileUpload(e.target.files[0], null, 'holderProof')}
+            />
+          </div>
         </div>
 
         {/* Close Button */}
         <div className="flex justify-center mt-8 gap-4">
-        <button
-              onClick={handleAdd}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Add
-            </button>
-            <button
-              onClick={handleReset}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-            >
-              Reset
-            </button>
+          <button
+            onClick={handleAdd}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Add
+          </button>
+          <button
+            onClick={handleReset}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Reset
+          </button>
         </div>
       </div>
     </div>

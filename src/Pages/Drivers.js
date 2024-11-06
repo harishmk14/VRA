@@ -1,161 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../index.css';
 import FilterModal from '../Drivers/FilterModal'; // Import the FilterModal component
 import AddDriverModal from '../Drivers/AddDriverModal'; // Import AddVehicleModal component
 import ViewDetailModal from '../Drivers/ViewDetailsModal'; // Import the ViewVehicleModal component
 import ReviewModal from '../Drivers/ReviewModal';
 import { GiSteeringWheel } from "react-icons/gi";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDrivers } from '../Slice/driverSlice';
 
 const Driver = () => {
-  const driversData = [
-    {
-      id: 1,
-      name: "John Doe",
-      image: "https://imgcdn.stablediffusionweb.com/2024/10/14/b53d6677-8076-4e9e-a652-37d1995386f3.jpg",
-      driverId: "D1",
-      experience: "10 years",
-      starRating: 5,
-      age: 56,
-      vehicleCategory: "Car, Bus",
-      status: "Available",
-      shift: "Day",
-      reviews: [
-        {
-          user: "Alice",
-          comment: "Very professional and experienced driver!",
-          rating: 5,
-        },
-        {
-          user: "Bob",
-          comment: "Smooth ride, but could improve punctuality.",
-          rating: 4,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      image: "https://imgcdn.stablediffusionweb.com/2024/10/4/2d52a83c-0d15-4136-87a4-47e92d66b3b2.jpg",
-      driverId: "D2",
-      experience: "8 years",
-      starRating: 4,
-      age: 45,
-      vehicleCategory: "Car, SUV",
-      status: "Pending",
-      shift: "Day / Night",
-      reviews: [
-        {
-          user: "Charlie",
-          comment: "Great driver, very friendly!",
-          rating: 5,
-        },
-        {
-          user: "Diana",
-          comment: "Could have driven a bit faster.",
-          rating: 3,
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Michael Johnson",
-      image: "https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg",
-      driverId: "D3",
-      experience: "12 years",
-      starRating: 4.5,
-      age: 50,
-      vehicleCategory: "Car",
-      status: "In Journey",
-      shift: "Day / Night",
-      reviews: [
-        {
-          user: "Eve",
-          comment: "Excellent service! Highly recommend.",
-          rating: 5,
-        },
-        {
-          user: "Frank",
-          comment: "Good, but could improve communication.",
-          rating: 4,
-        },
-        {
-          user: "Eve",
-          comment: "Excellent service! Highly recommend.",
-          rating: 5,
-        },
-        {
-          user: "Frank",
-          comment: "Good, but could improve communication.",
-          rating: 4,
-        },
-        {
-          user: "Eve",
-          comment: "Excellent service! Highly recommend.",
-          rating: 5,
-        },
-        {
-          user: "Frank",
-          comment: "Good, but could improve communication.",
-          rating: 4,
-        },
-        {
-          user: "Eve",
-          comment: "Excellent service! Highly recommend.",
-          rating: 5,
-        },
-        {
-          user: "Frank",
-          comment: "Good, but could improve communication.",
-          rating: 4,
-        },
-        {
-          user: "Eve",
-          comment: "Excellent service! Highly recommend.",
-          rating: 5,
-        },
-        {
-          user: "Frank",
-          comment: "Good, but could improve communication.",
-          rating: 4,
-        },
-        {
-          user: "Eve",
-          comment: "Excellent service! Highly recommend.",
-          rating: 5,
-        },
-        {
-          user: "Frank",
-          comment: "Good, but could improve communication.",
-          rating: 4,
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Emily Davis",
-      image: "https://imgcdn.stablediffusionweb.com/2024/9/8/04fdb256-b489-4571-972c-249a0cb35019.jpg",
-      driverId: "D4",
-      experience: "5 years",
-      starRating: 4,
-      age: 40,
-      vehicleCategory: "Bus",
-      status: "Unavailable",
-      shift: "Night",
-      reviews: [
-        {
-          user: "George",
-          comment: "Very nice and courteous.",
-          rating: 4,
-        },
-        {
-          user: "Hannah",
-          comment: "The bus was clean and comfortable.",
-          rating: 5,
-        },
-      ],
-    },
-  ];
-  
+  const dispatch = useDispatch();
+  const { drivers, loading, error } = useSelector((state) => state.drivers);
+  // Fetch drivers when the component mounts
+  useEffect(() => {
+    dispatch(fetchDrivers());
+  }, [dispatch]);
 
   const [filter, setFilter] = useState("All");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -180,7 +39,7 @@ const Driver = () => {
     }
   };
 
-  const filteredDrivers = driversData.filter((driver) => {
+  const filteredDrivers = drivers.filter((driver) => {
     if (filter === "All") return true; // Show all drivers
     if (filter === "Active") return driver.status === "Pending" || driver.status === "In Journey"; // Show Pending & In Journey
     if (filter === "Available") return driver.status === "Available"; // Show Available
@@ -189,7 +48,7 @@ const Driver = () => {
   });
 
   const renderShiftIcon = (shift) => {
-    if (shift.includes("Day") && shift.includes("Night")) {
+    if (shift === "Remote") {
       return (
         <>
           <i className="bi bi-brightness-high-fill mr-1"></i> {/* Add margin here */}
@@ -202,6 +61,22 @@ const Driver = () => {
       return <i className="bi bi-moon-stars-fill mr-1"></i>; // Add margin here for Night shift
     }
     return null; // Return null if no valid shift is found
+  };
+
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob); // The ISO 8601 string should work directly
+    if (isNaN(birthDate.getTime())) {
+      console.error(`Invalid date format for DOB: ${dob}`);
+      return 'Invalid Date';
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--; // Adjust if birthday hasn't occurred yet this year
+    }
+    return age;
   };
 
   return (
@@ -244,7 +119,7 @@ const Driver = () => {
             onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
             className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
           >
-            <i class="bi bi-funnel-fill"></i> Filter
+            <i className="bi bi-funnel-fill"></i> Filter
           </button>
         </div>
       </div>
@@ -269,11 +144,11 @@ const Driver = () => {
         driver={selectedDriver} // Pass the selected driver to the modal
       />
 
-<ReviewModal
-  isOpen={isReviewModalOpen}
-  onClose={() => setIsReviewModalOpen(false)} // Close Review Modal
-  driver={selectedDriver} // Pass the selected driver to the review modal
-/>
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)} // Close Review Modal
+        driver={selectedDriver} // Pass the selected driver to the review modal
+      />
 
 
       <div className="flex-grow overflow-auto hide-scroll p-3">
@@ -283,7 +158,7 @@ const Driver = () => {
               <div className="w-40 h-40">
                 <img
                   src={driver.image}
-                  alt={driver.name}
+                  alt={driver.dName}
                   className="object-cover rounded-md"
                 />
               </div>
@@ -293,46 +168,46 @@ const Driver = () => {
                   {driver.status}
                 </span>
                 <h2 className="text-lg font-semibold text-gray-800">
-                  {driver.name} - {driver.driverId}
+                  {driver.dName} - {driver.uniqId}
                 </h2>
 
                 <div className="grid grid-cols-3 gap-1">
                   <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Exp - {driver.experience}
+                    Exp - {driver.expe}
                   </span>
                   <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Rating - {driver.starRating} <i class="bi bi-star-fill text-yellow-500 ml-1"></i>
+                    Rating - {driver.starRating} <i className="bi bi-star-fill text-yellow-500 ml-1"></i>
                   </span>
                   <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Age - {driver.age}
+                    Age - {calculateAge(driver.DOB)} {/* Calculate and display age */}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-1">
-                <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-  <span className="mr-1">{renderShiftIcon(driver.shift)}</span> {/* Add margin to the right of the icon */}
-  {driver.shift}
-</span>
+                  <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                    <span className="mr-1">{renderShiftIcon(driver.shift)}</span> {/* Add margin to the right of the icon */}
+                    {driver.shift}
+                  </span>
                   <span className=" flex text-sm bg-blue-100 rounded-full px-1 py-1 text-center items-center justify-center">
-                  <GiSteeringWheel className='flex mr-2'/> {driver.vehicleCategory}
+                    <GiSteeringWheel className='flex mr-2' /> {driver.DLcategory}
                   </span>
                 </div>
 
                 <div className="flex justify-end items-center space-x-5">
-                <i 
-  class="bi bi-card-text text-blue-500 text-2xl mt-1 cursor-pointer"
-  onClick={() => {
-    setSelectedDriver(driver); // Set the selected driver for the review modal
-    setIsReviewModalOpen(true); // Open Review Modal
-  }}
-></i>
-                    <i class="bi bi-eye-fill text-blue-500 text-2xl mr-3 mt-1 cursor-pointer"
+                  <i
+                    className="bi bi-card-text text-blue-500 text-2xl mt-1 cursor-pointer"
+                    onClick={() => {
+                      setSelectedDriver(driver); // Set the selected driver for the review modal
+                      setIsReviewModalOpen(true); // Open Review Modal
+                    }}
+                  ></i>
+                  <i className="bi bi-eye-fill text-blue-500 text-2xl mr-3 mt-1 cursor-pointer"
                     onClick={() => {
                       setSelectedDriver(driver); // Set the selected driver
                       setIsViewVehicleModalOpen(true); // Open View Driver Modal
                     }}></i>
                 </div>
               </div>
-            </div> 
+            </div>
           ))}
         </div>
       </div>

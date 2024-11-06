@@ -2,9 +2,18 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// Async thunk for making a POST request to add a driver using Axios
+// Async thunk for fetching drivers
+export const fetchDrivers = createAsyncThunk(
+  'drivers/fetchDrivers',
+  async () => {
+    const response = await axios.get('http://localhost:7000/driver/getAll');
+    return response.data;
+  }
+);
+
+// Async thunk for adding a new driver
 export const addDriver = createAsyncThunk(
-  'driver/addDriver',
+  'drivers/addDriver',
   async (driverData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:7000/driver/add', driverData, {
@@ -13,7 +22,7 @@ export const addDriver = createAsyncThunk(
         },
       });
       toast.success('Driver added successfully!');
-      return response.data; // Assuming the response is JSON
+      return response.data;
     } catch (error) {
       toast.error(`Failed to add driver: ${error.response ? error.response.data : error.message}`);
       return rejectWithValue(error.response ? error.response.data : error.message);
@@ -21,32 +30,46 @@ export const addDriver = createAsyncThunk(
   }
 );
 
-// Initial state for the driver slice
+// Initial state for the drivers slice
 const initialState = {
-  driver: null,
-  loading: false,
-  error: null,
+  drivers: [],        // Holds the list of drivers
+  loading: false,  // Tracks loading state for both fetch and add actions
+  error: null,     // Holds any error messages// Holds data of the newly added driver
 };
 
-// Create the slice
-const driverSlice = createSlice({
-  name: 'driver',
+// Create the drivers slice
+const driversSlice = createSlice({
+  name: 'drivers',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Handling fetchDrivers actions
+      .addCase(fetchDrivers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDrivers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.drivers = action.payload.data;
+      })
+      .addCase(fetchDrivers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Handling addDriver actions
       .addCase(addDriver.pending, (state) => {
         state.loading = true;
       })
       .addCase(addDriver.fulfilled, (state, action) => {
         state.loading = false;
-        state.driver = action.payload; // Store driver data after successful request
+        state.addedDriver = action.payload; // Store the added driver data
       })
       .addCase(addDriver.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Store error message in case of failure
+        state.error = action.payload;
       });
   },
 });
 
-export default driverSlice.reducer;
+export default driversSlice.reducer;

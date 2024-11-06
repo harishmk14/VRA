@@ -16,25 +16,6 @@ export const addCustomer = createAsyncThunk(
   }
 );
 
-// Async thunk for uploading customer image
-export const uploadCustomerImage = createAsyncThunk(
-  'customer/uploadCustomerImage',
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('http://localhost:7000/user/img', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : 'Image upload failed. Please try again.'
-      );
-    }
-  }
-);
-
 // Async thunk for fetching all customers
 export const getAllCustomers = createAsyncThunk(
   'customer/getAllCustomers',
@@ -54,7 +35,6 @@ const customerSlice = createSlice({
   name: 'customer',
   initialState: {
     customers: [],
-    imageStatus: null,
     status: null,
     error: null,
   },
@@ -65,7 +45,6 @@ const customerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Add customer cases
       .addCase(addCustomer.pending, (state) => {
         state.status = 'loading';
         state.error = null; // Clear any previous errors
@@ -80,18 +59,6 @@ const customerSlice = createSlice({
       })
       .addCase(addCustomer.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
-      })
-      // Upload image cases
-      .addCase(uploadCustomerImage.pending, (state) => {
-        state.imageStatus = 'loading';
-        state.error = null; // Clear any previous errors
-      })
-      .addCase(uploadCustomerImage.fulfilled, (state, action) => {
-        state.imageStatus = 'succeeded';
-      })
-      .addCase(uploadCustomerImage.rejected, (state, action) => {
-        state.imageStatus = 'failed';
         state.error = action.payload;
       })
       // Fetch all customers cases

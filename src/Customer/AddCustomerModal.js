@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, getAllCustomers, uploadCustomerImage } from '../Slice/customerSlice';
+import { addCustomer, getAllCustomers } from '../Slice/customerSlice';
+import { uploadImg } from '../Slice/uploadImgSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -51,34 +52,35 @@ const AddCustomerModal = ({ onClose }) => {
     }
   };
 
-  const handleFileUpload = async (file, setFile) => {
-    const acceptedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+const handleFileUpload = async (file, setFile) => {
+  const acceptedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
-    if (file) {
-      if (!acceptedFileTypes.includes(file.type)) {
-        toast.error('Invalid file format. Please upload a JPG or PNG image.');
-        return;
-      }
+  if (file) {
+    if (!acceptedFileTypes.includes(file.type)) {
+      toast.error('Invalid file format. Please upload a JPG or PNG image.');
+      return;
+    }
 
-      const formData = new FormData();
-      formData.append('logo', file);
+    const formData = new FormData();
+    formData.append('logo', file);
 
-      try {
-        const response = await dispatch(uploadCustomerImage(formData));
+    try {
+      const response = await dispatch(uploadImg({ formData, variable: 'customer'}));
 
-        if (response.payload && typeof response.payload.path === 'string') {
-          setFile(response.payload.path);
-          // toast.success('File uploaded successfully.');
-        } else {
-          console.error('Invalid response format:', response.payload);
-          toast.error('Error uploading file. Please try again.');
-        }
-      } catch (error) {
-        console.error('File upload failed:', error);
+      if (response.payload && typeof response.payload.path === 'string') {
+        setFile(response.payload.path);
+        // toast.success('File uploaded successfully.');
+      } else {
+        console.error('Invalid response format:', response.payload);
         toast.error('Error uploading file. Please try again.');
       }
+    } catch (error) {
+      console.error('File upload failed:', error);
+      toast.error('Error uploading file. Please try again.');
     }
-  };
+  }
+};
+
   
   
 
