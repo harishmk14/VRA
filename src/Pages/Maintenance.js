@@ -1,11 +1,12 @@
 import React from 'react';
+import logo from '../Assets/img/logo1.png';
 
 const Invoicea4 = () => {
   return (
     <div className="w-[190mm] mx-auto p-8 bg-white border border-gray-300 shadow-lg rounded-lg">
       {/* Header Section */}
       <header className="flex justify-between items-center mb-6 border-b pb-4">
-        <div className="text-2xl font-bold text-blue-500">Your Company Logo</div>
+        <div><img src={logo} alt="Company Logo" /></div>
         <div className="text-right">
           <p className="font-semibold text-lg">Invoice #12345</p>
           <p className="text-gray-500 text-sm">Date Issued: 2024-11-04</p>

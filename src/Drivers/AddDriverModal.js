@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addDriver } from '../Slice/driverSlice';
 
 const AddDriverModal = ({ isOpen, onClose }) => {
+  // Redux dispatch hook
+  const dispatch = useDispatch();
+
   // State variables
   const [driverName, setDriverName] = useState('');
   const [gender, setGender] = useState('');
   const [dob, setDob] = useState('');
   const [batchNo, setBatchNo] = useState('');
   const [experience, setExperience] = useState('');
-  const [vehicleType, setVehicleType] = useState(''); // Assume you manage vehicleType somehow
+  const [DriverType, setDriverType] = useState('');
   const [email, setEmail] = useState('');
   const [mobileNo, setMobileNo] = useState('');
   const [alternateMobileNo, setAlternateMobileNo] = useState('');
@@ -26,6 +31,16 @@ const AddDriverModal = ({ isOpen, onClose }) => {
   const [driverImage, setDriverImage] = useState(null);
   const [dl, setDl] = useState(null);
   const [aadhar, setAadhar] = useState(null);
+
+  const [languagesKnown, setLanguagesKnown] = useState([]);
+
+  // Handle language checkbox change
+  const handleLanguageChange = (event) => {
+    const value = event.target.value;
+    setLanguagesKnown((prev) =>
+      prev.includes(value) ? prev.filter((lang) => lang !== value) : [...prev, value]
+    );
+  };
 
   // Handle reset functionality
   const handleReset = () => {
@@ -52,20 +67,45 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     setDriverImage(null);
     setDl(null);
     setAadhar(null);
+    setLanguagesKnown([]);
   };
 
-  // Handle add functionality (implement this)
+  // Handle Add Driver functionality
   const handleAdd = () => {
-    // Implement add functionality here
-  };
+    const driverData = {
+      dName: driverName,
+      dGender: gender,
+      DOB:dob,
+      batchNo,
+      expe: experience,
+      dType: DriverType, // You can manage dType logic as needed
+      email,
+      mobileNo,
+      altMobNo: alternateMobileNo,
+      shift: shiftPreference,
+      DLno: dlNo,
+      DLcategory: dlCategory,
+      DLexpire: licenseExpiryDate,
+      insNo: insuranceNo,
+      add: address,
+      crimeRec: criminalRecord,
+      drivHis: drivingHistory,
+      accHis: accidentHistory,
+      salary,
+      mediCert: 'dl_image_url.jpg',
+      pcc: 'dl_image_url.jpg',
+      dImg: 'dl_image_url.jpg',
+      dlImd: 'dl_image_url.jpg',
+      adhar: 'dl_image_url.jpg',
+      langKow: languagesKnown,
+    };
 
-  const [languagesKnown, setLanguagesKnown] = useState([]);
+    // Dispatch the action to add the driver
+    dispatch(addDriver(driverData));
 
-  const handleLanguageChange = (event) => {
-    const value = event.target.value;
-    setLanguagesKnown((prev) =>
-      prev.includes(value) ? prev.filter((lang) => lang !== value) : [...prev, value]
-    );
+    // Optionally reset the form after adding
+    handleReset();
+    onClose(); // Close the modal after adding
   };
 
   return (
@@ -78,16 +118,6 @@ const AddDriverModal = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="grid grid-cols-2 gap-5 gap-x-8">
-          {/* Driver Id */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Driver Id <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              value="D001"
-              readOnly
-            />
-          </div>
 
           {/* Driver Name */}
           <div>
@@ -154,11 +184,12 @@ const AddDriverModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Driver Type */}
-          {vehicleType !== 'bike' && (
             <div>
               <label className="block text-sm font-medium mb-1">Driver Type <span className="text-red-500">*</span></label>
               <select
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                value={DriverType}
+                onChange={(e) => setDriverType(e.target.value)}
                 required
               >
                 <option value="">Select Type</option>
@@ -166,32 +197,31 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                 <option value="Acting">Acting</option>
               </select>
             </div>
-          )}
 
           {/* Language Known */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Language Known <span className="text-red-500">*</span>
-  </label>
-  <div className="flex flex-wrap gap-5"> {/* Updated flex and added gap */}
-    {[
-      "Tamil", "English", "Hindi", "Bengali", 
-      "Telugu", "Marathi", "Urdu", "Gujarati", 
-      "Malayalam", "Kannada"
-    ].map((language) => (
-      <label key={language} className="flex items-center">
-        <input
-          type="checkbox"
-          value={language}
-          checked={languagesKnown.includes(language)}
-          onChange={handleLanguageChange}
-          className="mr-2"
-        />
-        {language}
-      </label>
-    ))}
-  </div>
-</div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Language Known <span className="text-red-500">*</span>
+            </label>
+            <div className="flex flex-wrap gap-5"> {/* Updated flex and added gap */}
+              {[
+                "Tamil", "English", "Hindi", "Bengali",
+                "Telugu", "Marathi", "Urdu", "Gujarati",
+                "Malayalam", "Kannada"
+              ].map((language) => (
+                <label key={language} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value={language}
+                    checked={languagesKnown.includes(language)}
+                    onChange={handleLanguageChange}
+                    className="mr-2"
+                  />
+                  {language}
+                </label>
+              ))}
+            </div>
+          </div>
 
 
           {/* Email */}
@@ -235,8 +265,8 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-                    {/* Shift Preference */}
-                    <div>
+          {/* Shift Preference */}
+          <div>
             <label className="block text-sm font-medium mb-1">Shift Preference <span className="text-red-500">*</span></label>
             <select
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
@@ -263,29 +293,29 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-{/* DL Category */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    DL Category <span className="text-red-500">*</span>
-  </label>
-  <select
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    value={dlCategory}
-    onChange={(e) => setDlCategory(e.target.value)}
-    required
-  >
-    <option value="">Select Category</option>
-    <option value="LMV">LMV (Light Motor Vehicle)</option>
-    <option value="HMV">HMV (Heavy Motor Vehicle)</option>
-    <option value="MCWG">MCWG (Motorcycle Without Gear)</option>
-    <option value="MCWOG">MCWOG (Motorcycle With Gear)</option>
-    <option value="TAXI">Taxi</option>
-    <option value="OTR">OTR (Off-Road Vehicle)</option>
-    <option value="E-RICKSHAW">E-Rickshaw</option>
-    <option value="LGV">LGV (Light Goods Vehicle)</option>
-    <option value="HGV">HGV (Heavy Goods Vehicle)</option>
-  </select>
-</div>
+          {/* DL Category */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              DL Category <span className="text-red-500">*</span>
+            </label>
+            <select
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={dlCategory}
+              onChange={(e) => setDlCategory(e.target.value)}
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="LMV">LMV (Light Motor Vehicle)</option>
+              <option value="HMV">HMV (Heavy Motor Vehicle)</option>
+              <option value="MCWG">MCWG (Motorcycle Without Gear)</option>
+              <option value="MCWOG">MCWOG (Motorcycle With Gear)</option>
+              <option value="TAXI">Taxi</option>
+              <option value="OTR">OTR (Off-Road Vehicle)</option>
+              <option value="E-RICKSHAW">E-Rickshaw</option>
+              <option value="LGV">LGV (Light Goods Vehicle)</option>
+              <option value="HGV">HGV (Heavy Goods Vehicle)</option>
+            </select>
+          </div>
 
 
           {/* License Expiry Date */}
@@ -325,50 +355,50 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-{/* Criminal Record */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Criminal Record <span className="text-red-500">*</span>
-  </label>
-  <textarea
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    value={criminalRecord}
-    onChange={(e) => setCriminalRecord(e.target.value)}
-    required
-    rows={3} // Adjust the number of rows as needed
-    placeholder="Provide details about any criminal record..."
-  />
-</div>
+          {/* Criminal Record */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Criminal Record <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={criminalRecord}
+              onChange={(e) => setCriminalRecord(e.target.value)}
+              required
+              rows={3} // Adjust the number of rows as needed
+              placeholder="Provide details about any criminal record..."
+            />
+          </div>
 
-{/* Driving History */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Driving History <span className="text-red-500">*</span>
-  </label>
-  <textarea
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    value={drivingHistory}
-    onChange={(e) => setDrivingHistory(e.target.value)}
-    required
-    rows={3} // Adjust the number of rows as needed
-    placeholder="Provide details about your driving history..."
-  />
-</div>
+          {/* Driving History */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Driving History <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={drivingHistory}
+              onChange={(e) => setDrivingHistory(e.target.value)}
+              required
+              rows={3} // Adjust the number of rows as needed
+              placeholder="Provide details about your driving history..."
+            />
+          </div>
 
-{/* Accident History */}
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Accident History <span className="text-red-500">*</span>
-  </label>
-  <textarea
-    className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-    value={accidentHistory}
-    onChange={(e) => setAccidentHistory(e.target.value)}
-    required
-    rows={3} // Adjust the number of rows as needed
-    placeholder="Provide details about your accident history..."
-  />
-</div>
+          {/* Accident History */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Accident History <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={accidentHistory}
+              onChange={(e) => setAccidentHistory(e.target.value)}
+              required
+              rows={3} // Adjust the number of rows as needed
+              placeholder="Provide details about your accident history..."
+            />
+          </div>
 
           {/* Salary */}
           <div>
@@ -377,7 +407,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               type="number"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               value={salary}
-              onChange={(e) => setExperience(e.target.value)}
+              onChange={(e) => setSalary(e.target.value)}
               required
             />
           </div>
@@ -420,7 +450,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
 
           {/* DL */}
           <div>
-            <label className="block text-sm font-medium mb-1">Driving License Document <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium mb-1">Driving License <span className="text-red-500">*</span></label>
             <input
               type="file"
               accept="image/*"
@@ -432,7 +462,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
 
           {/* Aadhar */}
           <div>
-            <label className="block text-sm font-medium mb-1">Aadhar Document <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium mb-1">Proof <span className="text-red-500">*</span></label>
             <input
               type="file"
               accept="image/*"
@@ -445,7 +475,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
 
         {/* Action Buttons */}
         <div className="flex justify-end mt-4">
-        <button onClick={handleAdd} className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">
+          <button onClick={handleAdd} className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">
             Add Driver
           </button>
           <button onClick={handleReset} className="px-4 py-2 bg-red-500 text-white rounded-lg ">
