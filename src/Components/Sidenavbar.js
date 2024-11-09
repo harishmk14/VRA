@@ -13,7 +13,10 @@ const Sidebar = () => {
   };
 
   // Helper function to check if the current route matches the path
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (path === '/dashboard' && location.pathname === '/') return true;
+    return location.pathname === path;
+  };
 
   return (
     <div className='flex flex-col bg-white min-h-screen shadow-lg sticky top-0 px-8'>

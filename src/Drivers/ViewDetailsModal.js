@@ -1,62 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDriverLanguages } from '../Slice/driversLang';
+import { updateDriver } from '../Slice/updateDriverSlice';
 
-const ViewDriverModal = ({ isOpen, onClose }) => {
-  // Hooks must be declared at the top level
-  const defaultData = {
-    driverId: 'D123',
-    Name: 'John Doe',
-    gender: 'Male',
-    dateOfBirth: '1990-01-01',
-    batchNo: 'B2024',
-    experience: '5 years',
-    driverType: 'Full-time',
-    languageKnown: 'English, Hindi',
-    email: 'john.doe@example.com',
-    mobileNo: '1234567890',
-    alternateMobileNo: '0987654321',
-    shiftPreference: 'Day',
-    drivingLicenseNo: 'DL123456',
-    dlCategory: 'LMV',
-    licenseExpiryDate: '2025-01-01',
-    insuranceNo: 'INS123456',
-    address: '123 Main St, City, State',
-    criminalRecord: 'No',
-    drivingHistory: 'Clean',
-    accidentHistory: 'None',
-    salary:'15000',
-    documents: {
-      medicalCertificate: 'https://example.com/medical_certificate.pdf',
-      pcc: 'https://example.com/pcc.pdf',
-    },
-    driverImage: 'https://imgcdn.stablediffusionweb.com/2024/9/14/32126d8d-b1ea-4a60-9878-b2f729b566fa.jpg',
-    holderDocuments: {
-      drivingLicense: 'https://rtoimage.rto.care/rto_application/live/news_headline/544201641286938.jpg',
-      aadharProof: 'https://lawsisto.com/kkg_admin/images/categoryimages/1527952340Aadhar_format.png',
-    },
-  };
+const ViewDriverModal = ({ isOpen, onClose, driver , dlc}) => {
+  const dispatch = useDispatch();
+  const { languages, status, error } = useSelector((state) => state.driverLanguages);
 
-  // Hooks must be declared outside of conditionals
-  const [data, setData] = useState(defaultData);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedDriver, setEditedDriver] = useState(driver || {});
+  const [selectedLanguages, setSelectedLanguages] = useState(driver?.languageIds || []);
 
-  // Early return if the modal is not open
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(fetchDriverLanguages());
+      setEditedDriver(driver); 
+      setSelectedLanguages(driver?.langKow || []); // Initialize with driver.langKow
+    }
+  }, [dispatch, isOpen, driver]);
+  
+
+  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'failed') return <p>Error: {error}</p>;
+
   if (!isOpen) return null;
 
-  // Function to handle update action
-  const handleUpdate = () => {
-    console.log("Update clicked", data);
-    setIsEdit(false); // Exit edit mode
-  };
-
-  // Function to handle delete action
-  const handleDelete = () => {
-    console.log("Delete clicked");
-  };
-
-  // Function to handle input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({ ...prevData, [name]: value }));
+    const { name, type, checked, value } = e.target;
+    setEditedDriver((prevDriver) => ({
+      ...prevDriver,
+      [name]: type === 'checkbox' ? (checked ? 'Yes' : 'No') : value, 
+    }));
+  };
+
+  const handleLanguageChange = (e) => {
+    const languageId = e.target.value;
+    setSelectedLanguages((prevSelectedLanguages) => {
+      if (prevSelectedLanguages.includes(languageId)) {
+        return prevSelectedLanguages.filter((id) => id !== languageId);
+      } else {
+        return [...prevSelectedLanguages, languageId];
+      }
+    });
+  };
+
+  const handleSave = () => {
+    const updatedDriver = {
+      ...editedDriver,
+      langKow: selectedLanguages, 
+    };
+    console.log(updatedDriver);
+    dispatch(updateDriver({ driverId: driver.uniqId, updatedData: updatedDriver }));
+    setIsEditing(false); 
+    onClose();
   };
 
   return (
@@ -73,43 +69,43 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
           {/* Driver ID */}
           <div>
             <label className="grid text-sm font-medium mb-1">Driver ID</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
                 name="driverId"
-                value={data.driverId}
+                value={driver.uniqId}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
                 readOnly
               />
             ) : (
-              <p>{data.driverId}</p>
+              <p>{driver.uniqId}</p>
             )}
           </div>
 
           {/* Driver Name */}
           <div>
             <label className="grid text-sm font-medium mb-1">Driver Name</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
-                name="Name"
-                value={data.Name}
+                name="dName"
+                value={editedDriver.dName || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.Name}</p>
+              <p>{driver.dName}</p>
             )}
           </div>
 
           {/* Gender */}
           <div>
             <label className="block text-sm font-medium mb-1">Gender</label>
-            {isEdit ? (
+            {isEditing ? (
               <select
-                name="gender"
-                value={data.gender}
+                name="dGender"
+                value={editedDriver.dGender || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               >
@@ -118,438 +114,472 @@ const ViewDriverModal = ({ isOpen, onClose }) => {
                 <option value="Other">Other</option>
               </select>
             ) : (
-              <p>{data.gender}</p>
+              <p>{driver.dGender}</p>
             )}
           </div>
 
           {/* Date of Birth */}
           <div>
             <label className="block text-sm font-medium mb-1">Date of Birth</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="date"
-                name="dateOfBirth"
-                value={data.dateOfBirth}
+                name="DOB"
+                value={editedDriver.DOB ? new Date(editedDriver.DOB).toISOString().split('T')[0] : editedDriver.DOB || ''}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.dateOfBirth}</p>
+              <p>{driver.DOB ? new Date(driver.DOB).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}</p>
             )}
           </div>
 
           {/* Batch No */}
           <div>
             <label className="block text-sm font-medium mb-1">Batch No</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
                 name="batchNo"
-                value={data.batchNo}
+                value={editedDriver.batchNo || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.batchNo}</p>
+              <p>{driver.batchNo}</p>
             )}
           </div>
 
           {/* Experience */}
           <div>
             <label className="block text-sm font-medium mb-1">Experience</label>
-            {isEdit ? (
+            {isEditing? (
               <input
-                type="text"
-                name="experience"
-                value={data.experience}
+                type="number"
+                name="expe"
+                value={editedDriver.expe || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.experience}</p>
+              <p>{driver.expe}</p>
             )}
           </div>
 
           {/* Driver Type */}
           <div>
             <label className="block text-sm font-medium mb-1">Driver Type</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name="driverType"
-                value={data.driverType}
+            {isEditing ? (
+              <select
+                name="dType"
+                value={editedDriver.dType || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              />
+              >
+                <option value="">Select Type</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Acting">Acting</option>
+              </select>
             ) : (
-              <p>{data.driverType}</p>
+              <p>{driver.dType}</p>
             )}
           </div>
 
           {/* Language Known */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Language Known</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name="languageKnown"
-                value={data.languageKnown}
-                onChange={handleInputChange}
-                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              />
-            ) : (
-              <p>{data.languageKnown}</p>
-            )}
-          </div>
+<div>
+  <label className="block text-sm font-medium mb-1">Language Known</label>
+  {isEditing ? (
+    <div className="flex flex-wrap gap-2">
+      {languages.map(language => (
+        <div key={language.uniqId} className="flex items-center">
+          <input
+            type="checkbox"
+            value={language.uniqId}
+            onChange={handleLanguageChange}
+            className="mr-2"
+            checked={selectedLanguages.includes(language.uniqId)} // Reflects initial state and updates
+          />
+          <span>{language.lang}</span>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <ul>
+      {languages
+        .filter(language => driver.langKow.includes(language.uniqId))
+        .map(language => (
+          <li key={language.uniqId} className="text-black">
+            <i className="bi bi-dot"></i>{language.lang}
+          </li>
+        ))}
+    </ul>
+  )}
+</div>
+
+
+
 
           {/* Email */}
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="email"
                 name="email"
-                value={data.email}
+                value={editedDriver.email || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.email}</p>
+              <p>{driver.email}</p>
             )}
           </div>
 
           {/* Mobile No */}
           <div>
             <label className="block text-sm font-medium mb-1">Mobile No</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
                 name="mobileNo"
-                value={data.mobileNo}
+                value={editedDriver.mobileNo || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.mobileNo}</p>
+              <p>{driver.mobileNo}</p>
             )}
           </div>
 
           {/* Alternate Mobile No */}
           <div>
             <label className="block text-sm font-medium mb-1">Alternate Mobile No</label>
-            {isEdit ? (
+            {isEditing? (
               <input
                 type="text"
-                name="alternateMobileNo"
-                value={data.alternateMobileNo}
+                name="altMobNo"
+                value={editedDriver.altMobNo || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.alternateMobileNo}</p>
+              <p>{driver.altMobNo}</p>
             )}
           </div>
 
           {/* Shift Preference */}
           <div>
             <label className="block text-sm font-medium mb-1">Shift Preference</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name="shiftPreference"
-                value={data.shiftPreference}
+            {isEditing ? (
+              <select
+                name="shift"
+                value={editedDriver.shift || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              />
+              >
+              <option value="">Select Preference</option>
+              <option value="Day">Day</option>
+              <option value="Night">Night</option>
+              <option value="Remote">Remote</option>
+              </select>
             ) : (
-              <p>{data.shiftPreference}</p>
+              <p>{driver.shift}</p>
             )}
           </div>
 
           {/* Driving License No */}
           <div>
             <label className="block text-sm font-medium mb-1">Driving License No</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
-                name="drivingLicenseNo"
-                value={data.drivingLicenseNo}
+                name="DLno"
+                value={editedDriver.DLno || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.drivingLicenseNo}</p>
+              <p>{driver.DLno}</p>
             )}
           </div>
 
           {/* DL Category */}
           <div>
             <label className="block text-sm font-medium mb-1">DL Category</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
-                name="dlCategory"
-                value={data.dlCategory}
+                name="DLcategory"
+                value={editedDriver.DLcategory || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.dlCategory}</p>
+              <>
+              {dlc
+                .filter(category => driver.DLcategory.includes(category.uniqId))
+                .map((category) => (
+                  <li key={category.uniqId} className="text-black">{category.ABB}
+                </li>
+                ))}
+                </>
             )}
           </div>
 
           {/* License Expiry Date */}
           <div>
             <label className="block text-sm font-medium mb-1">License Expiry Date</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="date"
-                name="licenseExpiryDate"
-                value={data.licenseExpiryDate}
+                name="DLexpire"
+                value={editedDriver.DLexpire ? new Date(editedDriver.DLexpire).toISOString().split('T')[0] : editedDriver.DLexpire || ''}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.licenseExpiryDate}</p>
+              <p>{driver.DLexpire ? new Date(driver.DLexpire).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}</p>
             )}
           </div>
 
           {/* Insurance No */}
           <div>
             <label className="block text-sm font-medium mb-1">Insurance No</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="text"
-                name="insuranceNo"
-                value={data.insuranceNo}
+                name="insNo"
+                value={editedDriver.insNo || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.insuranceNo}</p>
+              <p>{driver.insNo}</p>
             )}
           </div>
 
           {/* Address */}
           <div>
             <label className="block text-sm font-medium mb-1">Address</label>
-            {isEdit ? (
+            {isEditing ? (
               <textarea
-                name="address"
-                value={data.address}
+                name="add"
+                value={editedDriver.add || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.address}</p>
+              <p>{driver.add}</p>
             )}
           </div>
 
           {/* Criminal Record */}
           <div>
             <label className="block text-sm font-medium mb-1">Criminal Record</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name="criminalRecord"
-                value={data.criminalRecord}
+            {isEditing ? (
+              <textarea
+                name="crimeRec"
+                value={editedDriver.crimeRec || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.criminalRecord}</p>
+              <p>{driver.crimeRec}</p>
             )}
           </div>
 
           {/* Driving History */}
           <div>
             <label className="block text-sm font-medium mb-1">Driving History</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name="drivingHistory"
-                value={data.drivingHistory}
+            {isEditing ? (
+              <textarea
+                name="drivHis"
+                value={editedDriver.drivHis || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.drivingHistory}</p>
+              <p>{driver.drivHis}</p>
             )}
           </div>
 
           {/* Accident History */}
           <div>
             <label className="block text-sm font-medium mb-1">Accident History</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name="accidentHistory"
-                value={data.accidentHistory}
+            {isEditing ? (
+              <textarea
+                name="accHis"
+                value={editedDriver.accHis || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.accidentHistory}</p>
+              <p>{driver.accHis}</p>
             )}
           </div>
 
-                    {/* Salary */}
-                    <div>
+          {/* Salary */}
+          <div>
             <label className="grid text-sm font-medium mb-1">Salary</label>
-            {isEdit ? (
+            {isEditing ? (
               <input
                 type="number"
                 name="salary"
-                value={data.salary}
+                value={editedDriver.salary || ""}
                 onChange={handleInputChange}
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
               />
             ) : (
-              <p>{data.salary}</p>
-            )}
-          </div>
-
-          {/* Medical Certificate */}
-          <div>
-          <label className="block text-sm font-medium mb-1">Medical Certificate</label>
-          {isEdit ? (
-            <input
-            type="file"
-            accept="application/pdf"
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
-            required
-          />
-            ) : (
-              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-              <a
-                href={data.documents.medicalCertificate}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                View Medical Certificate
-              </a>
-            </div>
-            )}
-          </div>
-
-          {/* PCC */}
-          <div>
-          <label className="block text-sm font-medium mb-1">PCC</label>
-          {isEdit ? (
-            <input
-            type="file"
-            accept="application/pdf"
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
-            required
-          />
-            ) : (
-              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-              <a
-                href={data.documents.pcc}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                View PCC Document
-              </a>
-            </div>
+              <p>{driver.salary}</p>
             )}
           </div>
 
           {/* Driver Image */}
           <div>
-          <label className="block text-sm font-medium mb-1">Driver Image</label>
-          {isEdit ? (
-            <input
-            type="file"
-            accept="application/pdf"
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
-            required
-          />
+            <label className="block text-sm font-medium mb-1">Driver Image</label>
+            {isEditing ? (
+              <input
+                type="file"
+                accept="application/pdf"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+                required
+              />
             ) : (
               <div className="w-40 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-              <img 
-                src={data.driverImage} 
-                alt="Driver"
-                className="w-full h-auto object-cover"
+                <img
+                  src={driver.dImg}
+                  alt="Driverimg"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Medical Certificate */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Medical Certificate</label>
+            {isEditing ? (
+              <input
+                type="file"
+                accept="application/pdf"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+                required
               />
-            </div>
+            ) : (
+              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+                <img
+                  src={driver.mediCert}
+                  alt="medical"
+                  className="w-auto h-64 object-cover"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* PCC */}
+          <div>
+            <label className="block text-sm font-medium mb-1">PCC</label>
+            {isEditing ? (
+              <input
+                type="file"
+                accept="application/pdf"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+                required
+              />
+            ) : (
+              <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
+                <img
+                  src={driver.pcc}
+                  alt="pcc"
+                  className="w-auto h-64 object-cover"
+                />
+              </div>
             )}
           </div>
 
           {/* Driving License */}
           <div>
-          <label className="block text-sm font-medium mb-1">Driving License</label>
-          {isEdit ? (
-            <input
-            type="file"
-            accept="application/pdf"
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
-            required
-          />
+            <label className="block text-sm font-medium mb-1">Driving License</label>
+            {isEditing ? (
+              <input
+                type="file"
+                accept="application/pdf"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+                required
+              />
             ) : (
               <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-              <img 
-                src={data.holderDocuments.drivingLicense} 
-                alt="Driving License" 
-                className="w-full h-auto object-cover" 
-              />
-            </div>
+                <img
+                  src={driver.dlImd}
+                  alt="Driving License"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
             )}
           </div>
 
           {/* Aadhar */}
           <div>
-          <label className="block text-sm font-medium mb-1">Aadhar Proof</label>
-          {isEdit ? (
-            <input
-            type="file"
-            accept="application/pdf"
-            className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            // onChange={(e) => setMedicalCertificate(e.target.files[0])}
-            required
-          />
+            <label className="block text-sm font-medium mb-1">Aadhar Proof</label>
+            {isEditing ? (
+              <input
+                type="file"
+                accept="application/pdf"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                // onChange={(e) => setMedicalCertificate(e.target.files[0])}
+                required
+              />
             ) : (
               <div className="w-64 h-auto mb-2 border border-gray-300 p-2 rounded-md">
-              <img 
-                src={data.holderDocuments.aadharProof} 
-                alt="Aadhar Proof" 
-                className="w-full h-auto object-cover" 
-              />
-            </div>
+                <img
+                  src={driver.adhar}
+                  alt="Aadhar Proof"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
             )}
           </div>
         </div>
 
         {/* Action Buttons */}
-<div className="flex justify-end mt-4">
-  {isEdit ? (
-    <button
-      onClick={handleUpdate}
-      className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-blue-600"
-    >
-      Update
-    </button>
-  ) : (
-    <button
-      onClick={() => setIsEdit(true)} // Set isEdit to true when Edit button is clicked
-      className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2 hover:bg-blue-600"
-    >
-      Edit
-    </button>
-  )}
-  <button
-    onClick={handleDelete}
-    className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600"
-  >
-    Delete
-  </button>
-</div>
+        <div className="flex justify-end mt-4">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg mr-2 hover:bg-blue-600"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsEditing(true)} // Set isEdit to true when Edit button is clicked
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg mr-2 hover:bg-blue-600"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600"
+              >
+                Deactivate
+              </button>
+            </>
+          )}
+
+        </div>
       </div>
     </div>
   );

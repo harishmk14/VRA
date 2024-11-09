@@ -4,6 +4,7 @@ import FilterModal from '../Drivers/FilterModal'; // Import the FilterModal comp
 import AddDriverModal from '../Drivers/AddDriverModal'; // Import AddVehicleModal component
 import ViewDetailModal from '../Drivers/ViewDetailsModal'; // Import the ViewVehicleModal component
 import ReviewModal from '../Drivers/ReviewModal';
+import { fetchLicenseCategory } from '../Slice/licenseCategorySlice';
 import { GiSteeringWheel } from "react-icons/gi";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDrivers } from '../Slice/driverSlice';
@@ -11,9 +12,11 @@ import { fetchDrivers } from '../Slice/driverSlice';
 const Driver = () => {
   const dispatch = useDispatch();
   const { drivers, loading, error } = useSelector((state) => state.drivers);
+  const { data: licenseCategories, loading: licenseLoading, error: licenseError } = useSelector((state) => state.licenseCategory);
   // Fetch drivers when the component mounts
   useEffect(() => {
     dispatch(fetchDrivers());
+    dispatch(fetchLicenseCategory());
   }, [dispatch]);
 
   const [filter, setFilter] = useState("All");
@@ -141,7 +144,8 @@ const Driver = () => {
       <ViewDetailModal
         isOpen={isViewVehicleModalOpen}
         onClose={() => setIsViewVehicleModalOpen(false)} // Close View Driver Modal
-        driver={selectedDriver} // Pass the selected driver to the modal
+        driver={selectedDriver}
+        dlc={licenseCategories} // Pass the selected driver to the modal
       />
 
       <ReviewModal
@@ -153,63 +157,78 @@ const Driver = () => {
 
       <div className="flex-grow overflow-auto hide-scroll p-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-5">
-          {filteredDrivers.map((driver) => (
-            <div key={driver.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2 grid grid-cols-[30%_70%]">
-              <div className="w-40 h-40">
-                <img
-                  src={driver.image}
-                  alt={driver.dName}
-                  className="object-cover rounded-md"
-                />
+          {filteredDrivers.length > 0 ? (
+            filteredDrivers.map((driver) => (
+              <div key={driver.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2 grid grid-cols-[30%_70%]">
+                <div className="w-40 h-40">
+                  <img
+                    src={driver.dImg}
+                    alt={driver.dName}
+                    className="object-cover rounded-md"
+                  />
+                </div>
+
+                <div className="px-2 space-y-2.5 relative">
+                  <span className={`absolute top-0 right-0 ${getStatusColor(driver.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
+                    {driver.status}
+                  </span>
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    {driver.dName} - {driver.uniqId}
+                  </h2>
+
+                  <div className="grid grid-cols-3 gap-1">
+                    <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                      Exp - {driver.expe}
+                    </span>
+                    <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                      Rating - {driver.starRating} <i className="bi bi-star-fill text-yellow-500 ml-1"></i>
+                    </span>
+                    <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                      Age - {calculateAge(driver.DOB)}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[40%_60%] gap-1">
+                    <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                      <span className="mr-1">{renderShiftIcon(driver.shift)}</span>
+                      {driver.shift}
+                    </span>
+                    <span className="flex text-sm bg-blue-100 rounded-full px-1 py-1 text-center items-center justify-center">
+                      <GiSteeringWheel className="flex mr-2" />
+                      {licenseCategories
+                        .filter(category => driver.DLcategory.includes(category.uniqId))
+                        .map((category, index, arr) => (
+                          <label key={category.uniqId} className="text-black">{category.ABB}{index < arr.length - 1 && " /  "}</label>
+                        ))}
+                    </span>
+                  </div>
+
+
+                  <div className="flex justify-end items-center space-x-5">
+                    <i
+                      className="bi bi-card-text text-blue-500 text-2xl mt-1 cursor-pointer"
+                      onClick={() => {
+                        setSelectedDriver(driver);
+                        setIsReviewModalOpen(true);
+                      }}
+                    ></i>
+                    <i
+                      className="bi bi-eye-fill text-blue-500 text-2xl mr-3 mt-1 cursor-pointer"
+                      onClick={() => {
+                        setSelectedDriver(driver);
+                        setIsViewVehicleModalOpen(true);
+                      }}
+                    ></i>
+                  </div>
+                </div>
               </div>
-
-              <div className="px-2 space-y-2.5 relative">
-                <span className={`absolute top-0 right-0 ${getStatusColor(driver.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
-                  {driver.status}
-                </span>
-                <h2 className="text-lg font-semibold text-gray-800">
-                  {driver.dName} - {driver.uniqId}
-                </h2>
-
-                <div className="grid grid-cols-3 gap-1">
-                  <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Exp - {driver.expe}
-                  </span>
-                  <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Rating - {driver.starRating} <i className="bi bi-star-fill text-yellow-500 ml-1"></i>
-                  </span>
-                  <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Age - {calculateAge(driver.DOB)} {/* Calculate and display age */}
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-1">
-                  <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
-                    <span className="mr-1">{renderShiftIcon(driver.shift)}</span> {/* Add margin to the right of the icon */}
-                    {driver.shift}
-                  </span>
-                  <span className=" flex text-sm bg-blue-100 rounded-full px-1 py-1 text-center items-center justify-center">
-                    <GiSteeringWheel className='flex mr-2' /> {driver.DLcategory}
-                  </span>
-                </div>
-
-                <div className="flex justify-end items-center space-x-5">
-                  <i
-                    className="bi bi-card-text text-blue-500 text-2xl mt-1 cursor-pointer"
-                    onClick={() => {
-                      setSelectedDriver(driver); // Set the selected driver for the review modal
-                      setIsReviewModalOpen(true); // Open Review Modal
-                    }}
-                  ></i>
-                  <i className="bi bi-eye-fill text-blue-500 text-2xl mr-3 mt-1 cursor-pointer"
-                    onClick={() => {
-                      setSelectedDriver(driver); // Set the selected driver
-                      setIsViewVehicleModalOpen(true); // Open View Driver Modal
-                    }}></i>
-                </div>
-              </div>
+            ))
+          ) : (
+            <div className="flex items-center justify-center h-96 col-span-full text-center text-gray-500">
+              No driver available
             </div>
-          ))}
+          )}
         </div>
+
       </div>
     </div>
   );

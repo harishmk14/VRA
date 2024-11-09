@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaCar, FaLock, FaEye, FaEyeSlash, FaEnvelope } from 'react-icons/fa'; // Importing icons from react-icons
 
-const CustomerSupport = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -97,7 +97,7 @@ const CustomerSupport = () => {
                   Remember me
                 </label>
               </div>
-              <a href="#" className="text-sm font-medium text-blue-500 hover:text-blue-500">
+              <a href="/forgot-password" className="text-sm font-medium text-blue-500 hover:text-blue-500">
                 Forgot password?
               </a>
             </div>
@@ -113,7 +113,7 @@ const CustomerSupport = () => {
             {/* Sign Up Link */}
             <p className="text-center text-sm text-gray-600">
               Need another account?{' '}
-              <a href="#" className="font-medium text-blue-500 hover:text-blue-600">
+              <a href="https://m.media-amazon.com/images/I/91wn+Av0LGL._AC_UF1000,1000_QL80_.jpg" className="font-medium text-blue-500 hover:text-blue-600">
                 Create account
               </a>
             </p>
@@ -125,4 +125,4 @@ const CustomerSupport = () => {
   );
 };
 
-export default CustomerSupport;
+export default Login;

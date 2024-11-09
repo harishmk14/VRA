@@ -172,60 +172,66 @@ const Vehicles = () => {
       />
 
       <div className="flex-grow overflow-auto hide-scroll p-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {vehicles.data?.map((vehicle) => (
-            <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
-              <div className="relative">
-                <img
-                  src={vehicle.vImg[1]}
-                  alt={vehicle.vModel}
-                  className="w-full h-44 object-cover rounded-md"
-                />
-                <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
-                  {vehicle.color}
-                </span>
-              </div>
-
-              <div className="p-2 space-y-2">
-                <h2 className="text-sm font-semibold text-gray-800">
-                  {vehicle.brand}
-                </h2>
-
-                <div className="grid grid-cols-3 gap-1 mt-2">
-                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
-                    {vehicle.fuel}
-                  </span>
-                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
-                    {vehicle.gear}
-                  </span>
-                  <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
-                    Seater {vehicle.seatCnt}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-500 text-xs">Range {vehicle.rangeKm}</span>
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                  <div className="text-sm font-bold text-gray-900">
-                    Rs {vehicle.priceDay} <span className="text-xs text-gray-500">Per Day</span>
-                  </div>
-                  <button
-                    className="text-blue-500 rounded-lg text-xl "
-                    onClick={() => {
-                      setSelectedVehicle(vehicle); // Set the selected vehicle
-                      setIsViewVehicleModalOpen(true);
-                      // setEditedVehicle(vehicle); // Open View Vehicle Modal
-                    }}
-                  >
-                    <i className="bi bi-eye-fill"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+  {vehicles.data && vehicles.data.length > 0 ? (
+    vehicles.data.map((vehicle) => (
+      <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
+        <div className="relative">
+          <img
+            src={vehicle.vImg[1]}
+            alt={vehicle.vModel}
+            className="w-full h-44 object-cover rounded-md"
+          />
+          <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
+            {vehicle.color}
+          </span>
         </div>
+
+        <div className="p-2 space-y-2">
+          <h2 className="text-sm font-semibold text-gray-800">
+            {vehicle.brand}
+          </h2>
+
+          <div className="grid grid-cols-3 gap-1 mt-2">
+            <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
+              {vehicle.fuel}
+            </span>
+            <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
+              {vehicle.gear}
+            </span>
+            <span className="text-xs bg-blue-100 rounded-full px-1 py-1 text-center">
+              Seater {vehicle.seatCnt}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center mt-2">
+            <span className="text-gray-500 text-xs">Range {vehicle.rangeKm}</span>
+          </div>
+
+          <div className="flex justify-between items-center mt-2">
+            <div className="text-sm font-bold text-gray-900">
+              Rs {vehicle.priceDay} <span className="text-xs text-gray-500">Per Day</span>
+            </div>
+            <button
+              className="text-blue-500 rounded-lg text-xl"
+              onClick={() => {
+                setSelectedVehicle(vehicle);
+                setIsViewVehicleModalOpen(true);
+              }}
+            >
+              <i className="bi bi-eye-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    ))
+  ) : (
+<div className="flex items-center justify-center h-96 col-span-full text-center text-gray-500">
+  No vehicle available
+</div>
+  )}
+</div>
+
       </div>
     </div>
   );

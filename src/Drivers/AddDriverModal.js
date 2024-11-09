@@ -1,16 +1,21 @@
-import React, { useState , useEffect } from 'react';
-import { useDispatch , useSelector } from 'react-redux';
-import { addDriver ,fetchDrivers } from '../Slice/driverSlice';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addDriver, fetchDrivers } from '../Slice/driverSlice';
 import { fetchDriverLanguages } from '../Slice/driversLang';
+import { fetchLicenseCategory } from '../Slice/licenseCategorySlice';
+import { uploadImg } from '../Slice/uploadImgSlice';
+import { toast } from 'react-toastify';
 
 const AddDriverModal = ({ isOpen, onClose }) => {
   // Redux dispatch hook
   const dispatch = useDispatch();
 
-  const { languages, loading, error } = useSelector((state) => state.driverLanguages);
+  const { languages, loading: languagesLoading, error: languagesError } = useSelector((state) => state.driverLanguages);
+  const { data: licenseCategories, loading: licenseLoading, error: licenseError } = useSelector((state) => state.licenseCategory);
 
   useEffect(() => {
     dispatch(fetchDriverLanguages());
+    dispatch(fetchLicenseCategory());
   }, [dispatch]);
   // State variables
   const [driverName, setDriverName] = useState('');
@@ -24,7 +29,6 @@ const AddDriverModal = ({ isOpen, onClose }) => {
   const [alternateMobileNo, setAlternateMobileNo] = useState('');
   const [address, setAddress] = useState('');
   const [dlNo, setDlNo] = useState('');
-  const [dlCategory, setDlCategory] = useState('');
   const [licenseExpiryDate, setLicenseExpiryDate] = useState('');
   const [insuranceNo, setInsuranceNo] = useState('');
   const [shiftPreference, setShiftPreference] = useState('');
@@ -32,35 +36,52 @@ const AddDriverModal = ({ isOpen, onClose }) => {
   const [drivingHistory, setDrivingHistory] = useState('');
   const [accidentHistory, setAccidentHistory] = useState('');
   const [salary, setSalary] = useState('');
-  const [medicalCertificate, setMedicalCertificate] = useState(null);
-  const [pcc, setPcc] = useState(null);
-  const [driverImage, setDriverImage] = useState(null);
-  const [dl, setDl] = useState(null);
-  const [aadhar, setAadhar] = useState(null);
-
+  const [medicalCertificate, setMedicalCertificate] = useState('');
+  const [pcc, setPcc] = useState('');
+  const [driverImage, setDriverImage] = useState('');
+  const [dl, setDl] = useState('');
+  const [Proof, setProof] = useState('');
+  const [dlCategory, setDlCategory] = useState([]);
   const [languagesKnown, setLanguagesKnown] = useState([]);
 
   // Handle language checkbox change
   const handleLanguageChange = (event) => {
-    const value = event.target.value;
+    const { value, checked } = event.target;
     setLanguagesKnown((prev) =>
-      prev.includes(value) ? prev.filter((lang) => lang !== value) : [...prev, value]
+      checked
+        ? [...prev, value] // Add if checked
+        : prev.filter((id) => id !== value) // Remove if unchecked
+    );
+  };
+
+  const handleLicenseCategoryChange = (event) => {
+    const { value, checked } = event.target;
+    setDlCategory((prev) =>
+      checked
+        ? [...prev, value] // Add if checked
+        : prev.filter((id) => id !== value) // Remove if unchecked
     );
   };
 
   // Handle reset functionality
   const handleReset = () => {
+    document.getElementById("img").value = "";
+    document.getElementById("img1").value = "";
+    document.getElementById("img2").value = "";
+    document.getElementById("img3").value = "";
+    document.getElementById("img4").value = "";
     setDriverName('');
     setGender('');
     setDob('');
     setBatchNo('');
     setExperience('');
+    setDriverType('');
     setEmail('');
     setMobileNo('');
     setAlternateMobileNo('');
     setAddress('');
     setDlNo('');
-    setDlCategory('');
+    setDlCategory([]);
     setLicenseExpiryDate('');
     setInsuranceNo('');
     setShiftPreference('');
@@ -68,23 +89,31 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     setDrivingHistory('');
     setAccidentHistory('');
     setSalary('');
-    setMedicalCertificate(null);
-    setPcc(null);
-    setDriverImage(null);
-    setDl(null);
-    setAadhar(null);
+    setMedicalCertificate(''); // Set file inputs to null
+    setPcc('');
+    setDriverImage('');
+    setDl('');
+
+    setProof('');
     setLanguagesKnown([]);
   };
 
+  const handleClose = () => {
+    handleReset();  // Reset the form fields
+    onClose();  // Close the modal
+  };
   // Handle Add Driver functionality
-  const handleAdd = () => {
+  // Handle Add Driver functionality
+  const handleAdd = (e) => {
+    e.preventDefault();
+
     const driverData = {
       dName: driverName,
       dGender: gender,
-      DOB:dob,
+      DOB: dob,
       batchNo,
       expe: experience,
-      dType: DriverType, // You can manage dType logic as needed
+      dType: DriverType,
       email,
       mobileNo,
       altMobNo: alternateMobileNo,
@@ -98,22 +127,51 @@ const AddDriverModal = ({ isOpen, onClose }) => {
       drivHis: drivingHistory,
       accHis: accidentHistory,
       salary,
-      mediCert: 'dl_image_url.jpg',
-      pcc: 'dl_image_url.jpg',
-      dImg: 'dl_image_url.jpg',
-      dlImd: 'dl_image_url.jpg',
-      adhar: 'dl_image_url.jpg',
+      mediCert: medicalCertificate,
+      pcc,
+      dImg: driverImage,
+      dlImd: dl,
+      adhar: Proof,
       langKow: languagesKnown,
     };
 
-    // Dispatch the action to add the driver
+    // Dispatch the action to add the driver and wait for it to complete
     dispatch(addDriver(driverData)).then(() => {
       dispatch(fetchDrivers());
     });
 
+    handleClose();
     // Optionally reset the form after adding
-    handleReset();
-    onClose(); // Close the modal after adding
+    // Close the modal after adding
+  };
+
+  const handleFileUpload = async (file, setFile) => {
+    const acceptedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    if (file) {
+      if (!acceptedFileTypes.includes(file.type)) {
+        toast.error('Invalid file format. Please upload a JPG or PNG image.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('logo', file);
+
+      try {
+        const response = await dispatch(uploadImg({ formData, variable: 'Driver' }));
+
+        if (response.payload && typeof response.payload.path === 'string') {
+          setFile(response.payload.path);
+          // toast.success('File uploaded successfully.');
+        } else {
+          console.error('Invalid response format:', response.payload);
+          toast.error('Error uploading file. Please try again.');
+        }
+      } catch (error) {
+        console.error('File upload failed:', error);
+        toast.error('Error uploading file. Please try again.');
+      }
+    }
   };
 
   return (
@@ -121,7 +179,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
       <div className="bg-white rounded-lg p-8 pt-0 shadow-lg w-4/5 relative overflow-auto max-h-[90vh]">
         <div className="flex justify-between items-center sticky top-0 bg-white z-10 p-5 px-1 mb-2">
           <h2 className="text-2xl font-bold">Add Driver</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button onClick={handleClose} className="text-gray-500 hover:text-gray-700">
             <span className="text-2xl">&times;</span>
           </button>
         </div>
@@ -192,32 +250,32 @@ const AddDriverModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Driver Type */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Driver Type <span className="text-red-500">*</span></label>
-              <select
-                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-                value={DriverType}
-                onChange={(e) => setDriverType(e.target.value)}
-                required
-              >
-                <option value="">Select Type</option>
-                <option value="Permanent">Permanent</option>
-                <option value="Acting">Acting</option>
-              </select>
-            </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Driver Type <span className="text-red-500">*</span></label>
+            <select
+              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              value={DriverType}
+              onChange={(e) => setDriverType(e.target.value)}
+              required
+            >
+              <option value="">Select Type</option>
+              <option value="Permanent">Permanent</option>
+              <option value="Acting">Acting</option>
+            </select>
+          </div>
 
-          {/* Language Known */}
           <div>
             <label className="block text-sm font-medium mb-1">
               Language Known <span className="text-red-500">*</span>
             </label>
-            <div className="flex flex-wrap gap-5"> {/* Updated flex and added gap */}
+            <div className="flex flex-wrap gap-5">
               {languages.map((language) => (
                 <label key={language.id} className="flex items-center">
                   <input
                     type="checkbox"
                     value={language.uniqId}
                     onChange={handleLanguageChange}
+                    checked={languagesKnown.includes(language.uniqId)}  // Make sure it reflects the current state
                     className="mr-2"
                   />
                   {language.lang}
@@ -225,6 +283,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               ))}
             </div>
           </div>
+
 
 
           {/* Email */}
@@ -299,25 +358,22 @@ const AddDriverModal = ({ isOpen, onClose }) => {
           {/* DL Category */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              DL Category <span className="text-red-500">*</span>
+              License Category <span className="text-red-500">*</span>
             </label>
-            <select
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              value={dlCategory}
-              onChange={(e) => setDlCategory(e.target.value)}
-              required
-            >
-              <option value="">Select Category</option>
-              <option value="LMV">LMV (Light Motor Vehicle)</option>
-              <option value="HMV">HMV (Heavy Motor Vehicle)</option>
-              <option value="MCWG">MCWG (Motorcycle Without Gear)</option>
-              <option value="MCWOG">MCWOG (Motorcycle With Gear)</option>
-              <option value="TAXI">Taxi</option>
-              <option value="OTR">OTR (Off-Road Vehicle)</option>
-              <option value="E-RICKSHAW">E-Rickshaw</option>
-              <option value="LGV">LGV (Light Goods Vehicle)</option>
-              <option value="HGV">HGV (Heavy Goods Vehicle)</option>
-            </select>
+            <div className="flex flex-wrap gap-5">
+              {licenseCategories.map((category) => (
+                <label key={category.id} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value={category.uniqId} // Use category.id as the value
+                    onChange={handleLicenseCategoryChange}
+                    checked={dlCategory.includes(category.uniqId)}
+                    className="mr-2"
+                  />
+                  {category.name}
+                </label>
+              ))}
+            </div>
           </div>
 
 
@@ -420,10 +476,10 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium mb-1">Medical Certificate <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="application/pdf"
+              accept=".jpg,.jpeg,.png"
+              id="img"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              onChange={(e) => setMedicalCertificate(e.target.files[0])}
-              required
+              onChange={(e) => handleFileUpload(e.target.files[0], setMedicalCertificate)}
             />
           </div>
 
@@ -432,10 +488,10 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium mb-1">PCC <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="application/pdf"
+              accept=".jpg,.jpeg,.png"
+              id="img1"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              onChange={(e) => setPcc(e.target.files[0])}
-              required
+              onChange={(e) => handleFileUpload(e.target.files[0], setPcc)}
             />
           </div>
 
@@ -444,10 +500,10 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium mb-1">Driver Image <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png"
+              id="img2"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              onChange={(e) => setDriverImage(e.target.files[0])}
-              required
+              onChange={(e) => handleFileUpload(e.target.files[0], setDriverImage)}
             />
           </div>
 
@@ -456,22 +512,22 @@ const AddDriverModal = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium mb-1">Driving License <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png"
+              id="img3"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              onChange={(e) => setDl(e.target.files[0])}
-              required
+              onChange={(e) => handleFileUpload(e.target.files[0], setDl)}
             />
           </div>
 
-          {/* Aadhar */}
+          {/*Proof*/}
           <div>
             <label className="block text-sm font-medium mb-1">Proof <span className="text-red-500">*</span></label>
             <input
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png"
+              id="img4"
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              onChange={(e) => setAadhar(e.target.files[0])}
-              required
+              onChange={(e) => handleFileUpload(e.target.files[0], setProof)}
             />
           </div>
         </div>
@@ -481,7 +537,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
           <button onClick={handleAdd} className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">
             Add Driver
           </button>
-          <button onClick={handleReset} className="px-4 py-2 bg-red-500 text-white rounded-lg ">
+          <button onClick={handleReset} className="px-4 py-2 bg-gray-500 text-white rounded-lg ">
             Reset
           </button>
         </div>

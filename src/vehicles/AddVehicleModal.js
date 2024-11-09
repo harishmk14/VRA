@@ -164,7 +164,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
     setHolderEmail('');
     setAirbags('');
     setAccidentHistory('');
-    setSelectedFeatures('');
+    setSelectedFeatures([]);
     setVehicleImages([]);
     setRegistrationDocument('');
     setInsuranceDocument('');
@@ -590,12 +590,13 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
           <div>
             <label className="block text-sm font-medium mb-1">Vehicle Features</label>
             <div className="flex flex-wrap gap-2">
-              {features.data.map(feature => (
+              {features.map(feature => (
                 <div key={feature.id} className="flex items-center">
                   <input
                     type="checkbox"
                     value={feature.uniqId} // Set value to feature.uniqId
                     onChange={handleFeatureChange}
+                    checked={selectedFeatures.includes(feature.uniqId)}
                     className="mr-2"
                   />
                   <span>{feature.name}</span>
@@ -691,16 +692,16 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Close Button */}
-        <div className="flex justify-center mt-8 gap-4">
+        <div className="flex justify-end mt-8 gap-4">
           <button
             onClick={handleAdd}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
             Add
           </button>
           <button
             onClick={handleReset}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
           >
             Reset
           </button>

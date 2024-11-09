@@ -6,10 +6,15 @@ import axios from 'axios';
 export const fetchVehicleFeatures = createAsyncThunk(
   'vehicleFeatures/fetchVehicleFeatures',
   async (param) => {
-    const response = await axios.get(`http://localhost:7000/vechicle/getall/feature`);
+    console.log(param);
+    const url = param === 'Bike' 
+      ? 'http://localhost:7000/vechicle/getall/feature/bike' 
+      : 'http://localhost:7000/vechicle/getall/feature';
+    const response = await axios.get(url);
     return response.data; // Assuming response.data contains the array of features
   }
 );
+
 
 // Slice to manage vehicle features state
 const vehicleFeaturesSlice = createSlice({
@@ -27,7 +32,7 @@ const vehicleFeaturesSlice = createSlice({
       })
       .addCase(fetchVehicleFeatures.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.features = action.payload;
+        state.features = action.payload.data;
       })
       .addCase(fetchVehicleFeatures.rejected, (state, action) => {
         state.status = 'failed';

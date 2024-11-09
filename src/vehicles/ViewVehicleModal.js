@@ -75,143 +75,143 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
 
         <div className="grid grid-cols-2 gap-5 gap-x-8">
           {/* Vehicle Type */}
-        <div>
-          <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
-          {isEditing ? (
-            <select
-              name="vType"
-              className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
-              value={editedVehicle.vType || ""}
-              onChange={handleInputChange}
-            >
-              <option value="" disabled>Select Vehicle Type</option>
-              <option value="bike">Bike</option>
-              <option value="car">Car</option>
-              <option value="van">Van</option>
-              <option value="bus">Bus</option>
-              <option value="truck">Delivery Truck</option>
-            </select>
-          ) : (
-            <p>{vehicle.vType}</p>
-          )}
-        </div>
-
-        {/* Brand Name */}
-        <div>
-          <label className="grid text-sm font-medium mb-1">Brand Name</label>
-          {isEditing ? (
-            <input
-              name="brand"
-              value={editedVehicle.brand || ""}
-              onChange={handleInputChange}
-              className="border rounded px-2 py-1 w-full"
-            />
-          ) : (
-            <p>{vehicle.brand}</p>
-          )}
-        </div>
-
-        {/* Vehicle Model */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Vehicle Model</label>
-          {isEditing ? (
-            <input
-              name="vModel"
-              value={editedVehicle.vModel || ""}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            />
-          ) : (
-            <p>{vehicle.vModel}</p>
-          )}
-        </div>
-
-        {/* Registration No */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Registration No</label>
-          {isEditing ? (
-            <input
-              name="regNo"
-              value={editedVehicle.regNo || ""}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            />
-          ) : (
-            <p>{vehicle.regNo}</p>
-          )}
-        </div>
-
-        {/* Registration Type */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Registration Type</label>
-          {isEditing ? (
-            <input
-              type="text"
-              name="regType"
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              value={editedVehicle.regType || "Commercial"} // Assuming it's always commercial
-              readOnly
-            />
-          ) : (
-            <p>{vehicle.regType}</p>
-          )}
-        </div>
-
-        {/* Seater */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Seater</label>
-          {isEditing ? (
-            <input
-              type='number'
-              name="seatCnt"
-              value={editedVehicle.seatCnt || ""}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-            />
-          ) : (
-            <p>{vehicle.seatCnt}</p>
-          )}
-        </div>
-
-        {/* AC/Non-AC */}
-        {vehicle.vType !== 'bike' && (
           <div>
-            <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
+            <label className="grid text-sm font-medium mb-1">Vehicle Type</label>
             {isEditing ? (
               <select
-                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-                name="ac"
-                value={editedVehicle.ac || ""}
+                name="vType"
+                className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
+                value={editedVehicle.vType || ""}
                 onChange={handleInputChange}
               >
-                <option>Select</option>
-                <option value="AC">AC</option>
-                <option value="Non-AC">Non-AC</option>
+                <option value="" disabled>Select Vehicle Type</option>
+                <option value="bike">Bike</option>
+                <option value="car">Car</option>
+                <option value="van">Van</option>
+                <option value="bus">Bus</option>
+                <option value="truck">Delivery Truck</option>
               </select>
             ) : (
-              <p>{vehicle.ac}</p>
+              <p>{vehicle.vType}</p>
             )}
           </div>
-        )}
 
-        {/* Gear Type */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Gear Type</label>
-          {isEditing ? (
-            <select
-              className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
-              name="gear"
-              value={editedVehicle.gear || ""}
-              onChange={handleInputChange}
-            >
-              <option>Select Gear Type</option>
-              <option value="manual">Manual</option>
-              <option value="auto">Automatic</option>
-            </select>
-          ) : (
-            <p>{vehicle.gear}</p>
+          {/* Brand Name */}
+          <div>
+            <label className="grid text-sm font-medium mb-1">Brand Name</label>
+            {isEditing ? (
+              <input
+                name="brand"
+                value={editedVehicle.brand || ""}
+                onChange={handleInputChange}
+                className="border rounded px-2 py-1 w-full"
+              />
+            ) : (
+              <p>{vehicle.brand}</p>
+            )}
+          </div>
+
+          {/* Vehicle Model */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Vehicle Model</label>
+            {isEditing ? (
+              <input
+                name="vModel"
+                value={editedVehicle.vModel || ""}
+                onChange={handleInputChange}
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              />
+            ) : (
+              <p>{vehicle.vModel}</p>
+            )}
+          </div>
+
+          {/* Registration No */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Registration No</label>
+            {isEditing ? (
+              <input
+                name="regNo"
+                value={editedVehicle.regNo || ""}
+                onChange={handleInputChange}
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              />
+            ) : (
+              <p>{vehicle.regNo}</p>
+            )}
+          </div>
+
+          {/* Registration Type */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Registration Type</label>
+            {isEditing ? (
+              <input
+                type="text"
+                name="regType"
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                value={editedVehicle.regType || "Commercial"} // Assuming it's always commercial
+                readOnly
+              />
+            ) : (
+              <p>{vehicle.regType}</p>
+            )}
+          </div>
+
+          {/* Seater */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Seater</label>
+            {isEditing ? (
+              <input
+                type='number'
+                name="seatCnt"
+                value={editedVehicle.seatCnt || ""}
+                onChange={handleInputChange}
+                className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+              />
+            ) : (
+              <p>{vehicle.seatCnt}</p>
+            )}
+          </div>
+
+          {/* AC/Non-AC */}
+          {vehicle.vType !== 'bike' && (
+            <div>
+              <label className="block text-sm font-medium mb-1">AC/Non-AC</label>
+              {isEditing ? (
+                <select
+                  className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
+                  name="ac"
+                  value={editedVehicle.ac || ""}
+                  onChange={handleInputChange}
+                >
+                  <option>Select</option>
+                  <option value="AC">AC</option>
+                  <option value="Non-AC">Non-AC</option>
+                </select>
+              ) : (
+                <p>{vehicle.ac}</p>
+              )}
+            </div>
           )}
-        </div>
+
+          {/* Gear Type */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Gear Type</label>
+            {isEditing ? (
+              <select
+                className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
+                name="gear"
+                value={editedVehicle.gear || ""}
+                onChange={handleInputChange}
+              >
+                <option>Select Gear Type</option>
+                <option value="manual">Manual</option>
+                <option value="auto">Automatic</option>
+              </select>
+            ) : (
+              <p>{vehicle.gear}</p>
+            )}
+          </div>
 
           {/* Fuel Type */}
           <div>
@@ -350,44 +350,44 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
           </div>
 
           {/* Sunroof */}
-      <div>
-        {vehicle.vType !== 'bike' && (
-          <div className="mb-2">
-            <label className="text-sm font-medium mb-1">Sunroof</label>
-            {isEditing ? (
-              <input
-                type="checkbox"
-                name="sunroof"
-                checked={editedVehicle.sunroof === 'Yes'} // Check if stored value is 'Yes'
-                onChange={handleInputChange}
-                className="border rounded ml-20"
-              />
-            ) : (
-              <p>{editedVehicle.sunroof}</p>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* GPS Tracking */}
-      <div>
-        {vehicle.vType !== 'bike' && (
           <div>
-            <label className="text-sm font-medium mb-1">GPS Tracking</label>
-            {isEditing ? (
-              <input
-                type="checkbox"
-                name="gps"
-                checked={editedVehicle.gps === 'Yes'} // Check if stored value is 'Yes'
-                onChange={handleInputChange}
-                className="border rounded ml-11"
-              />
-            ) : (
-              <p>{editedVehicle.gps}</p>
+            {vehicle.vType !== 'bike' && (
+              <div className="mb-2">
+                <label className="text-sm font-medium mb-1">Sunroof</label>
+                {isEditing ? (
+                  <input
+                    type="checkbox"
+                    name="sunroof"
+                    checked={editedVehicle.sunroof === 'Yes'} // Check if stored value is 'Yes'
+                    onChange={handleInputChange}
+                    className="border rounded ml-20"
+                  />
+                ) : (
+                  <p>{editedVehicle.sunroof}</p>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
+
+          {/* GPS Tracking */}
+          <div>
+            {vehicle.vType !== 'bike' && (
+              <div>
+                <label className="text-sm font-medium mb-1">GPS Tracking</label>
+                {isEditing ? (
+                  <input
+                    type="checkbox"
+                    name="gps"
+                    checked={editedVehicle.gps === 'Yes'} // Check if stored value is 'Yes'
+                    onChange={handleInputChange}
+                    className="border rounded ml-11"
+                  />
+                ) : (
+                  <p>{editedVehicle.gps}</p>
+                )}
+              </div>
+            )}
+          </div>
 
 
           {/* Insurance ID */}
@@ -551,34 +551,34 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
             )}
           </div>
 
-{/* Vehicle Features */}
-<div>
-  <label className="block text-sm font-medium mb-1">Vehicle Features</label>
-  {isEditing ? (
-    <div className="flex flex-wrap gap-2">
-      {features.data.map(feature => (
-        <div key={feature.uniqId} className="flex items-center">
-<input
-  type="checkbox"
-  value={feature.uniqId}
-  onChange={handleFeatureChange}
-  className="mr-2"
-  checked={selectedFeatures.includes(feature.uniqId)}
-/>
-          <span>{feature.name}</span>
-        </div>
-      ))}
-    </div>
-  ) : (
-<ul>
-      {features.data
-        .filter(feature => vehicle.featureId.includes(feature.uniqId))
-        .map(feature => (
-          <li key={feature.uniqId} className="text-gray-600">
-            <i className="bi bi-dot"></i>{feature.name}
-          </li>
-        ))}
-    </ul>
+          {/* Vehicle Features */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Vehicle Features</label>
+            {isEditing ? (
+              <div className="flex flex-wrap gap-2">
+                {features.data.map(feature => (
+                  <div key={feature.uniqId} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      value={feature.uniqId}
+                      onChange={handleFeatureChange}
+                      className="mr-2"
+                      checked={selectedFeatures.includes(feature.uniqId)}
+                    />
+                    <span>{feature.name}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <ul>
+                {features.data
+                  .filter(feature => vehicle.featureId.includes(feature.uniqId))
+                  .map(feature => (
+                    <li key={feature.uniqId} className="text-gray-600">
+                      <i className="bi bi-dot"></i>{feature.name}
+                    </li>
+                  ))}
+              </ul>
             )}
           </div>
 
