@@ -3,10 +3,16 @@ import logo from '../Assets/img/logo1.png';
 
 const Invoicea4 = () => {
   return (
-    <div className="w-[190mm] mx-auto p-8 bg-white border border-gray-300 shadow-lg rounded-lg">
+    <div className="w-[190mm] mx-auto bg-white border border-gray-300 shadow-lg rounded-lg relative overflow-hidden p-8">
+    {/* Ribbon */}
+    <div className="absolute top-0 left-0 w-32 h-32">
+  <div className="absolute transform rotate-[-45deg] bg-blue-600 text-white text-sm font-semibold py-1 left-[-26%] top-[20%] w-[120%] text-center shadow-md">
+    Paid
+  </div>
+</div>
       {/* Header Section */}
       <header className="flex justify-between items-center mb-6 border-b pb-4">
-        <div><img src={logo} alt="Company Logo" /></div>
+        <div className='ml-10'><img src={logo} alt="Company Logo" /></div>
         <div className="text-right">
           <p className="font-semibold text-lg">Invoice #12345</p>
           <p className="text-gray-500 text-sm">Date Issued: 2024-11-04</p>
