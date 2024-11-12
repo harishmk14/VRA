@@ -3,7 +3,7 @@ import React from 'react';
 
 const LeftSection = ({ data }) => {
   return (
-    <div className="flex flex-col h-[33.6rem] bg-white rounded-md shadow-md">
+    <div className="flex flex-col h-[32rem] overflow-y-auto">
       <div className='flex justify-between items-center px-4 py-3 border-b border-gray-100'>
         <h2 className="text-blue-500 font-bold text-lg">Invoice</h2>
         <button

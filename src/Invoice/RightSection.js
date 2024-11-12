@@ -45,7 +45,7 @@ const RightSection = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-[33.6rem] bg-white rounded-md shadow-md">
+    <div className="flex flex-col h-[32rem] overflow-y-auto">
       {/* Header Section */}
       <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100">
         {/* Heading */}
@@ -66,6 +66,7 @@ const RightSection = () => {
             ref={shareDrawerRef}
             className={`absolute top-full left-1.5 mt-2 transform -translate-x-1/2 flex flex-col bg-gray-200 p-2 rounded-full space-y-3 transition-all duration-300 ease-in-out ${isShareDrawerOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0 pointer-events-none'
               }`}
+              style={{ zIndex: 50 }} 
           >
             <button
               className="hover:bg-gray-400 bg-gray-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
@@ -96,6 +97,7 @@ const RightSection = () => {
             ref={downloadDrawerRef}
             className={`absolute top-full left-[40%] mt-2 transform -translate-x-1/2 flex flex-col bg-gray-200 p-2 rounded-full space-y-3 transition-all duration-300 ease-in-out ${isDownloadDrawerOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0 pointer-events-none'
               }`}
+              style={{ zIndex: 50 }} 
           >
             <button
               className="hover:bg-gray-400 bg-gray-500 px-2.5 py-1.5 rounded-full text-white flex items-center"

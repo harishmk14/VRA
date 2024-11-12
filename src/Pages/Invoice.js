@@ -98,31 +98,35 @@ const Invoice = () => {
       <FilterModal isOpen={isFilterModalOpen} onClose={closeFilterModal} onApplyFilters={handleApplyFilters} />
 
       {/* Updated Search and Button Section */}
-      <div className="relative w-full h-auto flex items-center justify-between py-3">
-        <input
-          type="search"
-          placeholder="Search Invoice"
-          className="w-1/5 pl-10 py-[6px] bg-white rounded-lg border border-gray-300 focus:outline-none focus:border-gray-500 placeholder-gray-400 text-sm"
-        />
-        <i className="bi bi-search text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={openAddModal}
-            className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1"
-          >
-            <i className="bi bi-file-earmark-plus"></i> Create
-          </button>
+      <div className="h-full w-full grid grid-rows-[auto_1fr]">
+        <div className="relative w-full h-auto flex items-center justify-between py-3 flex-wrap gap-3">
+          <div className="relative flex-grow md:w-1/5 w-full">
+            <input
+              type="search"
+              placeholder="Search Invoice"
+              className="pl-10 py-[6px] bg-white rounded-lg border border-gray-300 focus:outline-none focus:border-gray-500 placeholder-gray-400 text-sm"
+            />
+            <i className="bi bi-search text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <button
+              onClick={openAddModal}
+              className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1"
+            >
+              <i className="bi bi-file-earmark-plus"></i> Create
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-4 h-full">
+        <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
           <LeftSection data={data} />
         </div>
-        <div className="col-span-2">
+        <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
           <RightSection/>
         </div>
       </div>
+    </div>
     </div>
   );
 };

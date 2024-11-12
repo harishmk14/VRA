@@ -6,11 +6,8 @@ import axios from 'axios';
 export const fetchVehicleFeatures = createAsyncThunk(
   'vehicleFeatures/fetchVehicleFeatures',
   async (param) => {
-    console.log(param);
-    const url = param === 'Bike' 
-      ? 'http://localhost:7000/vechicle/getall/feature/bike' 
-      : 'http://localhost:7000/vechicle/getall/feature';
-    const response = await axios.get(url);
+    const queryParam = param ? param : 'all';
+    const response = await axios.get(`http://localhost:7000/vechicle/getall/feature/${queryParam}`);
     return response.data; // Assuming response.data contains the array of features
   }
 );
