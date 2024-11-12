@@ -12,7 +12,7 @@ import Payment from './Pages/Payment';
 import Maintenance from './Pages/Maintenance';
 import Performance from './Pages/Performance';
 import Setting from './Pages/Settings';
-import CustomerSupport from './Pages/Customersupport';
+import Employee from './Pages/Employee';
 import Login from './Authendication/Login';
 import ForgotPassword from './Authendication/ForgotPassword';
 import { ToastContainer } from 'react-toastify'; 
@@ -54,7 +54,7 @@ const App = () => {
             <Route path="maintenance" element={<Maintenance />} />
             <Route path="performance" element={<Performance />} />
             <Route path="setting" element={<Setting />} />
-            <Route path="customersupport" element={<CustomerSupport />} />
+            <Route path="employee" element={<Employee />} />
           </Route>
         )}
       </Routes>
