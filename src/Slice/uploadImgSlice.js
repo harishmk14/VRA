@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Async thunk for uploading customer image
 export const uploadImg = createAsyncThunk(
   'uploadImg/uploadImg',
   async ({ formData, variable }, { rejectWithValue }) => {
@@ -29,14 +28,14 @@ const uploadImgSlice = createSlice({
   },
   reducers: {
     resetError: (state) => {
-      state.error = null; // Reset error when called
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(uploadImg.pending, (state) => {
         state.imageStatus = 'loading';
-        state.error = null; // Clear any previous errors
+        state.error = null;
       })
       .addCase(uploadImg.fulfilled, (state, action) => {
         state.imageStatus = 'succeeded';
@@ -48,8 +47,6 @@ const uploadImgSlice = createSlice({
   },
 });
 
-// Export the resetError action
 export const { resetError } = uploadImgSlice.actions;
 
-// Export the reducer
 export default uploadImgSlice.reducer;

@@ -16,12 +16,12 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onApplyFilters(filters); // Pass the filters back to the parent
-    onClose(); // Close the modal after applying filters
+    onApplyFilters(filters); 
+    onClose(); 
   };
 
   const handleReset = () => {
-    setFilters({ date: '' }); // Reset filters
+    setFilters({ date: '' }); 
   };
 
   return (

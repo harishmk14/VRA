@@ -97,7 +97,6 @@ const Invoice = () => {
       <AddInvoiceModal isOpen={isAddModalOpen} onClose={closeAddModal} onAddInvoice={handleAddInvoice} />
       <FilterModal isOpen={isFilterModalOpen} onClose={closeFilterModal} onApplyFilters={handleApplyFilters} />
 
-      {/* Updated Search and Button Section */}
       <div className="h-full w-full grid grid-rows-[auto_1fr]">
         <div className="relative w-full h-auto flex items-center justify-between py-3 flex-wrap gap-3">
           <div className="relative flex-grow md:w-1/5 w-full">

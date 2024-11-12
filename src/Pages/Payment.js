@@ -1,7 +1,7 @@
 // Payment.js
 import React, { useState } from 'react';
-import AddPaymentModal from '../Payment/AddPaymentModal'; // Import the modal component
-import FilterModal from '../Payment/FilterModal'; // Import the filter modal component
+import AddPaymentModal from '../Payment/AddPaymentModal'; 
+import FilterModal from '../Payment/FilterModal'; 
 
 const Payment = () => {
   const [currentEntries] = useState([]);
@@ -11,26 +11,25 @@ const Payment = () => {
   const [currentPage] = useState(1);
   const [totalPages] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false); // State for filter modal
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const openAddModal = () => setIsAddModalOpen(true);
   const closeAddModal = () => setIsAddModalOpen(false);
-  const openFilterModal = () => setIsFilterModalOpen(true); // Open filter modal
-  const closeFilterModal = () => setIsFilterModalOpen(false); // Close filter modal
+  const openFilterModal = () => setIsFilterModalOpen(true); 
+  const closeFilterModal = () => setIsFilterModalOpen(false); 
 
   const handleAddPayment = (newPayment) => {
-    setPaymentData((prevData) => [...prevData, newPayment]); // Add new payment to the list
-    console.log("New payment added:", newPayment); // Handle adding payment logic here
+    setPaymentData((prevData) => [...prevData, newPayment]); 
+    console.log("New payment added:", newPayment); 
   };
 
   const handleApplyFilters = (filters) => {
-    console.log("Applied filters:", filters); // Handle filter logic here
-    // Implement filter logic here
-    closeFilterModal(); // Close the modal after applying filters
+    console.log("Applied filters:", filters); 
+    closeFilterModal(); 
   };
 
   const renderPageNumbers = () => {
-    return <span className="text-blue-500 text-sm mx-2">1</span>; // Example page number
+    return <span className="text-blue-500 text-sm mx-2">1</span>; 
   };
 
   return (
@@ -43,7 +42,7 @@ const Payment = () => {
       <FilterModal
         isOpen={isFilterModalOpen}
         onClose={closeFilterModal}
-        onApplyFilters={handleApplyFilters} // Pass the handler to filter modal
+        onApplyFilters={handleApplyFilters} 
       />
 
       <div className="h-full w-full grid grid-rows-[auto_1fr]">
@@ -62,7 +61,7 @@ const Payment = () => {
               <i className="bi bi-wallet-fill"></i> Add
             </button>
             <button
-              onClick={openFilterModal} // Open filter modal
+              onClick={openFilterModal} 
               className="bg-blue-500 text-white px-2 py-1 rounded-lg flex items-center gap-1"
             >
               <i className="bi bi-funnel-fill"></i> Filter

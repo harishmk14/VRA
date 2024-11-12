@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import FilterPopup from './FilterPopup'; // Import the new FilterPopup component
+import FilterPopup from './FilterPopup'; 
 
 const ReviewModal = ({ reviews, onClose }) => {
   const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
-  const [filteredReviews, setFilteredReviews] = useState(reviews); // State to hold filtered reviews
-  const [openTripIndex, setOpenTripIndex] = useState(null); // State to handle opening and closing trip details
+  const [filteredReviews, setFilteredReviews] = useState(reviews); 
+  const [openTripIndex, setOpenTripIndex] = useState(null); 
 
   const handleFilterApply = ({ date, starRating }) => {
     const filtered = reviews.filter((review) => {
@@ -12,11 +12,11 @@ const ReviewModal = ({ reviews, onClose }) => {
       const matchesRating = starRating ? review.rating === Number(starRating) : true;
       return matchesDate && matchesRating;
     });
-    setFilteredReviews(filtered); // Update the filtered reviews
+    setFilteredReviews(filtered); 
   };
 
   const toggleTripDetails = (index) => {
-    setOpenTripIndex(openTripIndex === index ? null : index); // Toggle the trip details drawer
+    setOpenTripIndex(openTripIndex === index ? null : index); 
   };
 
   return (
@@ -27,7 +27,7 @@ const ReviewModal = ({ reviews, onClose }) => {
             <h2 className="text-xl font-semibold">Reviews</h2>
             <button 
               className="text-blue-500 text-sm ml-5 mt-1 font-semibold"
-              onClick={() => setIsFilterPopupOpen(true)} // Open the filter popup
+              onClick={() => setIsFilterPopupOpen(true)} 
             >
               Filter
             </button>
@@ -59,7 +59,7 @@ const ReviewModal = ({ reviews, onClose }) => {
                   <p className="text-gray-500">{review.tripAreaDetails}</p>
                   <i
                     className={`bi bi-chevron-${openTripIndex === index ? 'up' : 'down'} text-blue-500 text-lg cursor-pointer`}
-                    onClick={() => toggleTripDetails(index)} // Toggle the trip details
+                    onClick={() => toggleTripDetails(index)} 
                   ></i>
                 </div>
 

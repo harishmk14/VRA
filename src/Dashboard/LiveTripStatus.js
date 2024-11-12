@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TripDetailsModal from './TripDetailsModal'; // Import the new modal component
+import TripDetailsModal from './TripDetailsModal'; 
 
 const statusColor = {
   'Ongoing': 'bg-blue-500',
@@ -8,38 +8,33 @@ const statusColor = {
 };
 
 const LiveVehicleStatus = ({ trips }) => {
-  const [selectedTrip, setSelectedTrip] = useState(null); // To track selected trip
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility
-  const [isFilterOpen, setIsFilterOpen] = useState(false); // Filter modal visibility
+  const [selectedTrip, setSelectedTrip] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isFilterOpen, setIsFilterOpen] = useState(false); 
   const [filters, setFilters] = useState({
     vehicleType: 'all',
     status: 'all',
     driveOption: 'all',
   });
 
-  // Function to open modal with trip details
   const handleOpenModal = (trip) => {
     setSelectedTrip(trip);
     setIsModalOpen(true);
   };
 
-  // Function to close modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedTrip(null);
   };
 
-  // Function to open filter popup
   const handleOpenFilter = () => {
     setIsFilterOpen(true);
   };
 
-  // Function to close filter popup
   const handleCloseFilter = () => {
     setIsFilterOpen(false);
   };
 
-  // Function to handle filter changes
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({
@@ -59,7 +54,7 @@ const LiveVehicleStatus = ({ trips }) => {
         <h2 className='text-lg font-bold text-gray-600 '>Live Trip Status</h2>
         <button 
           className='text-gray-600 font-bold'
-          onClick={handleOpenFilter} // Open filter popup on click
+          onClick={handleOpenFilter} 
         >
           <i class="bi bi-funnel-fill"></i> Filter
         </button>
@@ -90,7 +85,7 @@ const LiveVehicleStatus = ({ trips }) => {
                 <div className='flex w-1/6 h-full justify-center'>
                   <button 
                     className='shadow-md text-xs px-1.5 py-1 rounded-full bg-blue-500 text-white'
-                    onClick={() => handleOpenModal(trip)} // Open modal on button click
+                    onClick={() => handleOpenModal(trip)} 
                   >
                     Details
                   </button>
@@ -106,7 +101,6 @@ const LiveVehicleStatus = ({ trips }) => {
         </div>
       </div>
 
-      {/* Modal for trip details */}
       {isModalOpen && selectedTrip && (
         <TripDetailsModal 
           selectedTrip={selectedTrip} 
@@ -114,12 +108,10 @@ const LiveVehicleStatus = ({ trips }) => {
         />
       )}
 
-      {/* Filter trip */}
       {isFilterOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg w-96 relative">
 
-            {/* X Button in the top-right corner */}
             <button 
               onClick={handleCloseFilter} 
               className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900"
@@ -178,7 +170,7 @@ const LiveVehicleStatus = ({ trips }) => {
             <div className='flex justify-between mt-5'>
               <button 
                 className='bg-blue-500 text-white px-4 py-2 rounded'
-                onClick={handleApplyFilters} // Apply filters
+                onClick={handleApplyFilters} 
               >
                 Apply Filters
               </button>

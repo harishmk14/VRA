@@ -1,17 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios'; // Import Axios
+import axios from 'axios'; 
 
 export const deleteVehicle = createAsyncThunk(
   'vehicles/deleteVehicle',
   async (vehicleId) => {
-    // Use Axios to make the DELETE request
     const response = await axios.delete(`http://localhost:7000/vechicle/delete/${vehicleId}`);
     
     if (response.status !== 200) {
-      throw new Error('Failed to delete vehicle'); // Throw error if response status is not OK
+      throw new Error('Failed to delete vehicle'); 
     }
 
-    return vehicleId; // Return the vehicle ID to remove from state
+    return vehicleId; 
   }
 );
 
@@ -23,7 +22,7 @@ const vehiclesSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Other reducers like addVehicle, updateVehicle, etc.
+    
   },
   extraReducers: (builder) => {
     builder
@@ -32,8 +31,7 @@ const vehiclesSlice = createSlice({
       })
       .addCase(deleteVehicle.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // Remove the deleted vehicle from the state
-        state.vehicles = state.vehicles.filter(vehicle => vehicle.uniqId !== action.payload); // Ensure the correct identifier is used
+        state.vehicles = state.vehicles.filter(vehicle => vehicle.uniqId !== action.payload); 
       })
       .addCase(deleteVehicle.rejected, (state, action) => {
         state.status = 'failed';
@@ -42,6 +40,6 @@ const vehiclesSlice = createSlice({
   },
 });
 
-export const { /* other actions */ } = vehiclesSlice.actions;
+export const {} = vehiclesSlice.actions;
 
 export default vehiclesSlice.reducer;

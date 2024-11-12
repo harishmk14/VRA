@@ -33,28 +33,25 @@ const Sidebar = () => {
 
   return (
     <div className='flex flex-col bg-white min-h-screen shadow-lg sticky top-0'>
-      {/* Logo Section */}
       <div className='flex items-center justify-center h-20 px-6'>
         <img src={logo} className='max-w-[12rem] h-auto' alt="Company Logo" />
       </div>
 
-      {/* Navigation Container */}
       <div className='flex flex-col flex-grow overflow-y-auto px-6'>
-        {/* Main Navigation */}
-        <nav className='pt-4 pb-4'>
-          <ul className="space-y-1.5">
+        <nav className='py-5'>
+          <ul className="space-y-2">
             {navigationItems.map(({ path, icon, label }) => (
               <li key={path}>
                 <button
                   onClick={() => navigateTo(path)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
-                    ${isActive(path)
+        ${isActive(path)
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
                   <i className={`${icon} ${isActive(path) ? 'text-blue-600' : ''}`}></i>
-                  <span className="text-sm font-medium">{label}</span>
+                  <span className="text-base font-medium">{label}</span>
                 </button>
               </li>
             ))}

@@ -3,9 +3,9 @@ import React, { useState , useEffect } from 'react';
 import '../index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllVehicles } from '../Slice/vehicleSlice';
-import FilterModal from '../vehicles/FilterModal'; // Import the FilterModal component
-import AddVehicleModal from '../vehicles/AddVehicleModal'; // Import AddVehicleModal component
-import ViewVehicleModal from '../vehicles/ViewVehicleModal'; // Import the ViewVehicleModal component
+import FilterModal from '../vehicles/FilterModal'; 
+import AddVehicleModal from '../vehicles/AddVehicleModal'; 
+import ViewVehicleModal from '../vehicles/ViewVehicleModal'; 
 
 const Vehicles = () => {
   const dispatch = useDispatch();
@@ -15,9 +15,9 @@ const Vehicles = () => {
 
   const [filter, setFilter] = useState("All");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); // State for Add Vehicle Modal
-  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); // State for View Vehicle Modal
-  const [selectedVehicle, setSelectedVehicle] = useState(null); // State to hold the selected vehicle
+  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false);
+  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); 
+  const [selectedVehicle, setSelectedVehicle] = useState(null); 
 
 
   useEffect(() => {
@@ -79,29 +79,29 @@ const Vehicles = () => {
       seater: 5,
       range: "500 km",
       price: 1600,
-      status: "Service", // New status added here
+      status: "Service", 
     },
   ];
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
-        return "bg-yellow-400"; // Yellow for Pending
+        return "bg-yellow-400"; 
       case "In Journey":
-        return "bg-green-500"; // Green for In Journey
+        return "bg-green-500"; 
       case "Available":
-        return "bg-blue-500"; // Blue for Available
+        return "bg-blue-500"; 
       case "Service":
-        return "bg-red-600"; // Red for Service
+        return "bg-red-600"; 
       default:
-        return "bg-gray-300"; // Default gray if status is unknown
+        return "bg-gray-300"; 
     }
   };
 
   const filteredVehicles = vehiclesData.filter((vehicle) => {
-    if (filter === "All") return true; // Show all vehicles
-    if (filter === "Active") return vehicle.status === "Pending" || vehicle.status === "In Journey"; // Show Pending & In Journey
-    if (filter === "Available") return vehicle.status === "Available"; // Show Available
-    if (filter === "Maintenance") return vehicle.status === "Service"; // Show Service
+    if (filter === "All") return true;
+    if (filter === "Active") return vehicle.status === "Pending" || vehicle.status === "In Journey"; 
+    if (filter === "Available") return vehicle.status === "Available"; 
+    if (filter === "Maintenance") return vehicle.status === "Service"; 
     return false;
   });
 
@@ -137,13 +137,13 @@ const Vehicles = () => {
         </div>
         <div  className='flex gap-3'>
         <button 
-          onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Vehicle Modal
+          onClick={() => setIsAddVehicleModalOpen(true)} 
           className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
         >
           <i className="bi bi-plus text-3xl"></i>
         </button>
         <button
-          onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
+          onClick={() => setIsFilterModalOpen(true)} 
           className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
         >
           <i className="bi bi-funnel-fill"></i> Filter
@@ -161,14 +161,14 @@ const Vehicles = () => {
       {/* Add Vehicle Modal */}
       <AddVehicleModal
         isOpen={isAddVehicleModalOpen}
-        onClose={() => setIsAddVehicleModalOpen(false)} // Close Add Vehicle Modal
+        onClose={() => setIsAddVehicleModalOpen(false)} 
       />
 
       {/* View Vehicle Modal */}
       <ViewVehicleModal
         isOpen={isViewVehicleModalOpen}
-        onClose={() => setIsViewVehicleModalOpen(false)} // Close View Vehicle Modal
-        vehicle={selectedVehicle} // Pass the selected vehicle to the modal
+        onClose={() => setIsViewVehicleModalOpen(false)} 
+        vehicle={selectedVehicle} 
       />
 
       <div className="flex-grow overflow-auto hide-scroll p-3">

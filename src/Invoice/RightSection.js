@@ -45,14 +45,10 @@ const RightSection = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-[32rem] overflow-y-auto">
-      {/* Header Section */}
+    <div className="flex flex-col h-[33.5rem] overflow-y-auto">
       <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100">
-        {/* Heading */}
         <h2 className="text-black font-bold text-lg ml-2">INV-008614</h2>
-
         <div className="relative flex space-x-3">
-          {/* Share Button */}
           <button
             ref={shareButtonRef}
             className="hover:bg-blue-400 bg-blue-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
@@ -60,8 +56,6 @@ const RightSection = () => {
           >
             <i className="bi bi-share-fill"></i>
           </button>
-
-          {/* Share Drawer (Mail and WhatsApp Buttons) */}
           <div
             ref={shareDrawerRef}
             className={`absolute top-full left-1.5 mt-2 transform -translate-x-1/2 flex flex-col bg-gray-200 p-2 rounded-full space-y-3 transition-all duration-300 ease-in-out ${isShareDrawerOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0 pointer-events-none'
@@ -82,8 +76,6 @@ const RightSection = () => {
               <i className="bi bi-whatsapp"></i>
             </button>
           </div>
-
-          {/* Download Button */}
           <button
             ref={downloadButtonRef}
             className="hover:bg-green-400 bg-green-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
@@ -91,8 +83,6 @@ const RightSection = () => {
           >
             <i className="bi bi-download"></i>
           </button>
-
-          {/* Download Drawer (JPG and PDF Options) */}
           <div
             ref={downloadDrawerRef}
             className={`absolute top-full left-[40%] mt-2 transform -translate-x-1/2 flex flex-col bg-gray-200 p-2 rounded-full space-y-3 transition-all duration-300 ease-in-out ${isDownloadDrawerOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0 pointer-events-none'
@@ -113,8 +103,6 @@ const RightSection = () => {
               PDF
             </button>
           </div>
-
-          {/* Print Button */}
           <button
             className="hover:bg-red-400 bg-red-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
             onClick={() => alert('Print clicked')}

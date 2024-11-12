@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import VehicleBook from '../Booking/VehicleBook'; // Import the VehicleBook component
+import VehicleBook from '../Booking/VehicleBook'; 
 
 const VehicleAvailability = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false); // For booking modal
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false); 
   const [availableVehicles, setAvailableVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
-  const [selectedVehicle, setSelectedVehicle] = useState(null); // Track the selected vehicle for booking
+  const [selectedVehicle, setSelectedVehicle] = useState(null); 
 
   const handleCheckAvailability = () => {
-    // Simulating vehicle data (could be fetched from an API in a real-world scenario)
     const vehiclesData = [
       {
         id: 1,
@@ -58,7 +57,7 @@ const VehicleAvailability = () => {
     ];
 
     setAvailableVehicles(vehiclesData);
-    setFilteredVehicles(vehiclesData); // Assuming no filters applied yet
+    setFilteredVehicles(vehiclesData); 
     setIsModalOpen(true);
   };
 
@@ -74,7 +73,7 @@ const VehicleAvailability = () => {
 
   const handleBookVehicle = (vehicle) => {
     setSelectedVehicle(vehicle);
-    setIsBookingModalOpen(true); // Open booking modal
+    setIsBookingModalOpen(true); 
   };
 
   return (
@@ -178,8 +177,8 @@ const VehicleAvailability = () => {
           <div className="bg-white p-6 pt-0 rounded-xl shadow-lg w-full h-full overflow-auto">
             {/* Booking form */}
             <VehicleBook
-              vehicle={selectedVehicle} // Pass the selected vehicle data if necessary
-              closeModal={handleCloseBookingModal} // Pass close modal function
+              vehicle={selectedVehicle} 
+              closeModal={handleCloseBookingModal} 
             />
           </div>
         </div>

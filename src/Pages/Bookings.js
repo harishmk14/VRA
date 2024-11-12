@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import VehicleAvailability from '../Dashboard/VehicleAvailabilitys';
-import FilterModal from '../Booking/FilterModal'; // Import the filter modal
+import FilterModal from '../Booking/FilterModal'; 
 import BookingDetailModal from '../Booking/BookingDetailModal';
 import DriverListModal from '../Booking/DriverListModal';
 import '../index.css';
@@ -62,7 +62,6 @@ const Booking = () => {
     bookingType: index % 2 === 0 ? 'Online' : 'Offline',
     bookedAt: `2024-10-0${(index % 5) + 1}`,
     vehicleNo: `VEH${(index % 5) + 1}234`,
-    // driverId: `D00${(index % 5) + 1}`,
     customerName: `Customer ${index + 1}`,
     journeyType: index % 2 === 0 ? 'One-way' : 'Round-trip',
     noOfPersons: (index % 5) + 1,
@@ -72,19 +71,17 @@ const Booking = () => {
   const statusOptions = ["Pending", "Completed", "Started", "Cancelled"];
 
   const [showDriverListModal, setShowDriverListModal] = useState(false);
-  // const [selectedBooking, setSelectedBooking] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [showDetailModal, setShowDetailModal] = useState(false); // State for booking detail modal
-  const [selectedBooking, setSelectedBooking] = useState(null); // State for selected booking
+  const [showDetailModal, setShowDetailModal] = useState(false); 
+  const [selectedBooking, setSelectedBooking] = useState(null); 
   const [filters, setFilters] = useState({ bookingType: '', journeyType: '' });
 
   const entriesPerPage = 7;
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
 
-  // Filter the booking data based on the selected filters
   const filteredEntries = bookingData.filter((booking) => {
     return (
       (filters.bookingType ? booking.bookingType === filters.bookingType : true) &&
@@ -105,16 +102,15 @@ const Booking = () => {
 
   const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
 
-  // Update currentEntries based on filtered data
   const currentEntries = filteredEntries.slice(indexOfFirstEntry, indexOfLastEntry);
 
-  const modalRef = useRef(null); // Create a ref for the booking modal
-  const filterModalRef = useRef(null); // Create a ref for the filter modal
+  const modalRef = useRef(null); 
+  const filterModalRef = useRef(null); 
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
   const handleDetailsClick = (booking) => {
-    setSelectedBooking(booking); // Set the selected booking
-    setShowDetailModal(true); // Open the detail modal
+    setSelectedBooking(booking); 
+    setShowDetailModal(true);
   };
   const toggleModal = () => setShowModal(!showModal);
   const toggleFilterModal = () => setShowFilterModal(!showFilterModal);
@@ -123,7 +119,6 @@ const Booking = () => {
     setFilters(filterValues);
   };
 
-  // Close modals if the user clicks outside of them
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -214,11 +209,10 @@ const Booking = () => {
         </div>
 
 
-        {/* Booking Detail Modal */}
         {showDetailModal && (
           <BookingDetailModal
             booking={selectedBooking}
-            onClose={() => setShowDetailModal(false)} // Close modal handler
+            onClose={() => setShowDetailModal(false)} 
           />
         )}
 
@@ -230,13 +224,12 @@ const Booking = () => {
           />
         )}
 
-        {/* Modal for Booking */}
         <div ref={modalRef} className={`absolute z-10 mt-14 mr-5 right-0 transition-opacity duration-300 ${showModal ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <div className="bg-white p-5 rounded-md shadow-lg w-96">
             <VehicleAvailability />
           </div>
         </div>
-        {/* Filter Modal */}
+
         {showFilterModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-5 rounded-md shadow-lg w-96 z-10">
@@ -275,7 +268,7 @@ const Booking = () => {
                       <td className="px-4 py-3 text-center">
                         <button
                           className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
-                          onClick={() => handleAssignClick(booking)} // Call the function to open the modal with booking info
+                          onClick={() => handleAssignClick(booking)} 
                         >
                           Assign
                         </button>
@@ -289,7 +282,7 @@ const Booking = () => {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-between items-center px-4 py-2"> {/* Centered pagination */}
+            <div className="flex justify-between items-center px-4 py-2"> 
               <div className='text-gray-500 w-2/3'>
                 Showing {indexOfFirstEntry + 1} to {Math.min(indexOfLastEntry, bookingData.length)} of {bookingData.length} entries
               </div>

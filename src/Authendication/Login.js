@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaCar, FaLock, FaEye, FaEyeSlash, FaEnvelope } from 'react-icons/fa'; // Importing icons from react-icons
+import { FaCar, FaLock, FaEye, FaEyeSlash, FaEnvelope } from 'react-icons/fa';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -7,19 +7,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Define handleSubmit function
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add form submission logic here
     console.log('Form submitted:', { email, password, rememberMe });
   };
 
   return (
     <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
-        {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Header */}
           <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-8 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 backdrop-blur mb-4">
               <FaCar className="w-8 h-8 text-white" />
@@ -28,9 +24,7 @@ const Login = () => {
             <p className="text-blue-100">Sign in to access your account</p>
           </div>
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
-            {/* Email Input */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
                 Email Address
@@ -51,7 +45,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Password Input */}
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium text-gray-700 block">
                 Password
@@ -83,7 +76,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
@@ -102,7 +94,6 @@ const Login = () => {
               </a>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2.5 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-300 hover:scale-[1.02]"
@@ -110,7 +101,6 @@ const Login = () => {
               Sign in
             </button>
 
-            {/* Sign Up Link */}
             <p className="text-center text-sm text-gray-600">
               Need another account?{' '}
               <a href="https://m.media-amazon.com/images/I/91wn+Av0LGL._AC_UF1000,1000_QL80_.jpg" className="font-medium text-blue-500 hover:text-blue-600">

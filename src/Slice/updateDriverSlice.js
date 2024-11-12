@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Async function to update the driver
+
 export const updateDriver = createAsyncThunk(
   'driver/updateDriver', 
   async (driverData, { rejectWithValue }) => {
@@ -13,7 +13,7 @@ export const updateDriver = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(driverData.updatedData), // use updatedData here
+        body: JSON.stringify(driverData.updatedData), 
       });
       if (!response.ok) {
         throw new Error('Failed to update driver');

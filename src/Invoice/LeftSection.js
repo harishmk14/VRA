@@ -3,7 +3,7 @@ import React from 'react';
 
 const LeftSection = ({ data }) => {
   return (
-    <div className="flex flex-col h-[32rem] overflow-y-auto">
+    <div className="flex flex-col h-[33.5rem] overflow-y-auto">
       <div className='flex justify-between items-center px-4 py-3 border-b border-gray-100'>
         <h2 className="text-blue-500 font-bold text-lg">Invoice</h2>
         <button
@@ -20,7 +20,7 @@ const LeftSection = ({ data }) => {
             className={`flex flex-col ${index !== data.length - 1 ? "border-b border-gray-100" : ""
               } hover:bg-gray-100 transition-colors duration-150`}
           >
-            {/* Top Row */}
+
             <div className="flex justify-between items-center px-4 py-3">
               <span className="font-semibold text-base">{item.name}</span>
               <button
@@ -31,7 +31,6 @@ const LeftSection = ({ data }) => {
               </button>
             </div>
 
-            {/* Bottom Row */}
             <div className="flex justify-between items-center text-sm text-gray-700 px-4 pb-3">
               <span>
                 {item.invoice} | {item.date}

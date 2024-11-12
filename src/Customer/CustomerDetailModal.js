@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateCustomer } from '../Slice/updateCustomerSlice';
-import { getAllCustomers } from '../Slice/customerSlice'; // Adjust path if needed
-import { toast } from 'react-toastify'; // Import toast
+import { getAllCustomers } from '../Slice/customerSlice'; 
+import { toast } from 'react-toastify'; 
 
 const CustomerDetailModal = ({ customer, onClose}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCustomer, setEditedCustomer] = useState({ ...customer });
-  const dispatch = useDispatch();  // Initialize dispatch
-
+  const dispatch = useDispatch();  
   if (!customer) return null;
 
   const handleInputChange = (e) => {
@@ -60,7 +59,7 @@ const CustomerDetailModal = ({ customer, onClose}) => {
     ) : (
       <p>
         {field === 'DOB' && editedCustomer[field]
-          ? new Date(editedCustomer[field]).toISOString().split('T')[0].split('-').reverse().join('/') // Convert to DD/MM/YYYY
+          ? new Date(editedCustomer[field]).toISOString().split('T')[0].split('-').reverse().join('/') 
           : editedCustomer[field] || '-'}
       </p>
     )}

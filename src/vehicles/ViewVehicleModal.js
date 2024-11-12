@@ -15,8 +15,8 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
   useEffect(() => {
     if (isOpen) {
       dispatch(fetchVehicleFeatures());
-      setEditedVehicle(vehicle); // Set initial vehicle details in editedVehicle when modal opens
-      setSelectedFeatures(vehicle?.featureId || []); // Set initial selected features
+      setEditedVehicle(vehicle); 
+      setSelectedFeatures(vehicle?.featureId || []); 
     }
   }, [dispatch, isOpen, vehicle]);
 
@@ -25,12 +25,12 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
 
   if (!isOpen) return null;
 
-  // Handle input change for editable fields
+
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
     setEditedVehicle((prevVehicle) => ({
       ...prevVehicle,
-      [name]: type === 'checkbox' ? (checked ? 'Yes' : 'No') : value, // Store 'Yes' or 'No' for checkboxes
+      [name]: type === 'checkbox' ? (checked ? 'Yes' : 'No') : value, 
     }));
   };
 
@@ -38,7 +38,6 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
     dispatch(deleteVehicle(id));
   };
 
-  // Handle checkbox change for features
   const handleFeatureChange = (e) => {
     const featureId = e.target.value;
     setSelectedFeatures((prevSelectedFeatures) => {
@@ -50,15 +49,14 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
     });
   };
 
-  // Handle save action
   const handleSave = () => {
     const updatedVehicle = {
       ...editedVehicle,
-      featureId: selectedFeatures, // Send selected features as an array
+      featureId: selectedFeatures, 
     };
     dispatch(updateVehicle({ vehicleId: vehicle.uniqId, updatedData: updatedVehicle }));
-    setIsEditing(false); // Exit edit mode after saving
-    onClose(); // Close modal after saving (optional)
+    setIsEditing(false);
+    onClose(); 
   };
 
   return (
@@ -149,7 +147,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
                 type="text"
                 name="regType"
                 className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-                value={editedVehicle.regType || "Commercial"} // Assuming it's always commercial
+                value={editedVehicle.regType || "Commercial"} 
                 readOnly
               />
             ) : (
@@ -358,7 +356,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
                   <input
                     type="checkbox"
                     name="sunroof"
-                    checked={editedVehicle.sunroof === 'Yes'} // Check if stored value is 'Yes'
+                    checked={editedVehicle.sunroof === 'Yes'} 
                     onChange={handleInputChange}
                     className="border rounded ml-20"
                   />
@@ -378,7 +376,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
                   <input
                     type="checkbox"
                     name="gps"
-                    checked={editedVehicle.gps === 'Yes'} // Check if stored value is 'Yes'
+                    checked={editedVehicle.gps === 'Yes'} 
                     onChange={handleInputChange}
                     className="border rounded ml-11"
                   />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaCar, FaLock, FaEye, FaEyeSlash, FaEnvelope } from 'react-icons/fa'; // Importing icons from react-icons
+import { FaCar, FaLock, FaEye, FaEyeSlash, FaEnvelope } from 'react-icons/fa'; 
 
 const CustomerSupport = () => {
   const [email, setEmail] = useState('');
@@ -7,10 +7,9 @@ const CustomerSupport = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Define handleSubmit function
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add form submission logic here
+
     console.log('Form submitted:', { email, password, rememberMe });
   };
 

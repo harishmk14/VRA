@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Async thunk for adding a customer
+
 export const addCustomer = createAsyncThunk(
   'customer/addCustomer',
   async (customerData, { rejectWithValue }) => {
@@ -16,13 +16,13 @@ export const addCustomer = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching all customers
+
 export const getAllCustomers = createAsyncThunk(
   'customer/getAllCustomers',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get('http://localhost:7000/user/getAll');
-      return response.data; // Assuming the response contains an array of customers
+      return response.data;
     } catch (error) {
       return rejectWithValue(
         error.response ? error.response.data : 'Failed to fetch customers. Please try again.'
@@ -40,35 +40,34 @@ const customerSlice = createSlice({
   },
   reducers: {
     resetError: (state) => {
-      state.error = null; // Reset error when called
+      state.error = null; 
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(addCustomer.pending, (state) => {
         state.status = 'loading';
-        state.error = null; // Clear any previous errors
+        state.error = null; 
       })
       .addCase(addCustomer.fulfilled, (state, action) => {
         state.status = 'succeeded';
         if (Array.isArray(state.customers)) {
-          state.customers.push(action.payload); // Ensure state.customers is an array
+          state.customers.push(action.payload); 
         } else {
-          state.customers = [action.payload]; // Reset as an array if not
+          state.customers = [action.payload]; 
         }
       })
       .addCase(addCustomer.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })
-      // Fetch all customers cases
       .addCase(getAllCustomers.pending, (state) => {
         state.status = 'loading';
-        state.error = null; // Clear any previous errors
+        state.error = null; 
       })
       .addCase(getAllCustomers.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.customers = action.payload; // Assuming payload is an array of customers
+        state.customers = action.payload; 
       })
       .addCase(getAllCustomers.rejected, (state, action) => {
         state.status = 'failed';
@@ -77,8 +76,7 @@ const customerSlice = createSlice({
   },
 });
 
-// Export the resetError action
+
 export const { resetError } = customerSlice.actions;
 
-// Export the reducer
 export default customerSlice.reducer;

@@ -7,11 +7,11 @@ const IncomeExpenseCard = () => {
     series: [
       {
         name: 'Income',
-        data: [40000, 5000, 15000, 2000, 30000, 4000, 25000], // Sample income data
+        data: [40000, 5000, 15000, 2000, 30000, 4000, 25000], 
       },
       {
         name: 'Expense',
-        data: [1800, 2150, 5000, 100, 5600, 80, 6000], // Sample expense data
+        data: [1800, 2150, 5000, 100, 5600, 80, 6000], 
       },
     ],
     options: {
@@ -19,22 +19,22 @@ const IncomeExpenseCard = () => {
         height: 350,
         type: 'area',
         toolbar: {
-          show: false, // Hide the tool menu (toolbar)
+          show: false, 
         },
       },
       stroke: {
-        curve: 'smooth', // Converts to spline (smooth curve)
+        curve: 'smooth', 
       },
-      colors: ['#60a5fa', '#86efac'], // Set colors to blue-500 and green-500
+      colors: ['#60a5fa', '#86efac'], 
       xaxis: {
         labels: {
-          show: false, // Hide x-axis labels
+          show: false, 
         },
         axisBorder: {
-          show: false, // Hide x-axis border
+          show: false, 
         },
         axisTicks: {
-          show: false, // Hide x-axis ticks
+          show: false, 
         },
         categories: [
           '2023-09-19T00:00:00.000Z',
@@ -44,37 +44,37 @@ const IncomeExpenseCard = () => {
           '2023-09-19T04:30:00.000Z',
           '2023-09-19T05:30:00.000Z',
           '2023-09-19T06:30:00.000Z',
-        ], // Replace with actual date values
+        ], 
       },
       yaxis: {
-        show: false, // Hide y-axis values
+        show: false, 
       },
       dataLabels: {
-        enabled: false, // Disable data labels on the graph
+        enabled: false, 
       },
       tooltip: {
         shared: true,
         intersect: false,
         y: {
-          formatter: (val) => `₹${val}`, // Format for y-axis tooltip
+          formatter: (val) => `₹${val}`, 
         },
       },
       fill: {
         type: 'gradient',
         gradient: {
           shadeIntensity: 1,
-          opacityFrom: 0.9, // Increased from 0.8 to 0.9
-          opacityTo: 0.6,   // Increased from 0.4 to 0.6
+          opacityFrom: 0.9, 
+          opacityTo: 0.6,   
         },
       },
       markers: {
-        size: 0, // Hide markers
+        size: 0, 
       },
       grid: {
-        show: false, // Remove grid lines
+        show: false, 
       },
       legend: {
-        show: true, // Display legend for Income and Expense
+        show: true, 
       },
     },
   };

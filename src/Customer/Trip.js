@@ -19,7 +19,7 @@ const Trip = ({ Trip, onClose, onAssign }) => {
     {Trip.tripArea} <span className='text-base text-gray-500'>({Trip.tripType})</span>
   </span>
 </div>
-              <div className="flex space-x-2"> {/* Added a flex container for buttons */}
+              <div className="flex space-x-2"> 
                   <i className="bi bi-eye-fill text-blue-500 text-lg cursor-pointer" onClick={() => onAssign(Trip)}></i>
                 <div
     className={` flex px-2 py-1 w-28 justify-center rounded-lg ${
@@ -27,7 +27,7 @@ const Trip = ({ Trip, onClose, onAssign }) => {
       Trip.status === 'Pending' ? 'text-yellow-500' : 
       Trip.status === 'In Journey' ? 'text-green-500' : 
       Trip.status === 'Cancelled' ? 'text-red-500' : 
-      'text-gray-500' // Default color if none match
+      'text-gray-500' 
     }`}
   >
     {Trip.status}

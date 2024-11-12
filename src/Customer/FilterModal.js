@@ -3,13 +3,12 @@ import React from 'react';
 
 const FilterModal = ({ onClose, onApply }) => {
   const [filterValues, setFilterValues] = React.useState({
-    gender: '', // Added gender state
+    gender: '', 
     registrationDate: '',
     customerIdPrefix: '',
     customerIdSuffix: '',
     performance: '',
     numberOfTrips: '',
-    // Other states can be added here if needed
   });
 
   const handleChange = (e) => {
@@ -26,8 +25,6 @@ const FilterModal = ({ onClose, onApply }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-6 shadow-lg w-3/6 relative">
-
-        {/* X Button in the top-right corner */}
         <button 
           onClick={onClose} 
           className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900"
@@ -46,7 +43,7 @@ const FilterModal = ({ onClose, onApply }) => {
               name="registrationDate" 
               onChange={handleChange} 
               className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              required // Optional: Add this if the field is mandatory
+              required 
             />
           </div>
           
@@ -73,7 +70,7 @@ const FilterModal = ({ onClose, onApply }) => {
                 onChange={handleChange} 
                 className="border p-1 w-1/2 rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
                 placeholder="CUS From"
-                maxLength={5} // Optional: Set a max length if needed
+                maxLength={5} 
               />
               <input 
                 type="number" 
@@ -81,7 +78,7 @@ const FilterModal = ({ onClose, onApply }) => {
                 onChange={handleChange} 
                 className="border p-1 w-1/2 rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
                 placeholder="CUS To"
-                maxLength={5} // Optional: Set a max length if needed
+                maxLength={5} 
               />
             </div>
           </div>
@@ -106,9 +103,9 @@ const FilterModal = ({ onClose, onApply }) => {
               name="numberOfTrips" 
               onChange={handleChange} 
               className="border p-1 w-full rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
-              min={0} // Optional: Set minimum value
-              placeholder="Enter number of trips" // Optional: Add a placeholder for guidance
-              required // Optional: Add if the field is mandatory
+              min={0} 
+              placeholder="Enter number of trips" 
+              required 
             />
           </div>
 

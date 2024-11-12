@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// Async thunk to add a new vehicle
+
 export const addVehicle = createAsyncThunk(
   'vehicles/addVehicle',
   async (vehicleData, { rejectWithValue }) => {
@@ -19,7 +19,7 @@ export const addVehicle = createAsyncThunk(
   }
 );
 
-// Async thunk to fetch all vehicles
+
 export const fetchAllVehicles = createAsyncThunk(
   'vehicles/fetchAllVehicles',
   async (_, { rejectWithValue }) => {
@@ -43,7 +43,7 @@ const vehicleSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Add Vehicle
+
       .addCase(addVehicle.fulfilled, (state) => {
             state.status = 'succeeded';
       })
@@ -51,7 +51,6 @@ const vehicleSlice = createSlice({
         state.status = 'failed';
       })
 
-      // Fetch All Vehicles
       .addCase(fetchAllVehicles.pending, (state) => {
         state.status = 'loading';
       })

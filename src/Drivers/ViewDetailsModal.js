@@ -15,7 +15,7 @@ const ViewDriverModal = ({ isOpen, onClose, driver , dlc}) => {
     if (isOpen) {
       dispatch(fetchDriverLanguages());
       setEditedDriver(driver); 
-      setSelectedLanguages(driver?.langKow || []); // Initialize with driver.langKow
+      setSelectedLanguages(driver?.langKow || []); 
     }
   }, [dispatch, isOpen, driver]);
   
@@ -197,7 +197,7 @@ const ViewDriverModal = ({ isOpen, onClose, driver , dlc}) => {
             value={language.uniqId}
             onChange={handleLanguageChange}
             className="mr-2"
-            checked={selectedLanguages.includes(language.uniqId)} // Reflects initial state and updates
+            checked={selectedLanguages.includes(language.uniqId)} 
           />
           <span>{language.lang}</span>
         </div>
@@ -565,7 +565,7 @@ const ViewDriverModal = ({ isOpen, onClose, driver , dlc}) => {
           ) : (
             <>
               <button
-                onClick={() => setIsEditing(true)} // Set isEdit to true when Edit button is clicked
+                onClick={() => setIsEditing(true)} 
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg mr-2 hover:bg-blue-600"
               >
                 Edit

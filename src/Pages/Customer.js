@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import FilterModal from '../Customer/FilterModal'; // Import the filter modal
+import FilterModal from '../Customer/FilterModal'; 
 import CustomerDetailModal from '../Customer/CustomerDetailModal';
 import Trip from '../Customer/Trip';
 import AddCustomerModal from '../Customer/AddCustomerModal';
-import ReviewModal from '../Customer/ReviewModal'; // Import the ReviewModal
+import ReviewModal from '../Customer/ReviewModal'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCustomers, resetError } from '../Slice/customerSlice'
 
@@ -98,11 +98,9 @@ const Customer = () => {
   const dispatch = useDispatch();
   const { customers, status, error } = useSelector((state) => state.customer);
 
-  // Fetch customers data
   useEffect(() => {
     dispatch(getAllCustomers());
 
-    // Optionally reset error after fetching
     return () => {
       dispatch(resetError());
     };
@@ -154,7 +152,6 @@ const Customer = () => {
     setFilters(filterValues);
   };
 
-  // Close modals if the user clicks outside of them
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (filterModalRef.current && !filterModalRef.current.contains(event.target)) {
@@ -249,11 +246,11 @@ const Customer = () => {
           </div>
         </div>
 
-        {/* customer Detail Modal */}
+
         {showDetailModal && (
           <CustomerDetailModal
             customer={selectedBooking}
-            onClose={() => setShowDetailModal(false)} // Close modal handler
+            onClose={() => setShowDetailModal(false)} 
           />
         )}
 
@@ -269,7 +266,7 @@ const Customer = () => {
           <AddCustomerModal onClose={() => setShowAddModal(false)} />
         )}
 
-        {/* Filter Modal */}
+
         {showFilterModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-5 rounded-md shadow-lg w-96 z-10">
@@ -287,9 +284,9 @@ const Customer = () => {
                   <thead>
                     <tr className="bg-blue-100">
                       <th className="px-4 py-2 text-left">S. No</th>
-                      <th className="px-4 py-2 text-left">Reg Date</th> {/* Registration Date */}
-                      <th className="px-4 py-2 text-left">ID</th> {/* Added Id Column */}
-                      <th className="px-4 py-2 text-left">Name</th> {/* Name Column */}
+                      <th className="px-4 py-2 text-left">Reg Date</th> 
+                      <th className="px-4 py-2 text-left">ID</th> 
+                      <th className="px-4 py-2 text-left">Name</th> 
                       <th className="px-4 py-2 text-center">Trips</th>
                       <th className="px-4 py-2 text-center">Details</th>
                     </tr>
@@ -298,11 +295,11 @@ const Customer = () => {
                     {Array.isArray(currentEntries) && currentEntries?.length > 0 ? (
                       currentEntries.map((customer, index) => (
                         <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
-                          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> {/* Dynamic Serial Number */}
+                          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> 
                           <td className="px-4 py-3">
                             {customer.createAt ? new Date(customer.createAt).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}
-                          </td> {/* Registration Date */}
-                          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> {/* Customer ID */}
+                          </td> 
+                          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> 
                           <td className="px-4 py-3 flex items-center">
                             <img
                               src={customer.pImg}
@@ -310,7 +307,7 @@ const Customer = () => {
                               className="w-8 h-8 rounded-full mr-2"
                             />
                             {customer.name || 'Unnamed'}
-                          </td> {/* Customer Name */}
+                          </td> 
                           <td className="px-4 py-3 text-center">
                             <button
                               className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
@@ -365,12 +362,11 @@ const Customer = () => {
               <h2 className="text-blue-500 text-xl font-semibold">Reviews</h2>
               <i
                 className="bi bi-arrows-angle-expand text-blue-400 text-lg cursor-pointer"
-                onClick={() => setShowReviewModal(true)}  // Open the modal
+                onClick={() => setShowReviewModal(true)}  
               ></i>
 
-              {/* ReviewModal */}
               {showReviewModal && (
-                <div className="fixed inset-0 z-50"> {/* Ensure modal has a higher z-index */}
+                <div className="fixed inset-0 z-50">
                   <ReviewModal
                     reviews={reviews}
                     onClose={() => setShowReviewModal(false)}
@@ -379,11 +375,9 @@ const Customer = () => {
               )}
             </div>
 
-            {/* Ensure the review list container has no relative positioning */}
             <div className="flex flex-col h-[27.5rem] overflow-y-auto px-4">
               {reviews.map((review, index) => (
                 <div key={index} className="border rounded-lg p-4 shadow-sm mb-3">
-                  {/* User profile image and content */}
                   <div className="flex items-start">
                     <img
                       src={review.profilePic}
@@ -393,7 +387,6 @@ const Customer = () => {
                     <div className="flex-1">
                       <div className="flex justify-between items-center">
                         <h3 className="text-lg font-medium">{review.name}</h3>
-                        {/* Date displayed in the top right corner */}
                         <p className="mt-1 text-gray-500 text-sm">{review.date}</p>
                       </div>
                       <div className="flex items-center">

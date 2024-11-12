@@ -26,45 +26,42 @@ select.placeholder {
 }
 
 .sidebar-item:hover {
-  color: #3b82f6; /* Blue color on hover (text-blue-600 equivalent) */
+  color: #3b82f6;
 }
 
 .sidebar-item.active {
-  color: #3b82f6; /* Blue color for active state */
+  color: #3b82f6;
   font-weight: bold;
 }
 
 .Boxseperate {
-  display: flex; /* Equivalent to w-1/4 */
-  height: 100%; /* Equivalent to h-full */
-  background-color: white; /* Equivalent to bg-white */
+  display: flex;
+  height: 100%;
+  background-color: white;
   border-radius: 16px;
 }
 
-/* For WebKit browsers (Chrome, Safari, etc.) */
 ::-webkit-scrollbar {
-  width: 4px; /* Width of the scrollbar */
+  width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2); /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Rounded corners */
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.1); /* Color of the scrollbar track */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Hide scrollbars for the specific class */
 .hide-scroll::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
 }
 
 .hide-scroll {
-  -ms-overflow-style: none;  /* Internet Explorer and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
 
 @keyframes blink-shadow {
   0%, 100% {
@@ -99,5 +96,3 @@ select.placeholder {
   background: linear-gradient(135deg, #ff0000, #cc0000);
   animation: blink-shadow-offline 1s infinite;
 }
-
-

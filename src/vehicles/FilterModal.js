@@ -22,14 +22,13 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
   const [selectedVehicleType, setSelectedVehicleType] = useState('');
   const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 50000]); // Slider range from 0 to 50000
+  const [priceRange, setPriceRange] = useState([0, 50000]); 
   const [minPrice, maxPrice] = priceRange;
 
-  // Update available categories based on vehicle type
   useEffect(() => {
     if (selectedVehicleType) {
       setAvailableCategories(vehicleCategoriesMap[selectedVehicleType]);
-      setSelectedCategory(''); // Reset the selected category when vehicle type changes
+      setSelectedCategory(''); 
     }
   }, [selectedVehicleType]);
 
@@ -56,13 +55,12 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
     setPriceRange([0, 50000]);
   };
 
-  if (!isOpen) return null; // Do not render the modal if not open
+  if (!isOpen) return null; 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-6 shadow-lg w-96 relative">
         
-        {/* 'X' Button to close modal */}
         <button 
           onClick={onClose} 
           className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900">

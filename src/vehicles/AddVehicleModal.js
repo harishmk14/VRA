@@ -80,8 +80,8 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
     const { value, checked } = event.target;
     setSelectedFeatures((prevFeatures) =>
       checked
-        ? [...prevFeatures, value] // Add if checked
-        : prevFeatures.filter((id) => id !== value) // Remove if unchecked
+        ? [...prevFeatures, value] 
+        : prevFeatures.filter((id) => id !== value) 
     );
   };
 
@@ -182,7 +182,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
       }
   
       const formData = new FormData();
-      formData.append('logo', file);  // Changed 'logo' to 'file' for generality
+      formData.append('logo', file); 
   
       try {
         const response = await dispatch(uploadImg({ formData, variable: 'vehicle' }));
@@ -594,7 +594,7 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
                 <div key={feature.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    value={feature.uniqId} // Set value to feature.uniqId
+                    value={feature.uniqId} 
                     onChange={handleFeatureChange}
                     checked={selectedFeatures.includes(feature.uniqId)}
                     className="mr-2"

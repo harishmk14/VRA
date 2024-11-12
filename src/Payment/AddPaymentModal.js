@@ -21,8 +21,8 @@ const AddPaymentModal = ({ isOpen, onClose, onAddPayment }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddPayment(formData); // Call the parent function to handle adding payment
-    onClose(); // Close the modal after submitting
+    onAddPayment(formData); 
+    onClose(); 
   };
 
   if (!isOpen) return null;

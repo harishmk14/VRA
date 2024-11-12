@@ -3,7 +3,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Async thunk to fetch data by driving license category
 export const fetchLicenseCategory = createAsyncThunk(
   'licenseCategory/fetchLicenseCategory',
   async () => {
@@ -16,7 +15,7 @@ const licenseCategorySlice = createSlice({
   name: 'licenseCategory',
   initialState: {
     data: [],
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: 'idle', 
     error: null
   },
   reducers: {},

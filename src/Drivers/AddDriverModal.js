@@ -7,7 +7,6 @@ import { uploadImg } from '../Slice/uploadImgSlice';
 import { toast } from 'react-toastify';
 
 const AddDriverModal = ({ isOpen, onClose }) => {
-  // Redux dispatch hook
   const dispatch = useDispatch();
 
   const { languages, loading: languagesLoading, error: languagesError } = useSelector((state) => state.driverLanguages);
@@ -17,7 +16,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     dispatch(fetchDriverLanguages());
     dispatch(fetchLicenseCategory());
   }, [dispatch]);
-  // State variables
+
   const [driverName, setDriverName] = useState('');
   const [gender, setGender] = useState('');
   const [dob, setDob] = useState('');
@@ -44,13 +43,12 @@ const AddDriverModal = ({ isOpen, onClose }) => {
   const [dlCategory, setDlCategory] = useState([]);
   const [languagesKnown, setLanguagesKnown] = useState([]);
 
-  // Handle language checkbox change
   const handleLanguageChange = (event) => {
     const { value, checked } = event.target;
     setLanguagesKnown((prev) =>
       checked
-        ? [...prev, value] // Add if checked
-        : prev.filter((id) => id !== value) // Remove if unchecked
+        ? [...prev, value] 
+        : prev.filter((id) => id !== value) 
     );
   };
 
@@ -58,12 +56,11 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     const { value, checked } = event.target;
     setDlCategory((prev) =>
       checked
-        ? [...prev, value] // Add if checked
-        : prev.filter((id) => id !== value) // Remove if unchecked
+        ? [...prev, value] 
+        : prev.filter((id) => id !== value) 
     );
   };
 
-  // Handle reset functionality
   const handleReset = () => {
     document.getElementById("img").value = "";
     document.getElementById("img1").value = "";
@@ -89,7 +86,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     setDrivingHistory('');
     setAccidentHistory('');
     setSalary('');
-    setMedicalCertificate(''); // Set file inputs to null
+    setMedicalCertificate(''); 
     setPcc('');
     setDriverImage('');
     setDl('');
@@ -99,11 +96,10 @@ const AddDriverModal = ({ isOpen, onClose }) => {
   };
 
   const handleClose = () => {
-    handleReset();  // Reset the form fields
-    onClose();  // Close the modal
+    handleReset();  
+    onClose();  
   };
-  // Handle Add Driver functionality
-  // Handle Add Driver functionality
+
   const handleAdd = (e) => {
     e.preventDefault();
 
@@ -135,14 +131,12 @@ const AddDriverModal = ({ isOpen, onClose }) => {
       langKow: languagesKnown,
     };
 
-    // Dispatch the action to add the driver and wait for it to complete
     dispatch(addDriver(driverData)).then(() => {
       dispatch(fetchDrivers());
     });
 
     handleClose();
-    // Optionally reset the form after adding
-    // Close the modal after adding
+
   };
 
   const handleFileUpload = async (file, setFile) => {
@@ -275,7 +269,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                     type="checkbox"
                     value={language.uniqId}
                     onChange={handleLanguageChange}
-                    checked={languagesKnown.includes(language.uniqId)}  // Make sure it reflects the current state
+                    checked={languagesKnown.includes(language.uniqId)}  
                     className="mr-2"
                   />
                   {language.lang}
@@ -365,7 +359,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                 <label key={category.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    value={category.uniqId} // Use category.id as the value
+                    value={category.uniqId} 
                     onChange={handleLicenseCategoryChange}
                     checked={dlCategory.includes(category.uniqId)}
                     className="mr-2"
@@ -424,7 +418,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               value={criminalRecord}
               onChange={(e) => setCriminalRecord(e.target.value)}
               required
-              rows={3} // Adjust the number of rows as needed
+              rows={3} 
               placeholder="Provide details about any criminal record..."
             />
           </div>
@@ -439,7 +433,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               value={drivingHistory}
               onChange={(e) => setDrivingHistory(e.target.value)}
               required
-              rows={3} // Adjust the number of rows as needed
+              rows={3} 
               placeholder="Provide details about your driving history..."
             />
           </div>
@@ -454,7 +448,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               value={accidentHistory}
               onChange={(e) => setAccidentHistory(e.target.value)}
               required
-              rows={3} // Adjust the number of rows as needed
+              rows={3} 
               placeholder="Provide details about your accident history..."
             />
           </div>

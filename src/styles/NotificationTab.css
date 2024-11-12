@@ -1,34 +1,30 @@
-/* NotificationTab.css */
-
 .notification-tab {
-    position: fixed;
-    top: 0;
-    right: -30%; /* Start hidden off the screen */
-    height: 100vh;
-    width: 30%; /* Set width to 30% */
-    background: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: right 0.3s ease; /* Animate the right property */
-    z-index: 50;
-    overflow-y: auto; /* Allow scrolling within the tab */
-  }
-  
-  .notification-tab.open {
-    right: 0; /* Slide in when open */
-  }
-  
-  .notification-tab-content {
-    padding: 1rem; /* Add padding inside the tab */
-  }
-  
-  /* Overlay for shadow effect */
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Dark background for overlay */
-    z-index: 40; /* Lower than the tab but higher than the content */
-  }
-  
+  position: fixed;
+  top: 0;
+  right: -30%;
+  height: 100vh;
+  width: 30%;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.notification-tab.open {
+  right: 0;
+}
+
+.notification-tab-content {
+  padding: 1rem;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}

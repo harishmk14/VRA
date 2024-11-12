@@ -6,7 +6,7 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
   const [driverType, setDriverType] = useState('');
   const [shift, setShift] = useState('');
   const [dlCategory, setDlCategory] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 50000]); // Slider range from 0 to 50000
+  const [priceRange, setPriceRange] = useState([0, 50000]); 
   const [minPrice, maxPrice] = priceRange;
 
   const handleFilterClick = () => {
@@ -37,13 +37,12 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
     setPriceRange([0, 50000]);
   };
 
-  if (!isOpen) return null; // Do not render the modal if not open
+  if (!isOpen) return null; 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-6 shadow-lg w-1/3 relative">
         
-        {/* 'X' Button to close modal */}
         <button 
           onClick={onClose} 
           className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900">
@@ -106,7 +105,6 @@ const FilterModal = ({ isOpen, onClose, onFilterSelect }) => {
               className="w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300"
             >
               <option value="" className="text-gray-400">Select DL Category</option>
-              {/* Add relevant DL categories as options */}
               <option value="Light Motor Vehicle" className="text-gray-600">Light Motor Vehicle</option>
               <option value="Heavy Motor Vehicle" className="text-gray-600">Heavy Motor Vehicle</option>
               <option value="Commercial Vehicle" className="text-gray-600">Commercial Vehicle</option>

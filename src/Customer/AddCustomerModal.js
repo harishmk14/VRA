@@ -41,14 +41,14 @@ const AddCustomerModal = ({ onClose }) => {
       });
 
       if (!error) {
-        toast.success('Customer added successfully!'); // Success toast
+        toast.success('Customer added successfully!'); 
         onClose();
         handleReset();
       } else {
-        toast.error('Failed to add customer.'); // Error toast
+        toast.error('Failed to add customer.'); 
       }
     } else {
-      toast.warn('Please fill in required fields.'); // Warning toast for missing data
+      toast.warn('Please fill in required fields.'); 
     }
   };
 
@@ -69,7 +69,7 @@ const handleFileUpload = async (file, setFile) => {
 
       if (response.payload && typeof response.payload.path === 'string') {
         setFile(response.payload.path);
-        // toast.success('File uploaded successfully.');
+       
       } else {
         console.error('Invalid response format:', response.payload);
         toast.error('Error uploading file. Please try again.');

@@ -2,23 +2,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Thunk to fetch vehicle features
+
 export const fetchVehicleFeatures = createAsyncThunk(
   'vehicleFeatures/fetchVehicleFeatures',
   async (param) => {
     const queryParam = param ? param : 'all';
     const response = await axios.get(`http://localhost:7000/vechicle/getall/feature/${queryParam}`);
-    return response.data; // Assuming response.data contains the array of features
+    return response.data; 
   }
 );
 
-
-// Slice to manage vehicle features state
 const vehicleFeaturesSlice = createSlice({
   name: 'vehicleFeatures',
   initialState: {
     features: [],
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: 'idle', 
     error: null,
   },
   reducers: {},

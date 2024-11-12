@@ -9,8 +9,8 @@ const FilterModal = ({ onClose, onApply }) => {
     verification: '',
     tripStartDate: '',
     tripEndDate: '',
-    bookedDate: '', // Added bookedDate state
-    tripStatus: '', // Added tripStatus state
+    bookedDate: '', 
+    tripStatus: '', 
   });
 
   const handleChange = (e) => {
@@ -28,7 +28,6 @@ const FilterModal = ({ onClose, onApply }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-6 shadow-lg w-3/6 relative">
 
-        {/* X Button in the top-right corner */}
         <button 
           onClick={onClose} 
           className="absolute top-3 right-5 text-2xl text-gray-600 hover:text-gray-900"

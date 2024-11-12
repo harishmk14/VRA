@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../index.css';
-import FilterModal from '../Drivers/FilterModal'; // Import the FilterModal component
-import AddDriverModal from '../Drivers/AddDriverModal'; // Import AddVehicleModal component
-import ViewDetailModal from '../Drivers/ViewDetailsModal'; // Import the ViewVehicleModal component
+import FilterModal from '../Drivers/FilterModal'; 
+import AddDriverModal from '../Drivers/AddDriverModal'; 
+import ViewDetailModal from '../Drivers/ViewDetailsModal'; 
 import ReviewModal from '../Drivers/ReviewModal';
 import { fetchLicenseCategory } from '../Slice/licenseCategorySlice';
 import { GiSteeringWheel } from "react-icons/gi";
@@ -13,7 +13,6 @@ const Driver = () => {
   const dispatch = useDispatch();
   const { drivers, loading, error } = useSelector((state) => state.drivers);
   const { data: licenseCategories, loading: licenseLoading, error: licenseError } = useSelector((state) => state.licenseCategory);
-  // Fetch drivers when the component mounts
   useEffect(() => {
     dispatch(fetchDrivers());
     dispatch(fetchLicenseCategory());
@@ -21,32 +20,32 @@ const Driver = () => {
 
   const [filter, setFilter] = useState("All");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); // State for Add Vehicle Modal
-  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); // State for View Vehicle Modal
-  const [selectedDriver, setSelectedDriver] = useState(null); // State to hold the selected driver
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // State for Review Modal
+  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false); 
+  const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false); 
+  const [selectedDriver, setSelectedDriver] = useState(null); 
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
 
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
-        return "bg-yellow-400"; // Yellow for Pending
+        return "bg-yellow-400";
       case "In Journey":
-        return "bg-green-500"; // Green for In Journey
+        return "bg-green-500";
       case "Available":
-        return "bg-blue-500"; // Blue for Available
+        return "bg-blue-500"; 
       case "Unavailable":
-        return "bg-red-600"; // Red for Unavailable
+        return "bg-red-600"; 
       default:
-        return "bg-gray-300"; // Default gray if status is unknown
+        return "bg-gray-300"; 
     }
   };
 
   const filteredDrivers = drivers.filter((driver) => {
-    if (filter === "All") return true; // Show all drivers
-    if (filter === "Active") return driver.status === "Pending" || driver.status === "In Journey"; // Show Pending & In Journey
-    if (filter === "Available") return driver.status === "Available"; // Show Available
-    if (filter === "Unavailable") return driver.status === "Unavailable"; // Show Unavailable
+    if (filter === "All") return true; 
+    if (filter === "Active") return driver.status === "Pending" || driver.status === "In Journey"; 
+    if (filter === "Available") return driver.status === "Available"; 
+    if (filter === "Unavailable") return driver.status === "Unavailable"; 
     return false;
   });
 
@@ -54,20 +53,20 @@ const Driver = () => {
     if (shift === "Remote") {
       return (
         <>
-          <i className="bi bi-brightness-high-fill mr-1"></i> {/* Add margin here */}
+          <i className="bi bi-brightness-high-fill mr-1"></i> 
           <i className="bi bi-moon-stars-fill"></i>
         </>
-      ); // Show both icons for Day/Night shift
+      );
     } else if (shift === "Day") {
-      return <i className="bi bi-brightness-high-fill mr-1"></i>; // Add margin here for Day shift
+      return <i className="bi bi-brightness-high-fill mr-1"></i>; 
     } else if (shift === "Night") {
-      return <i className="bi bi-moon-stars-fill mr-1"></i>; // Add margin here for Night shift
+      return <i className="bi bi-moon-stars-fill mr-1"></i>; 
     }
-    return null; // Return null if no valid shift is found
+    return null; 
   };
 
   const calculateAge = (dob) => {
-    const birthDate = new Date(dob); // The ISO 8601 string should work directly
+    const birthDate = new Date(dob); 
     if (isNaN(birthDate.getTime())) {
       console.error(`Invalid date format for DOB: ${dob}`);
       return 'Invalid Date';
@@ -77,7 +76,7 @@ const Driver = () => {
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
     if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--; // Adjust if birthday hasn't occurred yet this year
+      age--; 
     }
     return age;
   };
@@ -113,13 +112,13 @@ const Driver = () => {
         </div>
         <div className='flex gap-3'>
           <button
-            onClick={() => setIsAddVehicleModalOpen(true)} // Open Add Driver Modal
+            onClick={() => setIsAddVehicleModalOpen(true)} 
             className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
           >
             <i className="bi bi-person-plus-fill p-1 px-1.5 text-xl"></i>
           </button>
           <button
-            onClick={() => setIsFilterModalOpen(true)} // Open Filter modal
+            onClick={() => setIsFilterModalOpen(true)} 
             className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
           >
             <i className="bi bi-funnel-fill"></i> Filter
@@ -127,31 +126,28 @@ const Driver = () => {
         </div>
       </div>
 
-      {/* Filter Modal */}
       <FilterModal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         onFilterSelect={(selectedFilter) => setFilter(selectedFilter)}
       />
 
-      {/* Add Driver Modal */}
       <AddDriverModal
         isOpen={isAddVehicleModalOpen}
-        onClose={() => setIsAddVehicleModalOpen(false)} // Close Add Driver Modal
+        onClose={() => setIsAddVehicleModalOpen(false)} 
       />
 
-      {/* View Driver Modal */}
       <ViewDetailModal
         isOpen={isViewVehicleModalOpen}
-        onClose={() => setIsViewVehicleModalOpen(false)} // Close View Driver Modal
+        onClose={() => setIsViewVehicleModalOpen(false)} 
         driver={selectedDriver}
-        dlc={licenseCategories} // Pass the selected driver to the modal
+        dlc={licenseCategories} 
       />
 
       <ReviewModal
         isOpen={isReviewModalOpen}
-        onClose={() => setIsReviewModalOpen(false)} // Close Review Modal
-        driver={selectedDriver} // Pass the selected driver to the review modal
+        onClose={() => setIsReviewModalOpen(false)} 
+        driver={selectedDriver} 
       />
 
 

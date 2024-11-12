@@ -4,13 +4,13 @@ import logo from '../Assets/img/logo1.png';
 const Invoicea4 = () => {
   return (
     <div className="w-[190mm] mx-auto bg-white border border-gray-300 shadow-lg rounded-lg relative overflow-hidden p-8">
-    {/* Ribbon */}
+      
     <div className="absolute top-0 left-0 w-32 h-32">
   <div className="absolute transform rotate-[-45deg] bg-blue-500 text-white text-sm font-semibold py-1 left-[-26%] top-[20%] w-[120%] text-center shadow-md">
     Pending
   </div>
 </div>
-      {/* Header Section */}
+
       <header className="flex justify-between items-center mb-6 border-b pb-4">
         <div className='ml-10'><img src={logo} alt="Company Logo" /></div>
         <div className="text-right">
@@ -19,7 +19,6 @@ const Invoicea4 = () => {
         </div>
       </header>
 
-      {/* Company and Customer Info */}
       <section className="grid grid-cols-2 gap-8 mb-5">
         <div>
           <p className="font-bold text-lg mb-2">Office Address:</p>
@@ -36,7 +35,6 @@ const Invoicea4 = () => {
         </div>
       </section>
 
-      {/* Vehicle and Driver Details */}
       <section className="mb-5">
         <p className="font-bold text-lg border-b pb-2">Vehicle & Driver Details</p>
         <div className="flex justify-between mt-2 text-sm">
@@ -52,7 +50,6 @@ const Invoicea4 = () => {
         </div>
       </section>
 
-      {/* Invoice Items Table */}
       <table className="w-full border-collapse mb-5 text-sm">
         <thead>
           <tr className="bg-gray-200">
@@ -84,14 +81,12 @@ const Invoicea4 = () => {
         </tbody>
       </table>
 
-      {/* Invoice Summary */}
       <section className="text-right mb-5 text-sm">
         <div className="mb-1">Subtotal: <span className="font-semibold"><i className="bi bi-currency-rupee"></i>18,500.00</span></div>
         <div className="mb-1">GST (18%): <span className="font-semibold"><i className="bi bi-currency-rupee"></i>3,330.00</span></div>
         <div className="text-lg font-bold">Total: <i className="bi bi-currency-rupee"></i>21,830.00</div>
       </section>
 
-      {/* Payment Details */}
       <section className="mb-5">
         <p className="font-bold text-lg border-b pb-2">Payment Details</p>
         <table className="w-full text-sm mt-2">
@@ -120,7 +115,6 @@ const Invoicea4 = () => {
         </table>
       </section>
 
-      {/* Footer with Customer Quote */}
       <footer className="pt-4 border-t mt-5 text-sm">
         <p className="mb-2">Approved By: Harish M</p>
         <p className="text-gray-600 mb-4">Thank you for choosing the best vehicle rental service in town!</p>

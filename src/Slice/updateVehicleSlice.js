@@ -4,7 +4,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// Async thunk to update a vehicle
 export const updateVehicle = createAsyncThunk(
   'vehicles/updateVehicle',
   async ({ vehicleId, updatedData }, { rejectWithValue }) => {
@@ -19,7 +18,6 @@ export const updateVehicle = createAsyncThunk(
   }
 );
 
-// Create a slice for update vehicle functionality
 const updateVehicleSlice = createSlice({
   name: 'updateVehicle',
   initialState: {
@@ -29,7 +27,7 @@ const updateVehicleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(updateVehicle.fulfilled, (state, action) => {
-        // You may want to handle additional state updates if needed
+     
         state.error = null;
       })
       .addCase(updateVehicle.rejected, (state, action) => {
@@ -38,6 +36,5 @@ const updateVehicleSlice = createSlice({
   },
 });
 
-// Export the reducer
 export default updateVehicleSlice.reducer;
 

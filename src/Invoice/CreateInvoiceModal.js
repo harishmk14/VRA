@@ -22,9 +22,9 @@ const CreateInvoiceModal = ({ isOpen, onClose, onAddInvoice }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddInvoice(invoiceData); // Pass the new invoice data to the parent component
-    onClose(); // Close the modal after adding the invoice
-    setInvoiceData({ date: '', invoiceId: '', amount: '', customerName: '', mobile: '', paymentMode: '', tripId: '' }); // Reset form
+    onAddInvoice(invoiceData); 
+    onClose(); 
+    setInvoiceData({ date: '', invoiceId: '', amount: '', customerName: '', mobile: '', paymentMode: '', tripId: '' }); 
   };
 
   return (
