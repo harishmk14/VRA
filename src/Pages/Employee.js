@@ -1,127 +1,149 @@
-import React, { useState } from 'react';
-import { FaCar, FaLock, FaEye, FaEyeSlash, FaEnvelope } from 'react-icons/fa'; 
+import React, { useState, useEffect } from 'react';
+import '../index.css';
+import FilterModal from '../Employees/FilterModal'; 
+import AddEmployeeModal from '../Employees/AddEmployeeModal'; 
+import ViewDetailModal from '../Employees/ViewDetailsModal'; 
+import ReviewModal from '../Employees/ReviewModal';
+import { GiSteeringWheel } from "react-icons/gi";
 
-const CustomerSupport = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log('Form submitted:', { email, password, rememberMe });
-  };
+const Employee = () => {
+  const [filter, setFilter] = useState("All");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false); 
+  const [isViewEmployeeModalOpen, setIsViewEmployeeModalOpen] = useState(false); 
+  const [selectedEmployee, setSelectedEmployee] = useState(null); 
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-4">
-    <div className="w-full max-w-lg">
-      {/* Login Card */}
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 backdrop-blur mb-4">
-            <FaCar className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-          <p className="text-blue-100">Sign in to access your account</p>
-        </div>
-
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
-          {/* Email Input */}
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
-              Email Address
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaEnvelope className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Password Input */}
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium text-gray-700 block">
-              Password
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter your password"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
-                {showPassword ? (
-                  <FaEyeSlash className="h-5 w-5 text-gray-400" />
-                ) : (
-                  <FaEye className="h-5 w-5 text-gray-400" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                Remember me
-              </label>
-            </div>
-            <a href="/forgot-password" className="text-sm font-medium text-blue-500 hover:text-blue-500">
-              Forgot password?
-            </a>
-          </div>
-
-          {/* Submit Button */}
+    <div className="h-full flex flex-col p-5 py-3 pb-0">
+      <div className="flex justify-between items-center pb-2 sticky top-0 z-10 px-3">
+        <div className="flex space-x-4">
           <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2.5 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-300 hover:scale-[1.02]"
+            onClick={() => setFilter("All")}
+            className={`px-3 py-1 rounded-full ${filter === "All" ? "bg-blue-500 text-white" : "hover:bg-blue-200 hover:text-white active:bg-blue-500 active:ring-2 active:ring-blue-500"}`}
           >
-            Sign in
+            All
           </button>
+          <button
+            onClick={() => setFilter("Active")}
+            className={`px-3 py-1 rounded-full ${filter === "Active" ? "bg-blue-500 text-white" : "hover:bg-blue-200 hover:text-white active:bg-blue-500 active:ring-2 active:ring-blue-500"}`}
+          >
+            Active
+          </button>
+          <button
+            onClick={() => setFilter("Available")}
+            className={`px-3 py-1 rounded-full ${filter === "Available" ? "bg-blue-500 text-white" : "hover:bg-blue-200 hover:text-white active:bg-blue-500 active:ring-2 active:ring-blue-500"}`}
+          >
+            Available
+          </button>
+          <button
+            onClick={() => setFilter("Unavailable")}
+            className={`px-3 py-1 rounded-full ${filter === "Unavailable" ? "bg-blue-500 text-white" : "hover:bg-blue-200 hover:text-white active:bg-blue-500 active:ring-2 active:ring-blue-500"}`}
+          >
+            Unavailable
+          </button>
+        </div>
+        <div className='flex gap-3'>
+          <button
+            onClick={() => setIsAddEmployeeModalOpen(true)} 
+            className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
+          >
+            <i className="bi bi-person-plus-fill p-1 px-1.5 text-xl"></i>
+          </button>
+          <button
+            onClick={() => setIsFilterModalOpen(true)} 
+            className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
+          >
+            <i className="bi bi-funnel-fill"></i> Filter
+          </button>
+        </div>
+      </div>
 
-          {/* Sign Up Link */}
-          <p className="text-center text-sm text-gray-600">
-            Need another account?{' '}
-            <a href="https://m.media-amazon.com/images/I/91wn+Av0LGL._AC_UF1000,1000_QL80_.jpg" className="font-medium text-blue-500 hover:text-blue-600">
-              Create account
-            </a>
-          </p>
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        onFilterSelect={(selectedFilter) => setFilter(selectedFilter)}
+      />
 
-        </form>
+      <AddEmployeeModal
+        isOpen={isAddEmployeeModalOpen}
+        onClose={() => setIsAddEmployeeModalOpen(false)} 
+      />
+
+      <ViewDetailModal
+        isOpen={isViewEmployeeModalOpen}
+        onClose={() => setIsViewEmployeeModalOpen(false)} 
+        employee={selectedEmployee}
+      />
+
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)} 
+        employee={selectedEmployee} 
+      />
+
+      <div className="flex-grow overflow-auto hide-scroll p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-5">
+          {/* Employee cards */}
+          <div className="bg-white rounded-lg shadow-md overflow-hidden p-2 grid grid-cols-[30%_70%]">
+            <div className="w-40 h-40">
+              <img
+                src="employee_image_url"
+                alt="Employee"
+                className="object-cover rounded-md"
+              />
+            </div>
+
+            <div className="px-2 space-y-2.5 relative">
+              <span className={`absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded`}>
+                Active
+              </span>
+              <h2 className="text-lg font-semibold text-gray-800">
+                John Doe - 12345
+              </h2>
+
+              <div className="grid grid-cols-3 gap-1">
+                <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                  Exp - 5 Years
+                </span>
+                <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                  Rating - 4.5 <i className="bi bi-star-fill text-yellow-500 ml-1"></i>
+                </span>
+                <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                  Age - 30
+                </span>
+              </div>
+              <div className="grid grid-cols-[40%_60%] gap-1">
+                <span className="text-sm bg-blue-100 rounded-full px-1 py-1 text-center">
+                  <span className="mr-1"><i className="bi bi-brightness-high-fill"></i></span>
+                  Day
+                </span>
+                <span className="flex text-sm bg-blue-100 rounded-full px-1 py-1 text-center items-center justify-center">
+                  <GiSteeringWheel className="flex mr-2" />
+                  DL Category: A / B
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center gap-2 mt-2">
+                <button
+                  onClick={() => setIsViewEmployeeModalOpen(true)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                >
+                  View Details
+                </button>
+                <button
+                  onClick={() => setIsReviewModalOpen(true)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                >
+                  Review
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
-export default CustomerSupport;
+export default Employee;

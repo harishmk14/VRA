@@ -1,6 +1,8 @@
 // RightSection.js
 import React, { useState, useEffect, useRef } from 'react';
 import Invoicea4 from './Invoicea4';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const RightSection = () => {
 
@@ -10,6 +12,8 @@ const RightSection = () => {
   const downloadButtonRef = useRef(null);
   const shareDrawerRef = useRef(null);
   const downloadDrawerRef = useRef(null);
+  const invoiceRef = useRef(null);
+  const [zoom, setZoom] = useState(1);
 
   const toggleShareDrawer = () => {
     setShareDrawerOpen(!isShareDrawerOpen);
@@ -44,6 +48,30 @@ const RightSection = () => {
     };
   }, []);
 
+  const handleZoomIn = () => setZoom(prevZoom => Math.min(prevZoom + 0.1, 2));
+  const handleZoomOut = () => setZoom(prevZoom => Math.max(prevZoom - 0.1, 0.5));
+
+  const handleDownloadJPG = () => {
+    if (invoiceRef.current) {
+      html2canvas(invoiceRef.current).then((canvas) => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/jpeg');
+        link.download = 'invoice.jpg';
+        link.click();
+      });
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    if (invoiceRef.current) {
+      const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'pt', [canvas.width, canvas.height]); // Fit to content size
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save('invoice.pdf');
+    }
+  };
+
   return (
     <div className="flex flex-col h-[33.5rem] overflow-y-auto">
       <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100">
@@ -60,7 +88,7 @@ const RightSection = () => {
             ref={shareDrawerRef}
             className={`absolute top-full left-1.5 mt-2 transform -translate-x-1/2 flex flex-col bg-gray-200 p-2 rounded-full space-y-3 transition-all duration-300 ease-in-out ${isShareDrawerOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0 pointer-events-none'
               }`}
-              style={{ zIndex: 50 }} 
+            style={{ zIndex: 50 }}
           >
             <button
               className="hover:bg-gray-400 bg-gray-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
@@ -87,18 +115,18 @@ const RightSection = () => {
             ref={downloadDrawerRef}
             className={`absolute top-full left-[40%] mt-2 transform -translate-x-1/2 flex flex-col bg-gray-200 p-2 rounded-full space-y-3 transition-all duration-300 ease-in-out ${isDownloadDrawerOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0 pointer-events-none'
               }`}
-              style={{ zIndex: 50 }} 
+            style={{ zIndex: 50 }}
           >
             <button
               className="hover:bg-gray-400 bg-gray-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
-              onClick={() => alert('Download JPG clicked')}
+              onClick={handleDownloadJPG}
             >
               JPG
             </button>
 
             <button
               className="hover:bg-gray-400 bg-gray-500 px-2.5 py-1.5 rounded-full text-white flex items-center"
-              onClick={() => alert('Download PDF clicked')}
+              onClick={handleDownloadPDF}
             >
               PDF
             </button>
@@ -111,8 +139,24 @@ const RightSection = () => {
           </button>
         </div>
       </div>
-      <div className='overflow-y-auto py-6'>
-      <Invoicea4 />
+      <div className="relative overflow-y-auto py-6">
+        <div ref={invoiceRef} style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}>
+          <Invoicea4 />
+        </div>
+        <div className="fixed bottom-8 right-8 flex flex-col gap-2">
+          <button
+            onClick={handleZoomIn}
+            className="px-2 py-1 text-white rounded-full bg-gray-400"
+          >
+            <i className="bi bi-zoom-in"></i>
+          </button>
+          <button
+            onClick={handleZoomOut}
+            className="px-2 py-1 text-white rounded-full bg-gray-400"
+          >
+            <i className="bi bi-zoom-out"></i>
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import AddInvoiceModal from '../Invoice/CreateInvoiceModal';
 import FilterModal from '../Invoice/FilterModal';
 import LeftSection from '../Invoice/LeftSection';
@@ -117,15 +117,16 @@ const Invoice = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-4 h-full">
-        <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
-          <LeftSection data={data} />
-        </div>
-        <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
-          <RightSection/>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_2fr] h-full bg-white rounded-lg shadow-md">
+          <div className="w-full h-full overflow-hidden">
+            <LeftSection data={data} />
+          </div>
+          <div className="w-px h-full bg-gray-100"></div>
+          <div className="w-full h-full overflow-hidden">
+            <RightSection />
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
