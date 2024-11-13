@@ -21,6 +21,7 @@ const Sidebar = () => {
     { path: '/dashboard', icon: 'bi bi-grid-fill', label: 'Dashboard' },
     { path: '/vehicle', icon: 'bi bi-car-front', label: 'Vehicles' },
     { path: '/booking', icon: 'bi bi-ui-checks', label: 'Booking' },
+    { path: '/employee', icon: 'bi bi-person-fill-gear', label: 'Employee' },
     { path: '/driver', icon: 'bi bi-person-fill-check', label: 'Driver' },
     { path: '/Customer', icon: 'bi bi-people-fill', label: 'Customer' },
     { path: '/payment', icon: 'bi bi-cash-coin', label: 'Payment' },
@@ -28,7 +29,6 @@ const Sidebar = () => {
     { path: '/maintenance', icon: 'bi bi-gear-wide-connected', label: 'Maintenance' },
     { path: '/performance', icon: 'bi bi-clipboard-data-fill', label: 'Performance' },
     { path: '/setting', icon: 'bi bi-gear-fill', label: 'Settings' },
-    { path: '/customersupport', icon: 'bi bi-person-fill-gear', label: 'Customer Support' },
   ];
 
   return (
@@ -37,8 +37,8 @@ const Sidebar = () => {
         <img src={logo} className='max-w-[12rem] h-auto' alt="Company Logo" />
       </div>
 
-      <div className='flex flex-col flex-grow overflow-y-auto px-6'>
-        <nav className='py-5'>
+      <div className='flex flex-col flex-grow overflow-y-auto px-5'>
+        <nav className='py-3'>
           <ul className="space-y-2">
             {navigationItems.map(({ path, icon, label }) => (
               <li key={path}>

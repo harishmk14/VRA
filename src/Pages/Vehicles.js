@@ -34,8 +34,54 @@ const Vehicles = () => {
     return <p>Error: {error}</p>;
   }
 
+  console.log(vehicles.data);
 
-
+  const vehiclesData = [
+    {
+      id: 1,
+      model: "Tesla Model 3",
+      image: "https://ev-database.org/img/auto/Tesla_Model_3/Tesla_Model_3-01@2x.jpg",
+      fuelType: "Electric",
+      transmission: "Auto Gear",
+      seater: 5,
+      range: "350 km",
+      price: 2000,
+      status: "Available",
+    },
+    {
+      id: 2,
+      model: "Toyota Camry",
+      image: "https://i0.wp.com/practicalmotoring.com.au/wp-content/uploads/2016/11/097A0935.jpg?fit=768%2C512&ssl=1",
+      fuelType: "Petrol",
+      transmission: "Auto Gear",
+      seater: 5,
+      range: "450 km",
+      price: 1500,
+      status: "Pending",
+    },
+    {
+      id: 3,
+      model: "Ford Mustang",
+      image: "https://www.vdm.ford.com/content/dam/vdm_ford/live/en_us/ford/nameplate/mustang/2024/collections/_360/atlas-blue/mst_24_gtp_ext_360_atlas_blue_01.jpg",
+      fuelType: "Gas",
+      transmission: "Auto Gear",
+      seater: 4,
+      range: "300 km",
+      price: 2500,
+      status: "In Journey",
+    },
+    {
+      id: 4,
+      model: "Chevrolet Malibu",
+      image: "https://cdn.motor1.com/images/mgl/g4MN9E/s1/chevrolet-malibu.webp",
+      fuelType: "Gas",
+      transmission: "Manual",
+      seater: 5,
+      range: "500 km",
+      price: 1600,
+      status: "Service", 
+    },
+  ];
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
@@ -51,18 +97,20 @@ const Vehicles = () => {
     }
   };
 
-  const filteredVehicles = vehicles.data.filter((vehicle) => {
+  const filteredVehicles = vehiclesData.filter((vehicle) => {
     if (filter === "All") return true;
     if (filter === "Active") return vehicle.status === "Pending" || vehicle.status === "In Journey"; 
     if (filter === "Available") return vehicle.status === "Available"; 
     if (filter === "Maintenance") return vehicle.status === "Service"; 
     return false;
-  });
+  }) : [];
+
+  console.log("bye",filteredVehicles,selectedVehicle,filter);
+
 
   return (
     <div className="h-full flex flex-col p-5 py-3 pb-0">
       <div className="flex justify-between items-center pb-2 sticky top-0 z-10 px-3">
-
         <div className="flex space-x-4">
           <button
             onClick={() => setFilter("All")}
@@ -89,46 +137,46 @@ const Vehicles = () => {
             Maintenance
           </button>
         </div>
-        <div  className='flex gap-3'>
-        <button 
-          onClick={() => setIsAddVehicleModalOpen(true)} 
-          className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
-        >
-          <i className="bi bi-plus text-3xl"></i>
-        </button>
-        <button
-          onClick={() => setIsFilterModalOpen(true)} 
-          className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
-        >
-          <i className="bi bi-funnel-fill"></i> Filter
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setIsAddVehicleModalOpen(true)}
+            className="bg-blue-500 text-white px-1 py-0 rounded-lg flex items-center"
+          >
+            <i className="bi bi-plus text-3xl"></i>
+          </button>
+          <button
+            onClick={() => setIsFilterModalOpen(true)}
+            className="bg-blue-500 text-white px-2.5 py-0 rounded-lg flex items-center gap-1"
+          >
+            <i className="bi bi-funnel-fill"></i> Filter
+          </button>
         </div>
       </div>
-
+  
       {/* Filter Modal */}
       <FilterModal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
-        onFilterSelect={(selectedFilter) => setFilter(selectedFilter)}
+        // onFilterSelect={(selectedFilter) => setFilter(selectedFilter)}
       />
-
+  
       {/* Add Vehicle Modal */}
       <AddVehicleModal
         isOpen={isAddVehicleModalOpen}
-        onClose={() => setIsAddVehicleModalOpen(false)} 
+        onClose={() => setIsAddVehicleModalOpen(false)}
       />
-
+  
       {/* View Vehicle Modal */}
       <ViewVehicleModal
         isOpen={isViewVehicleModalOpen}
-        onClose={() => setIsViewVehicleModalOpen(false)} 
-        vehicle={selectedVehicle} 
+        onClose={() => setIsViewVehicleModalOpen(false)}
+        vehicle={selectedVehicle}
       />
-
+  
       <div className="flex-grow overflow-auto hide-scroll p-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-  {filteredVehicles && filteredVehicles.length > 0 ? (
-    filteredVehicles.map((vehicle) => (
+  {vehicles.data && vehicles.data.length > 0 ? (
+    vehicles.data.map((vehicle) => (
       <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
         <div className="relative">
           <img
@@ -137,7 +185,7 @@ const Vehicles = () => {
             className="w-full h-44 object-cover rounded-md"
           />
           <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
-            {vehicle.status}
+            {vehicle.color}
           </span>
         </div>
 
@@ -189,6 +237,7 @@ const Vehicles = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Vehicles;
