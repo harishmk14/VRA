@@ -554,7 +554,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
             <label className="block text-sm font-medium mb-1">Vehicle Features</label>
             {isEditing ? (
               <div className="flex flex-wrap gap-2">
-                {features.data.map(feature => (
+                {features.map(feature => (
                   <div key={feature.uniqId} className="flex items-center">
                     <input
                       type="checkbox"
@@ -569,7 +569,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
               </div>
             ) : (
               <ul>
-                {features.data
+                {features
                   .filter(feature => vehicle.featureId.includes(feature.uniqId))
                   .map(feature => (
                     <li key={feature.uniqId} className="text-gray-600">
