@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { fetchVehicleFeatures } from '../Slice/vehicleFeaturesSlice';
+import { fetchVehicleFeatures } from '../Slice/vehicleFeaturesSlice';
 import { updateVehicle } from '../Slice/updateVehicleSlice';
 import { deleteVehicle } from '../Slice/vehicleDelete';
 
@@ -8,20 +8,20 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [editedVehicle, setEditedVehicle] = useState(vehicle || {});
-  // const [selectedFeatures, setSelectedFeatures] = useState(vehicle?.featureId || []);
+  const [selectedFeatures, setSelectedFeatures] = useState(vehicle?.featureId || []);
 
-  // const { features, status, error } = useSelector((state) => state.vehicleFeatures);
+  const { features, status, error } = useSelector((state) => state.vehicleFeatures);
 
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     dispatch(fetchVehicleFeatures());
-  //     setEditedVehicle(vehicle); 
-  //     setSelectedFeatures(vehicle?.featureId || []); 
-  //   }
-  // }, [dispatch, isOpen, vehicle]);
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(fetchVehicleFeatures());
+      setEditedVehicle(vehicle); 
+      setSelectedFeatures(vehicle?.featureId || []); 
+    }
+  }, [dispatch, isOpen, vehicle]);
 
-  // if (status === 'loading') return <p>Loading...</p>;
-  // if (status === 'failed') return <p>Error: {error}</p>;
+  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'failed') return <p>Error: {error}</p>;
 
   if (!isOpen) return null;
 
@@ -38,21 +38,21 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
     dispatch(deleteVehicle(id));
   };
 
-  // const handleFeatureChange = (e) => {
-  //   const featureId = e.target.value;
-  //   setSelectedFeatures((prevSelectedFeatures) => {
-  //     if (prevSelectedFeatures.includes(featureId)) {
-  //       return prevSelectedFeatures.filter((id) => id !== featureId);
-  //     } else {
-  //       return [...prevSelectedFeatures, featureId];
-  //     }
-  //   });
-  // };
+  const handleFeatureChange = (e) => {
+    const featureId = e.target.value;
+    setSelectedFeatures((prevSelectedFeatures) => {
+      if (prevSelectedFeatures.includes(featureId)) {
+        return prevSelectedFeatures.filter((id) => id !== featureId);
+      } else {
+        return [...prevSelectedFeatures, featureId];
+      }
+    });
+  };
 
   const handleSave = () => {
     const updatedVehicle = {
       ...editedVehicle,
-      // featureId: selectedFeatures, 
+      featureId: selectedFeatures, 
     };
     dispatch(updateVehicle({ vehicleId: vehicle.uniqId, updatedData: updatedVehicle }));
     setIsEditing(false);
@@ -550,7 +550,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
           </div>
 
           {/* Vehicle Features */}
-          {/* <div>
+          <div>
             <label className="block text-sm font-medium mb-1">Vehicle Features</label>
             {isEditing ? (
               <div className="flex flex-wrap gap-2">
@@ -578,7 +578,7 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
                   ))}
               </ul>
             )}
-          </div> */}
+          </div>
 
           {/* Vehicle Images */}
           <div className='space-y-3'>

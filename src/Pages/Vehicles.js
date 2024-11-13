@@ -34,54 +34,6 @@ const Vehicles = () => {
     return <p>Error: {error}</p>;
   }
 
-  console.log(vehicles.data);
-
-  const vehiclesData = [
-    {
-      id: 1,
-      model: "Tesla Model 3",
-      image: "https://ev-database.org/img/auto/Tesla_Model_3/Tesla_Model_3-01@2x.jpg",
-      fuelType: "Electric",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "350 km",
-      price: 2000,
-      status: "Available",
-    },
-    {
-      id: 2,
-      model: "Toyota Camry",
-      image: "https://i0.wp.com/practicalmotoring.com.au/wp-content/uploads/2016/11/097A0935.jpg?fit=768%2C512&ssl=1",
-      fuelType: "Petrol",
-      transmission: "Auto Gear",
-      seater: 5,
-      range: "450 km",
-      price: 1500,
-      status: "Pending",
-    },
-    {
-      id: 3,
-      model: "Ford Mustang",
-      image: "https://www.vdm.ford.com/content/dam/vdm_ford/live/en_us/ford/nameplate/mustang/2024/collections/_360/atlas-blue/mst_24_gtp_ext_360_atlas_blue_01.jpg",
-      fuelType: "Gas",
-      transmission: "Auto Gear",
-      seater: 4,
-      range: "300 km",
-      price: 2500,
-      status: "In Journey",
-    },
-    {
-      id: 4,
-      model: "Chevrolet Malibu",
-      image: "https://cdn.motor1.com/images/mgl/g4MN9E/s1/chevrolet-malibu.webp",
-      fuelType: "Gas",
-      transmission: "Manual",
-      seater: 5,
-      range: "500 km",
-      price: 1600,
-      status: "Service", 
-    },
-  ];
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
@@ -97,15 +49,13 @@ const Vehicles = () => {
     }
   };
 
-  const filteredVehicles = vehiclesData.filter((vehicle) => {
+  const filteredVehicles = vehicles.data.filter((vehicle) => {
     if (filter === "All") return true;
     if (filter === "Active") return vehicle.status === "Pending" || vehicle.status === "In Journey"; 
     if (filter === "Available") return vehicle.status === "Available"; 
     if (filter === "Maintenance") return vehicle.status === "Service"; 
     return false;
-  }) : [];
-
-  console.log("bye",filteredVehicles,selectedVehicle,filter);
+  });
 
 
   return (
@@ -175,8 +125,8 @@ const Vehicles = () => {
   
       <div className="flex-grow overflow-auto hide-scroll p-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-  {vehicles.data && vehicles.data.length > 0 ? (
-    vehicles.data.map((vehicle) => (
+  {filteredVehicles && filteredVehicles.length > 0 ? (
+    filteredVehicles.map((vehicle) => (
       <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden p-2">
         <div className="relative">
           <img
@@ -185,7 +135,7 @@ const Vehicles = () => {
             className="w-full h-44 object-cover rounded-md"
           />
           <span className={`absolute top-2 right-2 ${getStatusColor(vehicle.status)} text-white text-xs font-bold px-2 py-1 rounded`}>
-            {vehicle.color}
+            {vehicle.status}
           </span>
         </div>
 
