@@ -1,98 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import FilterModal from '../Customer/FilterModal'; 
+import FilterModal from '../Customer/FilterModal';
 import CustomerDetailModal from '../Customer/CustomerDetailModal';
-import Trip from '../Customer/Trip';
 import AddCustomerModal from '../Customer/AddCustomerModal';
-import ReviewModal from '../Customer/ReviewModal'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCustomers, resetError } from '../Slice/customerSlice'
-
+import Toggle from "react-toggle";
+import "react-toggle/style.css";
 import '../index.css';
-
-
-const bookingsData = [
-  { bookingId: "BOOK1", tripArea: "Delhi", tripDate: "2024-10-21", status: 'Completed', tripType: 'Round' },
-  { bookingId: "BOOK2", tripArea: "Mumbai", tripDate: "2024-10-21", status: "Cancelled", tripType: "One-way" },
-  { bookingId: "BOOK3", tripArea: "Bengaluru", tripDate: "2024-10-21", status: "Completed", tripType: "Round" },
-  { bookingId: "BOOK4", tripArea: "Chennai", tripDate: "2024-10-21", status: "Pending", tripType: "One-way" },
-  { bookingId: "BOOK5", tripArea: "Kolkata", tripDate: "2024-10-21", status: "Pending", tripType: "Round" },
-  { bookingId: "BOOK6", tripArea: "Hyderabad", tripDate: "2024-10-21", status: "Pending", tripType: "One-way" },
-  { bookingId: "BOOK7", tripArea: "Pune", tripDate: "2024-10-21", status: "In Journey", tripType: "Round" },
-  { bookingId: "BOOK8", tripArea: "Ahmedabad", tripDate: "2024-10-21", status: "Cancelled", tripType: "One-way" },
-];
-
-const reviews = [
-  {
-    name: 'Alice Johnson',
-    rating: 5,
-    content: 'Excellent service! The trip was smooth and enjoyable.',
-    profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-20",
-    tripAreaDetails: "Pondicherry to Chennai",
-    tripDetails: [
-      { label: 'Start Date', value: '2024-10-15' },
-      { label: 'End Date', value: '2024-10-16' },
-      { label: 'Persons', value: '4' },
-      { label: 'Vehicle No', value: 'TN01AB1234' }
-    ]
-  },
-  {
-    name: 'Bob Brown',
-    rating: 4,
-    content: 'Very nice experience. The vehicle was clean and well-maintained.',
-    profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-21",
-    tripAreaDetails: "Pondicherry to Bangalore",
-    tripDetails: [
-      { label: 'Start Date', value: '2024-10-19' },
-      { label: 'End Date', value: '2024-10-20' },
-      { label: 'Persons', value: '2' },
-      { label: 'Vehicle No', value: 'TN02XY9876' }
-    ]
-  },
-  {
-    name: 'Charlie Davis',
-    rating: 5,
-    content: 'Fantastic! The driver was friendly and punctual.',
-    profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-22",
-    tripAreaDetails: "Pondicherry to Madurai",
-    tripDetails: [
-      { label: 'Start Date', value: '2024-10-20' },
-      { label: 'End Date', value: '2024-10-21' },
-      { label: 'Persons', value: '5' },
-      { label: 'Vehicle No', value: 'TN03GH6543' }
-    ]
-  },
-  {
-    name: 'Jane Smith',
-    rating: 3,
-    content: 'Average experience. The car was fine, but the wait was too long.',
-    profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-19",
-    tripAreaDetails: "Pondicherry to Coimbatore",
-    tripDetails: [
-      { label: 'Start Date', value: '2024-10-17' },
-      { label: 'End Date', value: '2024-10-18' },
-      { label: 'Persons', value: '3' },
-      { label: 'Vehicle No', value: 'TN04JK4321' }
-    ]
-  },
-  {
-    name: 'John Doe',
-    rating: 4,
-    content: 'Good service overall. Will use again for future trips!',
-    profilePic: 'https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg',
-    date: "2024-10-18",
-    tripAreaDetails: "Pondicherry to Tiruchirappalli",
-    tripDetails: [
-      { label: 'Start Date', value: '2024-10-16' },
-      { label: 'End Date', value: '2024-10-17' },
-      { label: 'Persons', value: '6' },
-      { label: 'Vehicle No', value: 'TN05LM8765' }
-    ]
-  },
-];
+import '../styles/toogle.css';
 
 const Customer = () => {
   const dispatch = useDispatch();
@@ -250,15 +165,7 @@ const Customer = () => {
         {showDetailModal && (
           <CustomerDetailModal
             customer={selectedBooking}
-            onClose={() => setShowDetailModal(false)} 
-          />
-        )}
-
-        {showTrip && (
-          <Trip
-            Trip={bookingsData}
-            onClose={() => setShowTrip(false)}
-            onAssign={handleAssignDriver}
+            onClose={() => setShowDetailModal(false)}
           />
         )}
 
@@ -284,10 +191,10 @@ const Customer = () => {
                   <thead>
                     <tr className="bg-blue-100">
                       <th className="px-4 py-2 text-left">S. No</th>
-                      <th className="px-4 py-2 text-left">Reg Date</th> 
-                      <th className="px-4 py-2 text-left">ID</th> 
-                      <th className="px-4 py-2 text-left">Name</th> 
-                      <th className="px-4 py-2 text-center">Trips</th>
+                      <th className="px-4 py-2 text-left">Reg Date</th>
+                      <th className="px-4 py-2 text-left">ID</th>
+                      <th className="px-4 py-2 text-left">Name</th>
+                      <th className="px-4 py-2 text-center">Status</th>
                       <th className="px-4 py-2 text-center">Details</th>
                     </tr>
                   </thead>
@@ -295,11 +202,11 @@ const Customer = () => {
                     {Array.isArray(currentEntries) && currentEntries?.length > 0 ? (
                       currentEntries.map((customer, index) => (
                         <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
-                          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td> 
+                          <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td>
                           <td className="px-4 py-3">
                             {customer.createAt ? new Date(customer.createAt).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}
-                          </td> 
-                          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td> 
+                          </td>
+                          <td className="px-4 py-3">{customer.uniqId || 'N/A'}</td>
                           <td className="px-4 py-3 flex items-center">
                             <img
                               src={customer.pImg}
@@ -307,14 +214,15 @@ const Customer = () => {
                               className="w-8 h-8 rounded-full mr-2"
                             />
                             {customer.name || 'Unnamed'}
-                          </td> 
+                          </td>
                           <td className="px-4 py-3 text-center">
-                            <button
-                              className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
-                              onClick={() => handleAssignClick(customer)}
-                            >
-                              Trip
-                            </button>
+                            <label className="custom-toggle">
+                              <Toggle
+                                defaultChecked={true}
+                                icons={false}
+                                onChange={() => handleAssignClick(customer)}
+                              />
+                            </label>
                           </td>
                           <td className="px-4 py-3 text-center">
                             <i
@@ -359,46 +267,22 @@ const Customer = () => {
           </div>
           <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden py-3 ">
             <div className="flex justify-between items-center mb-4 px-4">
-              <h2 className="text-blue-500 text-xl font-semibold">Reviews</h2>
+              <h2 className="text-blue-500 text-xl font-semibold">Trip Details</h2>
               <i
                 className="bi bi-arrows-angle-expand text-blue-400 text-lg cursor-pointer"
-                onClick={() => setShowReviewModal(true)}  
               ></i>
 
               {showReviewModal && (
                 <div className="fixed inset-0 z-50">
-                  <ReviewModal
+                  {/* <ReviewModal
                     reviews={reviews}
                     onClose={() => setShowReviewModal(false)}
-                  />
+                  /> */}
                 </div>
               )}
             </div>
 
             <div className="flex flex-col h-[27.5rem] overflow-y-auto px-4">
-              {reviews.map((review, index) => (
-                <div key={index} className="border rounded-lg p-4 shadow-sm mb-3">
-                  <div className="flex items-start">
-                    <img
-                      src={review.profilePic}
-                      alt={`${review.name}'s profile`}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-medium">{review.name}</h3>
-                        <p className="mt-1 text-gray-500 text-sm">{review.date}</p>
-                      </div>
-                      <div className="flex items-center">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <i key={i} className="bi bi-star-fill text-yellow-400"></i>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="mt-2 text-gray-600">{review.content}</p>
-                </div>
-              ))}
             </div>
           </div>
 

@@ -20,9 +20,9 @@ const Sidebar = () => {
   const navigationItems = [
     { path: '/dashboard', icon: 'bi bi-grid-fill', label: 'Dashboard' },
     { path: '/vehicle', icon: 'bi bi-car-front', label: 'Vehicles' },
-    { path: '/booking', icon: 'bi bi-ui-checks', label: 'Booking' },
     { path: '/employee', icon: 'bi bi-person-fill-gear', label: 'Employee' },
     { path: '/driver', icon: 'bi bi-person-fill-check', label: 'Driver' },
+    { path: '/booking', icon: 'bi bi-ui-checks', label: 'Booking' },
     { path: '/Customer', icon: 'bi bi-people-fill', label: 'Customer' },
     { path: '/payment', icon: 'bi bi-cash-coin', label: 'Payment' },
     { path: '/Invoice', icon: 'bi bi-receipt-cutoff', label: 'Invoice' },
