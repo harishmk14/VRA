@@ -138,7 +138,7 @@ const LiveVehicleStatus = ({ trips }) => {
               </select>
             </div>
 
-            <div className='px-2 py-3'>
+            {/* <div className='px-2 py-3'>
               <label className="block text-sm font-medium mb-1">Status</label>
               <select 
                 className='w-full p-1 border rounded text-gray-700 bg-white focus:ring-2 focus:ring-gray-300'
@@ -151,7 +151,7 @@ const LiveVehicleStatus = ({ trips }) => {
                 <option value="Completed" className="text-gray-600">Completed</option>
                 <option value="Cancelled" className="text-gray-600">Cancelled</option>
               </select>
-            </div>
+            </div> */}
 
             <div className='px-2 py-3'>
               <label className="block text-sm font-medium mb-1">Driver / Self Drive</label>
@@ -167,12 +167,12 @@ const LiveVehicleStatus = ({ trips }) => {
               </select>
             </div>
 
-            <div className='flex justify-between mt-5'>
+            <div className='flex justify-end mt-4'>
               <button 
-                className='bg-blue-500 text-white px-4 py-2 rounded'
+                className='bg-blue-500 text-white px-2.5 py-1.5 rounded text-base'
                 onClick={handleApplyFilters} 
               >
-                Apply Filters
+                Apply
               </button>
             </div>
           </div>

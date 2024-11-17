@@ -58,9 +58,6 @@ const AddVehicleModal = ({ isOpen, onClose }) => {
 
   }, [vehicleType, dispatch]);
 
-  if (status === 'loading') return <p>Loading...</p>;
-  if (status === 'failed') return <p>Error: {error}</p>;
-
   const handleVehicleTypeChange = (e) => {
     const type = e.target.value;
     setVehicleType(type);

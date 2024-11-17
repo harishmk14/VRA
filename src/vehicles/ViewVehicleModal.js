@@ -20,9 +20,6 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
     }
   }, [dispatch, isOpen, vehicle]);
 
-  if (status === 'loading') return <p>Loading...</p>;
-  if (status === 'failed') return <p>Error: {error}</p>;
-
   if (!isOpen) return null;
 
 
@@ -717,12 +714,12 @@ const ViewVehicleModal = ({ isOpen, onClose, vehicle }) => {
               >
                 Edit
               </button>
-              <button
+              {/* <button
                 onClick={() => handleDelete(vehicle.uniqId)}
                 className="bg-red-500 text-white font-bold py-1.5 px-3 rounded-lg hover:bg-red-600"
               >
                 Delete
-              </button>
+              </button> */}
             </>
           )}
         </div>

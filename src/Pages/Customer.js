@@ -4,6 +4,8 @@ import CustomerDetailModal from '../Customer/CustomerDetailModal';
 import AddCustomerModal from '../Customer/AddCustomerModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCustomers, resetError } from '../Slice/customerSlice'
+import { StyledWrapper } from '../Components/Switch.styles';
+import LeftSection from '../Customer/Trips';
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import '../index.css';
@@ -130,6 +132,25 @@ const Customer = () => {
     return pageNumbers;
   };
 
+  const data = [
+    {
+      id: 1,
+      Dplace: "Karikal",
+      Aplace: "Pondy",
+      vno: "PY01H0002",
+      date: "09-10-2024",
+      status: "Pending",
+    },
+    {
+      id: 2,
+      Dplace: "Karikal",
+      Aplace: "Pondy",
+      vno: "PY01H0002",
+      date: "10-10-2024",
+      status: "Completed",
+    },
+  ];
+
 
 
   return (
@@ -190,18 +211,18 @@ const Customer = () => {
                 <table className="min-w-full border-collapse border-spacing-0">
                   <thead>
                     <tr className="bg-blue-100">
-                      <th className="px-4 py-2 text-left">S. No</th>
-                      <th className="px-4 py-2 text-left">Reg Date</th>
-                      <th className="px-4 py-2 text-left">ID</th>
-                      <th className="px-4 py-2 text-left">Name</th>
-                      <th className="px-4 py-2 text-center">Status</th>
-                      <th className="px-4 py-2 text-center">Details</th>
+                      <th className="px-4 py-2.5 text-left">S. No</th>
+                      <th className="px-4 py-2.5 text-left">Reg Date</th>
+                      <th className="px-4 py-2.5 text-left">ID</th>
+                      <th className="px-4 py-2.5 text-left">Name</th>
+                      <th className="px-4 py-2.5 text-center">Status</th>
+                      <th className="px-4 py-2.5 text-center">Details</th>
                     </tr>
                   </thead>
                   <tbody>
                     {Array.isArray(currentEntries) && currentEntries?.length > 0 ? (
                       currentEntries.map((customer, index) => (
-                        <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0">
+                        <tr key={customer.id || index} className="border-b border-gray-300 last:border-b-0 hover:bg-gray-100 transition-colors duration-150">
                           <td className="px-4 py-3">{indexOfFirstEntry + index + 1}</td>
                           <td className="px-4 py-3">
                             {customer.createAt ? new Date(customer.createAt).toISOString().split('T')[0].split('-').reverse().join('/') : 'N/A'}
@@ -215,14 +236,17 @@ const Customer = () => {
                             />
                             {customer.name || 'Unnamed'}
                           </td>
-                          <td className="px-4 py-3 text-center">
-                            <label className="custom-toggle">
-                              <Toggle
-                                defaultChecked={true}
-                                icons={false}
-                                onChange={() => handleAssignClick(customer)}
-                              />
-                            </label>
+                          <td className="px-4 pt-2.5 pb-3.5 text-center">
+                            <StyledWrapper>
+                              <label className="switch">
+                                <input
+                                  type="checkbox"
+                                  defaultChecked={true}
+                                  onChange={() => handleAssignClick(customer)}
+                                />
+                                <span className="slider" />
+                              </label>
+                            </StyledWrapper>
                           </td>
                           <td className="px-4 py-3 text-center">
                             <i
@@ -265,25 +289,8 @@ const Customer = () => {
               </div>
             </div>
           </div>
-          <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden py-3 ">
-            <div className="flex justify-between items-center mb-4 px-4">
-              <h2 className="text-blue-500 text-xl font-semibold">Trip Details</h2>
-              <i
-                className="bi bi-arrows-angle-expand text-blue-400 text-lg cursor-pointer"
-              ></i>
-
-              {showReviewModal && (
-                <div className="fixed inset-0 z-50">
-                  {/* <ReviewModal
-                    reviews={reviews}
-                    onClose={() => setShowReviewModal(false)}
-                  /> */}
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-col h-[27.5rem] overflow-y-auto px-4">
-            </div>
+          <div className="w-full h-full bg-white rounded-md shadow-md overflow-hidden">
+            <LeftSection data={data} />
           </div>
 
 

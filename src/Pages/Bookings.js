@@ -257,7 +257,7 @@ const Booking = () => {
                 </thead>
                 <tbody>
                   {currentEntries.map((booking, index) => (
-                    <tr key={booking.id} className="border-b border-gray-300 last:border-b-0">
+                    <tr key={booking.id} className="border-b border-gray-300 last:border-b-0 hover:bg-gray-100 transition-colors duration-150">
                       <td className="px-4 py-3">{index + 1 + indexOfFirstEntry}</td>
                       <td className="px-4 py-3">{booking.bookedAt}</td>
                       <td className="px-4 py-3">{booking.vehicleNo}</td>
@@ -267,14 +267,14 @@ const Booking = () => {
                       <td className="pr-8  py-3 text-center">{booking.verified ? <i class="bi bi-check-lg text-green-500 text-3xl"></i> : <i class="bi bi-x-lg text-red-500 text-xl"></i>}</td>
                       <td className="px-4 py-3 text-center">
                         <button
-                          className="bg-blue-500 text-white text-base px-2 py-1 rounded-lg"
+                          className="bg-blue-500  hover:bg-blue-400 text-white text-base px-2 py-1 rounded-lg"
                           onClick={() => handleAssignClick(booking)} 
                         >
                           Assign
                         </button>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <i class="bi bi-eye-fill text-blue-500 text-xl cursor-pointer"
+                        <i className="bi bi-eye-fill text-blue-500 text-xl cursor-pointer p-2 py-1 hover:bg-gray-200 rounded-md "
                           onClick={() => handleDetailsClick(booking)}></i>
                       </td>
                     </tr>
